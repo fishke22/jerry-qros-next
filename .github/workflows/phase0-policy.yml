@@ -1,6 +1,10 @@
 name: phase0-policy
 on:
   pull_request:
+  push:
+    branches:
+      - main
+      - foundation/phase-0-governance
   workflow_dispatch:
 permissions:
   contents: read
