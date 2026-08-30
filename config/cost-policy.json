@@ -1,0 +1,21 @@
+{
+  "policy_version": 1,
+  "zero_cost_required": true,
+  "paid_services_allowed": false,
+  "paid_runners_allowed": false,
+  "larger_runners_allowed": false,
+  "gpu_runners_allowed": false,
+  "paid_data_allowed": false,
+  "paid_llm_api_allowed": false,
+  "paid_storage_allowed": false,
+  "paid_code_signing_allowed": false,
+  "actions_paid_overage_allowed": false,
+  "standard_public_runners_only": true,
+  "windows_scheduled_runs_allowed": false,
+  "artifact_retention_days_max": 7,
+  "package_authorized": false,
+  "release_authorized": false,
+  "yuanta_integration_authorized": false,
+  "live_trading_authorized": false,
+  "repository_visibility": "public"
+}
