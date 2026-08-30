@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jerry-qros-next.local/schemas/cost-policy/v1",
+  "title": "Jerry QROS Next Cost Policy v1",
+  "type": "object",
+  "required": [
+    "policy_version",
+    "zero_cost_required",
+    "paid_services_allowed",
+    "paid_runners_allowed",
+    "larger_runners_allowed",
+    "gpu_runners_allowed",
+    "paid_data_allowed",
+    "paid_llm_api_allowed",
+    "package_authorized",
+    "release_authorized",
+    "yuanta_integration_authorized",
+    "live_trading_authorized",
+    "repository_visibility"
+  ],
+  "properties": {
+    "policy_version": {
+      "const": 1
+    },
+    "zero_cost_required": {
+      "const": true
+    },
+    "paid_services_allowed": {
+      "const": false
+    },
+    "paid_runners_allowed": {
+      "const": false
+    },
+    "larger_runners_allowed": {
+      "const": false
+    },
+    "gpu_runners_allowed": {
+      "const": false
+    },
+    "paid_data_allowed": {
+      "const": false
+    },
+    "paid_llm_api_allowed": {
+      "const": false
+    },
+    "package_authorized": {
+      "const": false
+    },
+    "release_authorized": {
+      "const": false
+    },
+    "yuanta_integration_authorized": {
+      "const": false
+    },
+    "live_trading_authorized": {
+      "const": false
+    },
+    "repository_visibility": {
+      "const": "public"
+    }
+  },
+  "additionalProperties": true
+}
