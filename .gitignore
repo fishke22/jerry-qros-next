@@ -26,6 +26,9 @@ data/
 *.arrow
 *.feather
 node_modules/
+.venv/
+.venv-*/
+venv/
 target/
 dist/
 build/

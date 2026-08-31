@@ -12,8 +12,158 @@
       "license_spdx": "MIT",
       "verified_at": "2026-08-31",
       "scope": "CI_ONLY"
+    },
+    {
+      "dependency_id": "actions-setup-python",
+      "component": "actions/setup-python",
+      "revision": "a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "license_spdx": "MIT",
+      "verified_at": "2026-08-31",
+      "scope": "CI_ONLY"
     }
   ],
-  "runtime_dependencies": [],
-  "policy": "UNKNOWN_LICENSE_DENIES_INTRODUCTION"
+  "runtime_dependencies": [
+    {
+      "dependency_id": "duckdb",
+      "component": "DuckDB",
+      "version": "1.5.5",
+      "license_spdx": "MIT",
+      "verified_at": "2026-08-31",
+      "scope": "RUNTIME",
+      "dependency_class": "DIRECT",
+      "verification_source": "https://pypi.org/project/duckdb/1.5.5/"
+    },
+    {
+      "dependency_id": "arrow-parquet",
+      "component": "PyArrow / Parquet",
+      "version": "25.0.1",
+      "license_spdx": "Apache-2.0",
+      "verified_at": "2026-08-31",
+      "scope": "RUNTIME",
+      "dependency_class": "DIRECT",
+      "verification_source": "https://pypi.org/project/pyarrow/25.0.1/"
+    },
+    {
+      "dependency_id": "pandera",
+      "component": "Pandera",
+      "version": "0.33.0",
+      "license_spdx": "MIT",
+      "verified_at": "2026-08-31",
+      "scope": "RUNTIME",
+      "dependency_class": "DIRECT",
+      "verification_source": "https://pypi.org/project/pandera/0.33.0/"
+    },
+    {
+      "dependency_id": "narwhals",
+      "component": "Narwhals",
+      "version": "2.25.0",
+      "license_spdx": "MIT",
+      "verified_at": "2026-08-31",
+      "scope": "RUNTIME",
+      "dependency_class": "TRANSITIVE",
+      "verification_source": "https://pypi.org/project/narwhals/2.25.0/"
+    },
+    {
+      "dependency_id": "packaging",
+      "component": "packaging",
+      "version": "26.3",
+      "license_spdx": "Apache-2.0 OR BSD-2-Clause",
+      "verified_at": "2026-08-31",
+      "scope": "RUNTIME",
+      "dependency_class": "TRANSITIVE",
+      "verification_source": "https://pypi.org/project/packaging/26.3/"
+    },
+    {
+      "dependency_id": "typing-inspect",
+      "component": "typing-inspect",
+      "version": "0.9.0",
+      "license_spdx": "MIT",
+      "verified_at": "2026-08-31",
+      "scope": "RUNTIME",
+      "dependency_class": "TRANSITIVE",
+      "verification_source": "https://pypi.org/project/typing-inspect/0.9.0/"
+    },
+    {
+      "dependency_id": "mypy-extensions",
+      "component": "mypy-extensions",
+      "version": "1.1.0",
+      "license_spdx": "MIT",
+      "verified_at": "2026-08-31",
+      "scope": "RUNTIME",
+      "dependency_class": "TRANSITIVE",
+      "verification_source": "https://github.com/python/mypy_extensions/blob/1.1.0/LICENSE"
+    },
+    {
+      "dependency_id": "typing-extensions",
+      "component": "typing-extensions",
+      "version": "4.16.0",
+      "license_spdx": "PSF-2.0",
+      "verified_at": "2026-08-31",
+      "scope": "RUNTIME",
+      "dependency_class": "TRANSITIVE",
+      "verification_source": "https://pypi.org/project/typing-extensions/4.16.0/"
+    },
+    {
+      "dependency_id": "pydantic",
+      "component": "Pydantic",
+      "version": "2.13.5",
+      "license_spdx": "MIT",
+      "verified_at": "2026-08-31",
+      "scope": "RUNTIME",
+      "dependency_class": "TRANSITIVE",
+      "verification_source": "https://pypi.org/project/pydantic/2.13.5/"
+    },
+    {
+      "dependency_id": "pydantic-core",
+      "component": "pydantic-core",
+      "version": "2.46.5",
+      "license_spdx": "MIT",
+      "verified_at": "2026-08-31",
+      "scope": "RUNTIME",
+      "dependency_class": "TRANSITIVE",
+      "verification_source": "https://pypi.org/project/pydantic-core/2.46.5/"
+    },
+    {
+      "dependency_id": "annotated-types",
+      "component": "annotated-types",
+      "version": "0.8.0",
+      "license_spdx": "MIT",
+      "verified_at": "2026-08-31",
+      "scope": "RUNTIME",
+      "dependency_class": "TRANSITIVE",
+      "verification_source": "https://pypi.org/project/annotated-types/0.8.0/"
+    },
+    {
+      "dependency_id": "typing-inspection",
+      "component": "typing-inspection",
+      "version": "0.4.4",
+      "license_spdx": "MIT",
+      "verified_at": "2026-08-31",
+      "scope": "RUNTIME",
+      "dependency_class": "TRANSITIVE",
+      "verification_source": "https://pypi.org/project/typing-inspection/0.4.4/"
+    },
+    {
+      "dependency_id": "typeguard",
+      "component": "typeguard",
+      "version": "4.6.0",
+      "license_spdx": "MIT",
+      "verified_at": "2026-08-31",
+      "scope": "RUNTIME",
+      "dependency_class": "TRANSITIVE",
+      "verification_source": "https://pypi.org/project/typeguard/4.6.0/"
+    }
+  ],
+  "policy": "UNKNOWN_LICENSE_DENIES_INTRODUCTION",
+  "toolchain_dependencies": [
+    {
+      "dependency_id": "cpython",
+      "component": "CPython",
+      "version": "3.14.7",
+      "license_spdx": "PSF-2.0",
+      "verified_at": "2026-08-31",
+      "scope": "TEST_AND_DATA_RUNTIME_TOOLCHAIN",
+      "verification_source": "https://docs.python.org/3.14/license.html"
+    }
+  ]
 }
