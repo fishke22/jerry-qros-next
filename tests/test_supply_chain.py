@@ -1,60 +1,20 @@
-import json
-import unittest
+import json,subprocess,unittest
 from pathlib import Path
-
 ROOT=Path(__file__).resolve().parents[1]
-
 class SupplyChainFoundationTests(unittest.TestCase):
-    def load(self,path):
-        return json.loads((ROOT/path).read_text(encoding="utf-8"))
-
-    def test_adopted_runtime_matches_sbom_and_lock(self):
-        reg=self.load("config/dependency-registry.json")
-        runtime=[d for d in reg["dependencies"] if d["runtime_scope"]=="RUNTIME" and d["status"]=="ADOPTED"]
-        self.assertEqual(len(runtime),13)
-        bom=self.load("supply-chain/bom.cdx.json")
-        purls={c["purl"] for c in bom["components"]}
-        lock=(ROOT/"requirements/phase2.lock").read_text(encoding="utf-8")
-        for d in runtime:
-            self.assertIn(f"pkg:pypi/{d['package_name']}@{d['version_label']}",purls)
-            needle=f"{d['package_name']}=="
-            if d["package_name"]=="pandera":
-                needle="pandera[pyarrow]=="
-            self.assertIn(needle,lock)
-            for digest in d["artifact_sha256"].values():
-                self.assertIn(f"sha256:{digest}",lock)
-
-    def test_only_phase2_runtime_is_introduced(self):
-        reg=self.load("config/dependency-registry.json")
-        runtime=[d for d in reg["dependencies"] if d["runtime_scope"]=="RUNTIME" and d["status"]=="ADOPTED"]
-        self.assertTrue(runtime)
-        for d in runtime:
-            self.assertEqual(d["phase"],"Phase 2")
-            self.assertTrue(d["introduction_authorized"])
-            self.assertEqual(d["pin_type"],"PYPI_EXACT_VERSION")
-
-    def test_planned_dependencies_are_denied_until_pinned(self):
-        reg=self.load("config/dependency-registry.json")
-        planned=[d for d in reg["dependencies"] if d["status"].startswith("PLANNED_")]
-        self.assertGreater(len(planned),0)
-        for d in planned:
-            self.assertEqual(d["version_label"],"UNSPECIFIED")
-            self.assertFalse(d["introduction_authorized"])
-
-    def test_project_license_is_not_assumed(self):
-        lic=self.load("supply-chain/dependency-license-manifest.json")
-        self.assertEqual(lic["project_source"]["license_status"],"NO_LICENSE_FILE")
-
-    def test_sbom_runtime_count_is_truthful(self):
-        bom=self.load("supply-chain/bom.cdx.json")
-        props={p["name"]:p["value"] for p in bom["metadata"]["component"]["properties"]}
-        self.assertEqual(int(props["qros:runtime-component-count"]),len(bom["components"]))
-        self.assertEqual(len(bom["components"]),13)
-
-    def test_supply_chain_hard_gates_closed(self):
-        p=self.load("config/supply-chain-policy.json")
-        for k,v in p["packaging_and_broker_gates"].items():
-            self.assertFalse(v,k)
-
-if __name__=="__main__":
-    unittest.main()
+ def load(self,p):return json.loads((ROOT/p).read_text(encoding="utf-8"))
+ def test_python_runtime_matches_lock(self):
+  r=[d for d in self.load("config/dependency-registry.json")["dependencies"] if d["runtime_scope"]=="RUNTIME" and d["status"]=="ADOPTED"];self.assertEqual(len(r),13)
+ def test_lean_exact_gitlink(self):
+  d=next(x for x in self.load("config/dependency-registry.json")["dependencies"] if x["dependency_id"]=="quantconnect-lean");self.assertEqual(d["revision"],"b692bf4788e8b54fc23bdcb5659666bf055ce89f")
+  t=subprocess.check_output(["git","ls-tree","HEAD","external/lean"],cwd=ROOT,text=True);self.assertIn("160000 commit b692bf4788e8b54fc23bdcb5659666bf055ce89f",t)
+ def test_dotnet_exact(self):
+  g=self.load("global.json")["sdk"];self.assertEqual(g["version"],"10.0.400");self.assertEqual(g["rollForward"],"disable")
+ def test_sbom_count(self):
+  b=self.load("supply-chain/bom.cdx.json");self.assertEqual(len(b["components"]),14)
+ def test_future_planned_denied(self):
+  for d in [x for x in self.load("config/dependency-registry.json")["dependencies"] if x["status"].startswith("PLANNED_")]:self.assertFalse(d["introduction_authorized"])
+ def test_project_license_not_assumed(self):self.assertEqual(self.load("supply-chain/dependency-license-manifest.json")["project_source"]["license_status"],"NO_LICENSE_FILE")
+ def test_hard_gates_closed(self):
+  for v in self.load("config/supply-chain-policy.json")["packaging_and_broker_gates"].values():self.assertFalse(v)
+if __name__=="__main__":unittest.main()

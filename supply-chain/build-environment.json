@@ -1,6 +1,6 @@
 {
   "manifest_version": 1,
-  "phase": "Phase 2 data receipt / QA / Parquet / DuckDB vertical slice",
+  "phase": "Phase 3A pinned LEAN integration",
   "product_build_exists": false,
   "ci": {
     "provider": "GitHub Actions",
@@ -10,14 +10,16 @@
     "last_observed_runner_version": "2.337.0",
     "python": "3.14.7 via actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
     "status": "PHASE_2_DATA_RUNTIME_TEST_ENVIRONMENT",
-    "dependency_lock": "requirements/phase2.lock"
+    "dependency_lock": "requirements/phase2.lock",
+    "dotnet": "10.0.400 via actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+    "lean_integration": "external/lean gitlink b692bf4788e8b54fc23bdcb5659666bf055ce89f"
   },
   "windows_product_build": {
     "target": "Windows 11 x64",
     "status": "DATA_SLICE_SMOKE_TEST_ONLY_NO_PRODUCT_BUILD",
     "exact_toolchain": "CPython 3.14.x x64; canonical target pin 3.14.7"
   },
-  "reproducibility_status": "PHASE_2_HASH_LOCKED_PYPI_RUNTIME",
+  "reproducibility_status": "PHASE_3_PINNED_LEAN_AND_HASH_LOCKED_DATA_RUNTIME",
   "paid_compute_allowed": false,
   "data_runtime_exists": true,
   "windows_smoke": {
@@ -35,5 +37,14 @@
     "purpose": "Cross-platform SHA-256 reproducibility on Windows and GitHub Linux runners.",
     "checksum_basis": "CANONICAL_HEAD_GIT_BLOB_BYTES",
     "working_tree_eol_is_not_checksum_authority": true
+  },
+  "quant_engine": {
+    "component": "QuantConnect/Lean",
+    "revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+    "path": "external/lean",
+    "integration_mode": "GIT_SUBMODULE_PROCESS_ADAPTER",
+    "target_framework": "net10.0",
+    "build_project": "Launcher/QuantConnect.Lean.Launcher.csproj",
+    "status": "PINNED_BUILD_GATE_PENDING"
   }
 }

@@ -20,6 +20,14 @@
       "license_spdx": "MIT",
       "verified_at": "2026-08-31",
       "scope": "CI_ONLY"
+    },
+    {
+      "dependency_id": "actions-setup-dotnet",
+      "component": "actions/setup-dotnet",
+      "revision": "a98b56852c35b8e3190ac28c8c2271da59106c68",
+      "license_spdx": "MIT",
+      "verified_at": "2026-08-31",
+      "scope": "CI_ONLY"
     }
   ],
   "runtime_dependencies": [
@@ -164,6 +172,26 @@
       "verified_at": "2026-08-31",
       "scope": "TEST_AND_DATA_RUNTIME_TOOLCHAIN",
       "verification_source": "https://docs.python.org/3.14/license.html"
+    },
+    {
+      "dependency_id": "dotnet-sdk",
+      "component": ".NET SDK",
+      "version": "10.0.400",
+      "license_spdx": "MIT",
+      "verified_at": "2026-08-31",
+      "scope": "LEAN_BUILD_TOOLCHAIN",
+      "verification_source": "https://github.com/dotnet/sdk/blob/main/LICENSE.TXT"
+    }
+  ],
+  "quant_engine_dependencies": [
+    {
+      "dependency_id": "quantconnect-lean",
+      "component": "QuantConnect/Lean",
+      "revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+      "license_spdx": "Apache-2.0",
+      "verified_at": "2026-08-31",
+      "scope": "CANONICAL_QUANT_ENGINE",
+      "verification_source": "https://github.com/QuantConnect/Lean/blob/b692bf4788e8b54fc23bdcb5659666bf055ce89f/LICENSE"
     }
   ]
 }

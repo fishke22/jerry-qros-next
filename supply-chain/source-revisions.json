@@ -20,10 +20,19 @@
       "status": "ADOPTED"
     },
     {
+      "component": "actions/setup-dotnet",
+      "revision": "a98b56852c35b8e3190ac28c8c2271da59106c68",
+      "version": "v6.0.0",
+      "usage": "CI_ONLY",
+      "status": "ADOPTED"
+    },
+    {
       "component": "QuantConnect/Lean",
-      "observed_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
-      "usage": "EVIDENCE_ONLY",
-      "status": "NOT_INTRODUCED_REVERIFY_IN_PHASE_3"
+      "revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+      "usage": "CANONICAL_QUANT_ENGINE",
+      "status": "ADOPTED_GITLINK",
+      "path": "external/lean",
+      "target_framework": "net10.0"
     },
     {
       "component": "DuckDB",
@@ -164,5 +173,11 @@
     "source": "python.org",
     "license": "PSF-2.0",
     "status": "ADOPTED_PHASE_2_TOOLCHAIN"
+  },
+  "dotnet_sdk": {
+    "version": "10.0.400",
+    "source": "dotnet.microsoft.com",
+    "license": "MIT",
+    "status": "ADOPTED_PHASE_3_TOOLCHAIN"
   }
 }

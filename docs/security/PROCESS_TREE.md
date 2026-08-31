@@ -27,3 +27,7 @@ GitHub standard hosted runner
 ```
 
 This document does not authorize packaging, persistence, broker login, Yuanta integration or live trading.
+
+## Phase 3A LEAN
+
+Build process: shell/CI → dotnet 10.0.400 → MSBuild/NuGet → pinned external/lean Launcher source. Future local backtest process boundary is QROS host → dotnet → QuantConnect.Lean.Launcher.dll. No injection, persistence, broker login or live mode is authorized.
