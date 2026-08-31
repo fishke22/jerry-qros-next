@@ -1,0 +1,37 @@
+{
+  "policy_version": 1,
+  "source_boundaries": {
+    "legacy_qros_local": {
+      "path_hint": "D:\\QROS",
+      "access_mode": "SELECTIVE_READ_ONLY_DONOR_REVIEW",
+      "whole_repository_upload_allowed": false,
+      "git_history_import_allowed": false,
+      "direct_runtime_copy_allowed": false,
+      "rewrite_or_independent_promotion_review_required": true
+    },
+    "yuanta_autopilot_local": {
+      "path_hint": "D:\\YUANTA_AUTOPILOT",
+      "access_mode": "DENY",
+      "upload_allowed": false,
+      "inspection_allowed": false,
+      "requires_user_phrase": "授權研究 Yuanta SPARK 整合"
+    }
+  },
+  "deny_path_markers": [
+    "secrets",
+    "credentials",
+    "certificates",
+    "personal_licensed",
+    "yuanta",
+    "spark",
+    "broker-private",
+    "raw",
+    "realtime",
+    "logs",
+    "cache",
+    ".git",
+    ".venv",
+    "node_modules"
+  ],
+  "unknown_is_deny": true
+}

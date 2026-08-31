@@ -1,0 +1,42 @@
+{
+  "manifest_version": 1,
+  "compatibility_policy": "BREAKING_CHANGE_REQUIRES_NEW_MAJOR_CONTRACT_VERSION",
+  "unknown_is_deny": true,
+  "contracts": [
+    {
+      "contract_id": "data-receipt",
+      "version": "1",
+      "schema_path": "packages/schemas/data-receipt.v1.schema.json",
+      "safety_class": "DATA",
+      "status": "ACTIVE"
+    },
+    {
+      "contract_id": "provenance-record",
+      "version": "1",
+      "schema_path": "packages/schemas/provenance-record.v1.schema.json",
+      "safety_class": "PROVENANCE",
+      "status": "ACTIVE"
+    },
+    {
+      "contract_id": "pit-availability",
+      "version": "1",
+      "schema_path": "packages/schemas/pit-availability.v1.schema.json",
+      "safety_class": "DATA_SAFETY",
+      "status": "ACTIVE"
+    },
+    {
+      "contract_id": "universe-membership",
+      "version": "1",
+      "schema_path": "packages/schemas/universe-membership.v1.schema.json",
+      "safety_class": "DATA_SAFETY",
+      "status": "ACTIVE"
+    },
+    {
+      "contract_id": "validation-result",
+      "version": "1",
+      "schema_path": "packages/schemas/validation-result.v1.schema.json",
+      "safety_class": "GOVERNANCE",
+      "status": "ACTIVE"
+    }
+  ]
+}

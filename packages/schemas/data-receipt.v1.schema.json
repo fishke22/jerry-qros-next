@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jerry-qros-next.local/contracts/data-receipt/v1",
+  "title": "QROS Data Receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "contract_version",
+    "dataset_id",
+    "source_id",
+    "source_timestamp",
+    "first_known_timestamp",
+    "received_at",
+    "source_hash",
+    "normalizer_version",
+    "validator_version",
+    "quality_status"
+  ],
+  "properties": {
+    "contract_id": {
+      "const": "data-receipt"
+    },
+    "contract_version": {
+      "const": "1"
+    },
+    "dataset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_timestamp": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "first_known_timestamp": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "received_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "normalizer_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "validator_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "quality_status": {
+      "enum": [
+        "PASS",
+        "WARN",
+        "FAIL",
+        "UNKNOWN"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "quality_status": {
+            "const": "PASS"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "source_timestamp": {
+            "type": "string",
+            "minLength": 1
+          },
+          "first_known_timestamp": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  ]
+}

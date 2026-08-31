@@ -1,4 +1,4 @@
-name: phase0-policy
+name: qros-gate
 on:
   pull_request:
   push:
@@ -9,10 +9,10 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: phase0-${{ github.workflow }}-${{ github.ref }}
+  group: qros-gate-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  policy:
+  governance-contracts:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -20,5 +20,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Validate governance policies
         run: python scripts/validate_policies.py
-      - name: Run Phase 0 tests
+      - name: Validate versioned contracts
+        run: python scripts/validate_contracts.py
+      - name: Run tests
         run: python -m unittest discover -s tests -v
