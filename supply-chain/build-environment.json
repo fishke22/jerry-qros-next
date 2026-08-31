@@ -28,5 +28,10 @@
     "full_repository_tests": "18/18 PASS",
     "scope": "COMPATIBILITY_SMOKE_NOT_CANONICAL_TOOLCHAIN_PROOF",
     "workspace": "TEMP_ONLY_OUTSIDE_CANONICAL_REPOSITORY"
+  },
+  "text_checkout_policy": {
+    "canonical_eol": "LF",
+    "enforcement": ".gitattributes",
+    "purpose": "Cross-platform SHA-256 reproducibility on Windows and GitHub Linux runners."
   }
 }

@@ -1,0 +1,12 @@
+* text=auto eol=lf
+
+*.parquet binary
+*.arrow binary
+*.feather binary
+*.duckdb binary
+*.sqlite binary
+*.db binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
