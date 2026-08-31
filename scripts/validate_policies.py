@@ -1,5 +1,5 @@
 from __future__ import annotations
-import json,re,sys
+import json,re,subprocess,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 EXPECTED={
@@ -37,11 +37,24 @@ def validate_sources():
   if m:fail(f"{s.get('source_id')} missing {sorted(m)}")
   if s["provenance_required"] is not True:fail(f"{s['source_id']} provenance_required must be true")
   if s["terms_verified_at"] is None and not s["status"].startswith("DENY_"):fail(f"{s['source_id']} unknown terms must deny ingestion")
+def gitlink_roots():
+ roots=[]
+ try:
+  output=subprocess.check_output(["git","ls-files","-s"],cwd=ROOT,text=True,stderr=subprocess.PIPE)
+ except (subprocess.CalledProcessError,FileNotFoundError):
+  return roots
+ for line in output.splitlines():
+  if "\t" not in line:continue
+  meta,path=line.split("\t",1)
+  if meta.split()[0]=="160000":roots.append(Path(path))
+ return roots
 def files():
  ignore={".git","__pycache__",".pytest_cache","node_modules","target","dist","build"}
+ gitlinks=[p.parts for p in gitlink_roots()]
  for p in ROOT.rglob("*"):
   if p.is_file():
    rel=p.relative_to(ROOT)
+   if any(rel.parts[:len(g)]==g for g in gitlinks):continue
    if not any(x in ignore for x in rel.parts):yield p,rel
 def validate_secrets():
  hits=[]
