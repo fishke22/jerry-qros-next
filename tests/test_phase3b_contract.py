@@ -9,19 +9,23 @@ class Phase3BContractTests(unittest.TestCase):
     def load(self, path):
         return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
-    def test_backtest_contract_is_fail_closed(self):
+    def test_backtest_contract_is_fail_closed_and_generic(self):
         schema = self.load("packages/schemas/lean-backtest-result.v1.schema.json")
         props = schema["properties"]
         self.assertEqual(props["classification"]["const"], "PASS_REVIEW_ONLY")
         self.assertTrue(props["research_only"]["const"])
         self.assertFalse(props["gate_opened"]["const"])
-        self.assertEqual(props["statistics"]["properties"]["total_orders"]["const"], "0")
+        self.assertEqual(
+            props["statistics"]["additionalProperties"]["type"], "string"
+        )
+        self.assertNotIn("qros_rows", props["statistics"].get("properties", {}))
 
     def test_manifest_registers_backtest_contract(self):
         manifest = self.load("packages/contracts/contract-manifest.json")
         matches = [
             item for item in manifest["contracts"]
-            if item["contract_id"] == "lean-backtest-result" and item["version"] == "1"
+            if item["contract_id"] == "lean-backtest-result"
+            and item["version"] == "1"
         ]
         self.assertEqual(len(matches), 1)
 

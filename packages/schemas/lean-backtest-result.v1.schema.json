@@ -33,14 +33,8 @@
     "gate_opened": {"const": false},
     "statistics": {
       "type": "object",
-      "additionalProperties": false,
-      "required": ["qros_rows", "qros_sum", "qros_last", "total_orders"],
-      "properties": {
-        "qros_rows": {"const": "5"},
-        "qros_sum": {"const": "510.0000"},
-        "qros_last": {"const": "104.0000"},
-        "total_orders": {"const": "0"}
-      }
+      "minProperties": 1,
+      "additionalProperties": {"type": "string"}
     },
     "normalized_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
   }
