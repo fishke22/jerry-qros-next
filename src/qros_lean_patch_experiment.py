@@ -1,13 +1,26 @@
 from __future__ import annotations
 
-import importlib.util
 from pathlib import Path
 
-_script = Path(__file__).resolve().parents[2] / "scripts" / "apply_lean_patch_experiment.py"
-_spec = importlib.util.spec_from_file_location("_qros_lean_patch_experiment_script", _script)
-_mod = importlib.util.module_from_spec(_spec)
-assert _spec and _spec.loader
-_spec.loader.exec_module(_mod)
+ROOT = Path(__file__).resolve().parents[1]
+LEAN = ROOT / "external" / "lean"
 
-CANDIDATES = _mod.CANDIDATES
-apply = _mod.apply
+CANDIDATES = {
+    "messaging-netmq-4.0.4.3": {
+        "path": LEAN / "Messaging" / "QuantConnect.Messaging.csproj",
+        "old": '<PackageReference Include="NetMQ" Version="4.0.1.6" />',
+        "new": '<PackageReference Include="NetMQ" Version="4.0.4.3" />',
+    }
+}
+
+
+def apply(candidate: str) -> Path:
+    cfg = CANDIDATES[candidate]
+    path = cfg["path"]
+    text = path.read_text(encoding="utf-8-sig")
+    if cfg["new"] in text:
+        raise RuntimeError("candidate already applied; refusing ambiguous state")
+    if text.count(cfg["old"]) != 1:
+        raise RuntimeError("expected exact old dependency line not found once")
+    path.write_text(text.replace(cfg["old"], cfg["new"]), encoding="utf-8")
+    return path

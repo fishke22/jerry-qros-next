@@ -15,7 +15,8 @@ class LeanRemediationResearchTests(unittest.TestCase):
 
     def test_no_remediation_action_is_authorized(self):
         self.assertTrue(self.r["research_only"])
-        self.assertFalse(self.r["architecture_amendment_approved"])
+        self.assertTrue(self.r["architecture_amendment_approved"])
+        self.assertTrue(self.r["lean_source_patch_experiment_authorized"])
         self.assertFalse(self.r["lean_source_patch_authorized"])
         self.assertFalse(self.r["lean_fork_authorized"])
         self.assertFalse(self.r["lean_gitlink_change_authorized"])
