@@ -1,0 +1,19 @@
+{
+  "manifest_version": 1,
+  "project_source": {
+    "license_status": "NO_LICENSE_FILE",
+    "redistribution_assumption": "DO_NOT_ASSUME_OPEN_SOURCE_LICENSE"
+  },
+  "adopted_dependencies": [
+    {
+      "dependency_id": "actions-checkout",
+      "component": "actions/checkout",
+      "revision": "de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+      "license_spdx": "MIT",
+      "verified_at": "2026-08-31",
+      "scope": "CI_ONLY"
+    }
+  ],
+  "runtime_dependencies": [],
+  "policy": "UNKNOWN_LICENSE_DENIES_INTRODUCTION"
+}

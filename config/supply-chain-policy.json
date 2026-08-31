@@ -1,0 +1,36 @@
+{
+  "policy_version": 1,
+  "sbom": {
+    "format": "CycloneDX",
+    "spec_version": "1.7",
+    "file": "supply-chain/bom.cdx.json",
+    "runtime_components_must_match_introduced_dependencies": true
+  },
+  "required_candidate_evidence": [
+    "SBOM",
+    "SHA256SUMS",
+    "dependency-license-manifest",
+    "source-revision",
+    "build-environment",
+    "provenance-manifest"
+  ],
+  "dependency_rules": {
+    "unknown_license": "DENY",
+    "unspecified_revision": "DENY_INTRODUCTION",
+    "paid_or_metered_unknown_cost": "DENY",
+    "agpl_proprietary_restrictive_or_unclear_core": "DENY_PENDING_REVIEW",
+    "lockfile_required_when_package_ecosystem_is_introduced": true
+  },
+  "github_actions": {
+    "full_commit_sha_required": true,
+    "standard_public_runners_only": true,
+    "paid_larger_gpu_runners_allowed": false,
+    "minimal_permissions_required": true
+  },
+  "packaging_and_broker_gates": {
+    "package_authorized": false,
+    "release_authorized": false,
+    "yuanta_integration_authorized": false,
+    "live_trading_authorized": false
+  }
+}
