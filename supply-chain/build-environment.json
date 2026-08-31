@@ -1,6 +1,6 @@
 {
   "manifest_version": 1,
-  "phase": "Phase 3A pinned LEAN integration",
+  "phase": "Phase 3B deterministic synthetic LEAN backtest",
   "product_build_exists": false,
   "ci": {
     "provider": "GitHub Actions",
@@ -51,7 +51,18 @@
     "build_result": "SUCCESS",
     "build_duration": "1m34s",
     "build_warnings": "UPSTREAM_ANALYZER_WARNINGS_NON_BLOCKING",
-    "exact_dotnet_verified": "10.0.400"
+    "exact_dotnet_verified": "10.0.400",
+    "synthetic_backtest": {
+      "status": "PENDING_CI",
+      "algorithm": "QrosSyntheticBacktestAlgorithm",
+      "input": "fixtures_synthetic/lean/qros-synthetic-daily.csv",
+      "expected_rows": 5,
+      "expected_sum": "510.0000",
+      "expected_last": "104.0000",
+      "expected_orders": 0,
+      "repetitions": 2,
+      "normalized_result_contract": "lean-backtest-result/v1"
+    }
   },
   "windows_lean_smoke": {
     "submodule_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",

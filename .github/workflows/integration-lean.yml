@@ -7,6 +7,11 @@ on:
       - 'global.json'
       - 'src/qros_lean/**'
       - 'scripts/validate_lean_pin.py'
+      - 'scripts/run_lean_synthetic_backtest.py'
+      - 'integration/lean/**'
+      - 'fixtures_synthetic/lean/**'
+      - 'packages/contracts/**'
+      - 'packages/schemas/lean-backtest-result.v1.schema.json'
       - 'config/dependency-registry.json'
       - 'supply-chain/**'
       - '.github/workflows/integration-lean.yml'
@@ -29,9 +34,21 @@ jobs:
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           dotnet-version: '10.0.400'
+      - name: Setup Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: '3.14.7'
+          check-latest: false
       - name: Verify pins
         run: |
           test "$(dotnet --version)" = "10.0.400"
+          test "$(python --version)" = "Python 3.14.7"
           python scripts/validate_lean_pin.py --require-populated
       - name: Build pinned LEAN Launcher
         run: dotnet build external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
+      - name: Build QROS synthetic algorithm
+        run: dotnet build integration/lean/QrosSyntheticAlgorithm/QrosSyntheticAlgorithm.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
+      - name: Run deterministic QROS to LEAN backtest twice
+        env:
+          PYTHONPATH: src
+        run: python scripts/run_lean_synthetic_backtest.py --output-dir "$RUNNER_TEMP/qros-phase3b"

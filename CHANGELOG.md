@@ -4,6 +4,11 @@ All notable QROS Next engineering milestones are recorded here.
 
 ## Unreleased
 
+### Phase 3B
+- Added a QROS-owned C# synthetic algorithm and five-row local custom-data fixture.
+- Added a two-run deterministic LEAN backtest normalizer with provenance and validation outputs.
+- Added lean-backtest-result/v1 as a research-only, non-gate-opening contract.
+
 ### Phase 3A
 - Pinned QuantConnect LEAN as the sole canonical quant engine using an external gitlink/submodule.
 - Pinned .NET SDK 10.0.400 and actions/setup-dotnet v6.0.0 by immutable revision.

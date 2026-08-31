@@ -31,3 +31,15 @@ This document does not authorize packaging, persistence, broker login, Yuanta in
 ## Phase 3A LEAN
 
 Build process: shell/CI → dotnet 10.0.400 → MSBuild/NuGet → pinned external/lean Launcher source. Future local backtest process boundary is QROS host → dotnet → QuantConnect.Lean.Launcher.dll. No injection, persistence, broker login or live mode is authorized.
+
+## Phase 3B deterministic synthetic backtest
+
+```text
+Python 3.14.7 QROS integration runner
+├─ dotnet 10.0.400 build QROS synthetic algorithm
+└─ dotnet QuantConnect.Lean.Launcher.dll
+   └─ QROS-owned C# algorithm
+      └─ local synthetic CSV
+```
+
+The runner executes the same backtest twice and compares normalized result hashes. No order submission, broker process, injection, persistence or hidden shell is used.

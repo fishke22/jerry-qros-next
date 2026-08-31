@@ -15,3 +15,7 @@ Yuanta/broker endpoints are absent and unauthorized.
 ## Phase 3A LEAN build
 
 Development/CI may access github.com for the exact public LEAN gitlink, NuGet endpoints for dependencies declared by pinned upstream projects, and Microsoft .NET distribution endpoints used by full-SHA-pinned setup-dotnet. QROS runtime does not auto-download LEAN. Yuanta/broker endpoints remain absent.
+
+## Phase 3B deterministic backtest runtime
+
+The actual synthetic backtest requires no external market-data or broker endpoint. The custom data source permits LocalFile only and throws if invoked in live mode. The config points the otherwise-unused LEAN API base URL to `127.0.0.1:9` as a fail-closed sentinel. Build-time GitHub/NuGet/.NET endpoints remain the only external endpoints in CI.
