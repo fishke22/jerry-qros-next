@@ -4,6 +4,11 @@ All notable QROS Next engineering milestones are recorded here.
 
 ## Unreleased
 
+### Phase 3C
+- Started fail-closed LEAN dependency-remediation research on a stacked branch.
+- Recorded current official upstream master/issue/PR evidence without changing the LEAN pin.
+- Added an exact-pinned NuGet direct/transitive vulnerability audit workflow.
+
 ### Phase 3B
 - Added a QROS-owned C# synthetic algorithm and five-row local custom-data fixture.
 - Added a two-run deterministic LEAN backtest normalizer with provenance and validation outputs.

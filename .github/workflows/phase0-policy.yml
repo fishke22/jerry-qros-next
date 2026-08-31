@@ -34,6 +34,8 @@ jobs:
         run: python scripts/validate_supply_chain.py
       - name: Validate LEAN security blocker representation
         run: python scripts/validate_lean_security.py
+      - name: Validate Phase 3C remediation research boundary
+        run: python scripts/validate_lean_remediation_research.py
       - name: Validate SHA256SUMS
         run: python scripts/validate_sha256sums.py
       - name: Run tests

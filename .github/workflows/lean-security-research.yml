@@ -1,0 +1,62 @@
+name: lean-security-research
+on:
+  pull_request:
+    paths:
+      - 'config/lean-remediation-research.json'
+      - 'docs/adr/0008-lean-security-remediation-research.md'
+      - 'docs/source-evidence/phase-3c-lean-security-remediation-research.md'
+      - 'scripts/validate_lean_remediation_research.py'
+      - 'tests/test_lean_remediation_research.py'
+      - '.github/workflows/lean-security-research.yml'
+      - '.github/workflows/phase0-policy.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: lean-security-research-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  nuget-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout QROS and pinned LEAN
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          submodules: true
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.0.400'
+      - name: Verify exact pins
+        run: |
+          test "$(dotnet --version)" = "10.0.400"
+          python scripts/validate_lean_pin.py --require-populated
+          python scripts/validate_lean_remediation_research.py
+      - name: Print Phase 3C canonical SHA256 evidence
+        shell: bash
+        run: |
+          sha256sum \
+            .github/workflows/lean-security-research.yml \
+            .github/workflows/phase0-policy.yml \
+            CHANGELOG.md \
+            config/lean-remediation-research.json \
+            docs/adr/0008-lean-security-remediation-research.md \
+            docs/source-evidence/phase-3c-lean-security-remediation-research.md \
+            scripts/validate_lean_remediation_research.py \
+            tests/test_lean_remediation_research.py
+      - name: Restore pinned LEAN Launcher graph
+        run: dotnet restore external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --nologo
+      - name: Enumerate direct and transitive packages
+        run: dotnet list external/lean/Launcher/QuantConnect.Lean.Launcher.csproj package --include-transitive
+      - name: Enumerate vulnerable packages
+        run: dotnet list external/lean/Launcher/QuantConnect.Lean.Launcher.csproj package --vulnerable --include-transitive
+      - name: Trace blocker dependency origins
+        shell: bash
+        run: |
+          for package in DotNetZip System.Drawing.Common System.Net.Http.WinHttpHandler System.Private.ServiceModel System.ServiceModel.Primitives; do
+            echo "=== QROS NUGET WHY: $package ==="
+            dotnet nuget why external/lean/Launcher/QuantConnect.Lean.Launcher.csproj "$package" || true
+          done
+      - name: Revalidate research boundary
+        run: python scripts/validate_lean_remediation_research.py
