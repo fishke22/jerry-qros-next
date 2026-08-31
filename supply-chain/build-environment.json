@@ -32,6 +32,8 @@
   "text_checkout_policy": {
     "canonical_eol": "LF",
     "enforcement": ".gitattributes",
-    "purpose": "Cross-platform SHA-256 reproducibility on Windows and GitHub Linux runners."
+    "purpose": "Cross-platform SHA-256 reproducibility on Windows and GitHub Linux runners.",
+    "checksum_basis": "CANONICAL_HEAD_GIT_BLOB_BYTES",
+    "working_tree_eol_is_not_checksum_authority": true
   }
 }
