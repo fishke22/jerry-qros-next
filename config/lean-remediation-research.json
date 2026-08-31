@@ -1,7 +1,7 @@
 {
   "research_version": 1,
   "phase": "Phase 3C — LEAN Dependency Security Remediation Research",
-  "status": "IN_PROGRESS",
+  "status": "RESEARCH_ACCEPTED_SECURITY_REMEDIATION_UNAVAILABLE",
   "evidence_date": "2026-09-01",
   "research_only": true,
   "architecture_amendment_approved": false,
@@ -44,7 +44,9 @@
     "launcher_directly_references_compression": true,
     "common_directly_references_compression": true,
     "master_still_contains_ionic_zip_usages": true,
-    "complete_transitive_nuget_graph_status": "PENDING_PHASE3C_CI_AUDIT"
+    "complete_transitive_nuget_graph_status": "AUDITED",
+    "audit_run_id": 33449064111,
+    "audit_job_id": 99674614880
   },
   "candidate_paths": [
     {
@@ -84,13 +86,54 @@
     }
   ],
   "next_gate": {
-    "required": [
-      "EXACT_PINNED_LEAN_FULL_TRANSITIVE_NUGET_AUDIT",
-      "DEPENDENCY_ORIGIN_MAPPING_FOR_ALL_HIGH_CRITICAL_BLOCKERS",
-      "NO_UNREVIEWED_SOURCE_PATCH",
-      "NO_GITLINK_CHANGE",
-      "NO_RUNTIME_PROMOTION"
-    ],
-    "accepted": false
+    "research_evidence_accepted": true,
+    "security_remediation_available": false,
+    "hard_stop_active": true,
+    "architecture_amendment_approved": false,
+    "runtime_promotion_allowed": false,
+    "required_user_decision_only_if_unblocking_before_upstream": [
+      "AUTHORIZE_RESEARCH_ONLY_UPSTREAM_ALIGNED_LEAN_PATCH_EXPERIMENT",
+      "OR_KEEP_BLOCKED_AND_WAIT_FOR_OFFICIAL_LEAN_REMEDIATION"
+    ]
+  },
+  "root_cause_clusters": [
+    {
+      "cluster": "COMPRESSION",
+      "blocker_path": "QuantConnect.Common -> QuantConnect.Compression -> DotNetZip 1.16.0",
+      "blockers": [
+        "DotNetZip 1.16.0 / GHSA-xhg6-9j5j-w4vf / HIGH",
+        "System.Drawing.Common 4.7.0 / GHSA-rxg9-xrhp-64gj / CRITICAL"
+      ],
+      "transitive_detail": "DotNetZip -> System.Security.Permissions 4.7.0 -> System.Windows.Extensions 4.7.0 -> System.Drawing.Common 4.7.0",
+      "no_source_change_escape_path": false
+    },
+    {
+      "cluster": "MESSAGING",
+      "blocker_path": "QuantConnect.Messaging -> NetMQ 4.0.1.6",
+      "blockers": [
+        "System.ServiceModel.Primitives 4.4.0 / GHSA-jc8g-xhw5-6x46 / HIGH",
+        "System.Private.ServiceModel 4.4.0 / GHSA-jc8g-xhw5-6x46 / HIGH",
+        "System.Net.Http.WinHttpHandler 4.4.0 / GHSA-6xh7-4v2w-36q6 / HIGH"
+      ],
+      "additional_observed_advisory": "GHSA-p9wx-v264-q34p / MODERATE on ServiceModel 4.4.0",
+      "transitive_detail": "NetMQ 4.0.1.6 -> System.ServiceModel.Primitives 4.4.0 -> System.Private.ServiceModel 4.4.0 -> System.Net.Http.WinHttpHandler 4.4.0",
+      "no_source_change_escape_path": false
+    }
+  ],
+  "current_market_candidates": {
+    "netmq": {
+      "observed_latest_version": "4.0.4.3",
+      "observed_at": "2026-09-01",
+      "published": "2026-07-30",
+      "current_dependency_examples": [
+        "System.ServiceModel.Primitives >= 10.0.652802",
+        "System.Security.Cryptography.Xml >= 10.0.10"
+      ],
+      "license_observation": "LGPLv3 per upstream repository README",
+      "status": "RESEARCH_CANDIDATE_ONLY",
+      "qros_introduction_authorized": false,
+      "security_compatibility_verified": false,
+      "lean_api_compatibility_verified": false
+    }
   }
 }

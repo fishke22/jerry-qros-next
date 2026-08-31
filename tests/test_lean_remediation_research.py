@@ -27,6 +27,20 @@ class LeanRemediationResearchTests(unittest.TestCase):
             self.r["upstream"]["latest_master_dotnetzip_version"], "1.16.0"
         )
 
+    def test_audit_maps_two_root_cause_clusters(self):
+        clusters = {x["cluster"]: x for x in self.r["root_cause_clusters"]}
+        self.assertIn("COMPRESSION", clusters)
+        self.assertIn("MESSAGING", clusters)
+        self.assertFalse(clusters["COMPRESSION"]["no_source_change_escape_path"])
+        self.assertFalse(clusters["MESSAGING"]["no_source_change_escape_path"])
+
+    def test_research_is_accepted_but_security_hard_stop_remains(self):
+        gate = self.r["next_gate"]
+        self.assertTrue(gate["research_evidence_accepted"])
+        self.assertFalse(gate["security_remediation_available"])
+        self.assertTrue(gate["hard_stop_active"])
+        self.assertFalse(gate["runtime_promotion_allowed"])
+
     def test_warning_suppression_and_drop_in_fork_are_rejected(self):
         c = {x["candidate"]: x for x in self.r["candidate_paths"]}
         self.assertEqual(c["DROP_IN_DOTNETZIP_FORK"]["status"], "REJECTED")

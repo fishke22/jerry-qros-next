@@ -42,6 +42,7 @@ jobs:
             CHANGELOG.md \
             config/lean-remediation-research.json \
             docs/adr/0008-lean-security-remediation-research.md \
+            docs/adr/0009-proposed-lean-security-remediation.md \
             docs/source-evidence/phase-3c-lean-security-remediation-research.md \
             scripts/validate_lean_remediation_research.py \
             tests/test_lean_remediation_research.py

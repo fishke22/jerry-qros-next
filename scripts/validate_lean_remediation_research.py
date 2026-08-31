@@ -44,8 +44,15 @@ def validate() -> dict:
     for rejected in ("DROP_IN_DOTNETZIP_FORK", "SUPPRESS_NUGET_SECURITY_WARNINGS"):
         if candidates.get(rejected, {}).get("status") != "REJECTED":
             raise AssertionError(f"{rejected} must remain rejected")
-    if r.get("next_gate", {}).get("accepted") is not False:
-        raise AssertionError("Phase 3C next gate unexpectedly accepted")
+    gate = r.get("next_gate", {})
+    if gate.get("research_evidence_accepted") is not True:
+        raise AssertionError("Phase 3C research evidence not accepted")
+    if gate.get("security_remediation_available") is not False:
+        raise AssertionError("security remediation incorrectly marked available")
+    if gate.get("hard_stop_active") is not True:
+        raise AssertionError("security hard stop must remain active")
+    if gate.get("architecture_amendment_approved") is not False:
+        raise AssertionError("architecture amendment unexpectedly approved")
     return r
 
 
@@ -55,7 +62,7 @@ def main() -> int:
     args = parser.parse_args()
     r = validate()
     print("QROS Phase 3C research-boundary validation: PASS")
-    if args.require_remediation and not r["next_gate"]["accepted"]:
+    if args.require_remediation and not r["next_gate"]["security_remediation_available"]:
         print("QROS Phase 3C remediation gate: BLOCKED", file=sys.stderr)
         return 2
     return 0
