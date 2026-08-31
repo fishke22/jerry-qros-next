@@ -1,6 +1,6 @@
 {
   "manifest_version": 1,
-  "phase": "Phase 1B foundation",
+  "phase": "Phase 2 data receipt / QA / Parquet / DuckDB vertical slice",
   "product_build_exists": false,
   "ci": {
     "provider": "GitHub Actions",
@@ -8,14 +8,16 @@
     "runner_label": "ubuntu-latest",
     "last_observed_os": "Ubuntu 24.04.4 LTS",
     "last_observed_runner_version": "2.337.0",
-    "python": "CI_IMAGE_DEFAULT_UNPINNED",
-    "status": "GOVERNANCE_TEST_ENVIRONMENT_ONLY"
+    "python": "3.14.7 via actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405",
+    "status": "PHASE_2_DATA_RUNTIME_TEST_ENVIRONMENT",
+    "dependency_lock": "requirements/phase2.lock"
   },
   "windows_product_build": {
     "target": "Windows 11 x64",
-    "status": "NOT_STARTED",
-    "exact_toolchain": "UNSPECIFIED"
+    "status": "DATA_SLICE_SMOKE_TEST_ONLY_NO_PRODUCT_BUILD",
+    "exact_toolchain": "CPython 3.14.x x64; canonical target pin 3.14.7"
   },
-  "reproducibility_status": "FOUNDATION_ONLY_NO_PRODUCT_BUILD",
-  "paid_compute_allowed": false
+  "reproducibility_status": "PHASE_2_HASH_LOCKED_PYPI_RUNTIME",
+  "paid_compute_allowed": false,
+  "data_runtime_exists": true
 }

@@ -13,10 +13,156 @@
       "status": "ADOPTED"
     },
     {
+      "component": "actions/setup-python",
+      "revision": "a309ff8b426b58ec0e2a45f0f869d46889d02405",
+      "version": "v6.2.0",
+      "usage": "CI_ONLY",
+      "status": "ADOPTED"
+    },
+    {
       "component": "QuantConnect/Lean",
       "observed_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
       "usage": "EVIDENCE_ONLY",
       "status": "NOT_INTRODUCED_REVERIFY_IN_PHASE_3"
+    },
+    {
+      "component": "DuckDB",
+      "package_name": "duckdb",
+      "version": "1.5.5",
+      "usage": "PHASE_2_DATA_RUNTIME",
+      "status": "ADOPTED_EXACT_VERSION",
+      "artifact_sha256": {
+        "linux": "fbf0f2d48b43c6c304d00463b463c27ead6c4b01c3c1816b750f728decf71afe",
+        "windows": "9dc826c4b50e64f6c4e4d07a3a9cb075ef70ba3899dc43ec5493dc3d7b04b353"
+      }
+    },
+    {
+      "component": "PyArrow / Parquet",
+      "package_name": "pyarrow",
+      "version": "25.0.1",
+      "usage": "PHASE_2_DATA_RUNTIME",
+      "status": "ADOPTED_EXACT_VERSION",
+      "artifact_sha256": {
+        "linux": "9171748cdf796972d85a4b60157c279913e242992e350c90c7450182a9838b2a",
+        "windows": "f729cfdbd36fd99d543b67a914d2de044c84ebe45be8b34902b299b608c15c8f"
+      }
+    },
+    {
+      "component": "Pandera",
+      "package_name": "pandera",
+      "version": "0.33.0",
+      "usage": "PHASE_2_DATA_RUNTIME",
+      "status": "ADOPTED_EXACT_VERSION",
+      "artifact_sha256": {
+        "universal": "3c4f1f3236b34fbac5b3f366efab293f97f65d5ad992956ddad3a875c42b4b1a"
+      }
+    },
+    {
+      "component": "Narwhals",
+      "package_name": "narwhals",
+      "version": "2.25.0",
+      "usage": "PHASE_2_DATA_RUNTIME",
+      "status": "ADOPTED_EXACT_VERSION",
+      "artifact_sha256": {
+        "universal": "1f0f403e8c7e4463cde9bfe78b12fdd809e3ae3dda6d9b2f802934fb9c7a6a8f"
+      }
+    },
+    {
+      "component": "packaging",
+      "package_name": "packaging",
+      "version": "26.3",
+      "usage": "PHASE_2_DATA_RUNTIME",
+      "status": "ADOPTED_EXACT_VERSION",
+      "artifact_sha256": {
+        "universal": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c"
+      }
+    },
+    {
+      "component": "typing-inspect",
+      "package_name": "typing-inspect",
+      "version": "0.9.0",
+      "usage": "PHASE_2_DATA_RUNTIME",
+      "status": "ADOPTED_EXACT_VERSION",
+      "artifact_sha256": {
+        "universal": "9ee6fc59062311ef8547596ab6b955e1b8aa46242d854bfc78f4f6b0eff35f9f"
+      }
+    },
+    {
+      "component": "mypy-extensions",
+      "package_name": "mypy-extensions",
+      "version": "1.1.0",
+      "usage": "PHASE_2_DATA_RUNTIME",
+      "status": "ADOPTED_EXACT_VERSION",
+      "artifact_sha256": {
+        "universal": "1be4cccdb0f2482337c4743e60421de3a356cd97508abadd57d47403e94f5505"
+      }
+    },
+    {
+      "component": "typing-extensions",
+      "package_name": "typing-extensions",
+      "version": "4.16.0",
+      "usage": "PHASE_2_DATA_RUNTIME",
+      "status": "ADOPTED_EXACT_VERSION",
+      "artifact_sha256": {
+        "universal": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+      }
+    },
+    {
+      "component": "Pydantic",
+      "package_name": "pydantic",
+      "version": "2.13.5",
+      "usage": "PHASE_2_DATA_RUNTIME",
+      "status": "ADOPTED_EXACT_VERSION",
+      "artifact_sha256": {
+        "universal": "346a034f080da3755d8e9cb5e00e8b07de1d39e4f6e2c87d8ab7cafa0b269a73"
+      }
+    },
+    {
+      "component": "pydantic-core",
+      "package_name": "pydantic-core",
+      "version": "2.46.5",
+      "usage": "PHASE_2_DATA_RUNTIME",
+      "status": "ADOPTED_EXACT_VERSION",
+      "artifact_sha256": {
+        "linux": "54d510bac3ee52247af28ed4bb18a1e799f040ac60fd2bf5ccd4c92f1fbe786f",
+        "windows": "fa10ef4112775900e7a0661068635eb67b2ab824fbde764de6e0e21982a93db0"
+      }
+    },
+    {
+      "component": "annotated-types",
+      "package_name": "annotated-types",
+      "version": "0.8.0",
+      "usage": "PHASE_2_DATA_RUNTIME",
+      "status": "ADOPTED_EXACT_VERSION",
+      "artifact_sha256": {
+        "universal": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0"
+      }
+    },
+    {
+      "component": "typing-inspection",
+      "package_name": "typing-inspection",
+      "version": "0.4.4",
+      "usage": "PHASE_2_DATA_RUNTIME",
+      "status": "ADOPTED_EXACT_VERSION",
+      "artifact_sha256": {
+        "universal": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147"
+      }
+    },
+    {
+      "component": "typeguard",
+      "package_name": "typeguard",
+      "version": "4.6.0",
+      "usage": "PHASE_2_DATA_RUNTIME",
+      "status": "ADOPTED_EXACT_VERSION",
+      "artifact_sha256": {
+        "universal": "79878165bb86f2cf5d41d159a0ff1792a796cf496882d2fe1b1c6c7049b9cdd7"
+      }
     }
-  ]
+  ],
+  "python_runtime": {
+    "version": "3.14.7",
+    "source": "python.org",
+    "license": "PSF-2.0",
+    "status": "ADOPTED_PHASE_2_TOOLCHAIN"
+  }
 }

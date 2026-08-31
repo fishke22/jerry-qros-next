@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jerry-qros-next.local/contracts/canonical-market-bar-row/v1",
+  "title": "QROS Canonical Market Bar Row v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "dataset_id",
+    "instrument_id",
+    "timestamp",
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "canonical-market-bar-row/v1"
+    },
+    "dataset_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.-]+$",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "instrument_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "open": {
+      "type": "string",
+      "pattern": "^[0-9]+(?:\\.[0-9]{1,4})?$"
+    },
+    "high": {
+      "type": "string",
+      "pattern": "^[0-9]+(?:\\.[0-9]{1,4})?$"
+    },
+    "low": {
+      "type": "string",
+      "pattern": "^[0-9]+(?:\\.[0-9]{1,4})?$"
+    },
+    "close": {
+      "type": "string",
+      "pattern": "^[0-9]+(?:\\.[0-9]{1,4})?$"
+    },
+    "volume": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

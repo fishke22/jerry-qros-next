@@ -37,6 +37,13 @@
       "schema_path": "packages/schemas/validation-result.v1.schema.json",
       "safety_class": "GOVERNANCE",
       "status": "ACTIVE"
+    },
+    {
+      "contract_id": "canonical-market-bar-row",
+      "version": "1",
+      "schema_path": "packages/schemas/canonical-market-bar-row.v1.schema.json",
+      "safety_class": "DATA",
+      "status": "ACTIVE"
     }
   ]
 }

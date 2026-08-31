@@ -2,18 +2,18 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.7",
   "serialNumber": "urn:uuid:6d1c1155-5a77-4c3e-b2a1-4acb7d4f1b10",
-  "version": 1,
+  "version": 2,
   "metadata": {
-    "timestamp": "2026-08-31T13:20:00Z",
+    "timestamp": "2026-08-31T13:40:00Z",
     "component": {
       "type": "application",
-      "bom-ref": "pkg:generic/jerry-qros-next@phase1b-foundation",
+      "bom-ref": "pkg:generic/jerry-qros-next@phase2-data-slice",
       "name": "Jerry QROS Next",
-      "version": "phase1b-foundation",
+      "version": "phase2-data-slice",
       "properties": [
         {
           "name": "qros:runtime-component-count",
-          "value": "0"
+          "value": "13"
         },
         {
           "name": "qros:package-authorized",
@@ -34,11 +34,366 @@
       ]
     }
   },
-  "components": [],
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/duckdb@1.5.5",
+      "name": "duckdb",
+      "version": "1.5.5",
+      "purl": "pkg:pypi/duckdb@1.5.5",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:dependency-class",
+          "value": "direct"
+        },
+        {
+          "name": "qros:linux-sha256",
+          "value": "fbf0f2d48b43c6c304d00463b463c27ead6c4b01c3c1816b750f728decf71afe"
+        },
+        {
+          "name": "qros:windows-sha256",
+          "value": "9dc826c4b50e64f6c4e4d07a3a9cb075ef70ba3899dc43ec5493dc3d7b04b353"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pyarrow@25.0.1",
+      "name": "pyarrow",
+      "version": "25.0.1",
+      "purl": "pkg:pypi/pyarrow@25.0.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:dependency-class",
+          "value": "direct"
+        },
+        {
+          "name": "qros:linux-sha256",
+          "value": "9171748cdf796972d85a4b60157c279913e242992e350c90c7450182a9838b2a"
+        },
+        {
+          "name": "qros:windows-sha256",
+          "value": "f729cfdbd36fd99d543b67a914d2de044c84ebe45be8b34902b299b608c15c8f"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pandera@0.33.0",
+      "name": "pandera",
+      "version": "0.33.0",
+      "purl": "pkg:pypi/pandera@0.33.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:dependency-class",
+          "value": "direct"
+        },
+        {
+          "name": "qros:universal-sha256",
+          "value": "3c4f1f3236b34fbac5b3f366efab293f97f65d5ad992956ddad3a875c42b4b1a"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/narwhals@2.25.0",
+      "name": "narwhals",
+      "version": "2.25.0",
+      "purl": "pkg:pypi/narwhals@2.25.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:dependency-class",
+          "value": "transitive"
+        },
+        {
+          "name": "qros:universal-sha256",
+          "value": "1f0f403e8c7e4463cde9bfe78b12fdd809e3ae3dda6d9b2f802934fb9c7a6a8f"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/packaging@26.3",
+      "name": "packaging",
+      "version": "26.3",
+      "purl": "pkg:pypi/packaging@26.3",
+      "licenses": [
+        {
+          "expression": "Apache-2.0 OR BSD-2-Clause"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:dependency-class",
+          "value": "transitive"
+        },
+        {
+          "name": "qros:universal-sha256",
+          "value": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/typing-inspect@0.9.0",
+      "name": "typing-inspect",
+      "version": "0.9.0",
+      "purl": "pkg:pypi/typing-inspect@0.9.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:dependency-class",
+          "value": "transitive"
+        },
+        {
+          "name": "qros:universal-sha256",
+          "value": "9ee6fc59062311ef8547596ab6b955e1b8aa46242d854bfc78f4f6b0eff35f9f"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/mypy-extensions@1.1.0",
+      "name": "mypy-extensions",
+      "version": "1.1.0",
+      "purl": "pkg:pypi/mypy-extensions@1.1.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:dependency-class",
+          "value": "transitive"
+        },
+        {
+          "name": "qros:universal-sha256",
+          "value": "1be4cccdb0f2482337c4743e60421de3a356cd97508abadd57d47403e94f5505"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/typing-extensions@4.16.0",
+      "name": "typing-extensions",
+      "version": "4.16.0",
+      "purl": "pkg:pypi/typing-extensions@4.16.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "PSF-2.0"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:dependency-class",
+          "value": "transitive"
+        },
+        {
+          "name": "qros:universal-sha256",
+          "value": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pydantic@2.13.5",
+      "name": "pydantic",
+      "version": "2.13.5",
+      "purl": "pkg:pypi/pydantic@2.13.5",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:dependency-class",
+          "value": "transitive"
+        },
+        {
+          "name": "qros:universal-sha256",
+          "value": "346a034f080da3755d8e9cb5e00e8b07de1d39e4f6e2c87d8ab7cafa0b269a73"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pydantic-core@2.46.5",
+      "name": "pydantic-core",
+      "version": "2.46.5",
+      "purl": "pkg:pypi/pydantic-core@2.46.5",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:dependency-class",
+          "value": "transitive"
+        },
+        {
+          "name": "qros:linux-sha256",
+          "value": "54d510bac3ee52247af28ed4bb18a1e799f040ac60fd2bf5ccd4c92f1fbe786f"
+        },
+        {
+          "name": "qros:windows-sha256",
+          "value": "fa10ef4112775900e7a0661068635eb67b2ab824fbde764de6e0e21982a93db0"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/annotated-types@0.8.0",
+      "name": "annotated-types",
+      "version": "0.8.0",
+      "purl": "pkg:pypi/annotated-types@0.8.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:dependency-class",
+          "value": "transitive"
+        },
+        {
+          "name": "qros:universal-sha256",
+          "value": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/typing-inspection@0.4.4",
+      "name": "typing-inspection",
+      "version": "0.4.4",
+      "purl": "pkg:pypi/typing-inspection@0.4.4",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:dependency-class",
+          "value": "transitive"
+        },
+        {
+          "name": "qros:universal-sha256",
+          "value": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/typeguard@4.6.0",
+      "name": "typeguard",
+      "version": "4.6.0",
+      "purl": "pkg:pypi/typeguard@4.6.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:dependency-class",
+          "value": "transitive"
+        },
+        {
+          "name": "qros:universal-sha256",
+          "value": "79878165bb86f2cf5d41d159a0ff1792a796cf496882d2fe1b1c6c7049b9cdd7"
+        }
+      ]
+    }
+  ],
   "dependencies": [
     {
-      "ref": "pkg:generic/jerry-qros-next@phase1b-foundation",
-      "dependsOn": []
+      "ref": "pkg:generic/jerry-qros-next@phase2-data-slice",
+      "dependsOn": [
+        "pkg:pypi/duckdb@1.5.5",
+        "pkg:pypi/pyarrow@25.0.1",
+        "pkg:pypi/pandera@0.33.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/pandera@0.33.0",
+      "dependsOn": [
+        "pkg:pypi/packaging@26.3",
+        "pkg:pypi/pydantic@2.13.5",
+        "pkg:pypi/typeguard@4.6.0",
+        "pkg:pypi/typing-inspect@0.9.0",
+        "pkg:pypi/typing-extensions@4.16.0",
+        "pkg:pypi/narwhals@2.25.0",
+        "pkg:pypi/pyarrow@25.0.1"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/typing-inspect@0.9.0",
+      "dependsOn": [
+        "pkg:pypi/mypy-extensions@1.1.0",
+        "pkg:pypi/typing-extensions@4.16.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/pydantic@2.13.5",
+      "dependsOn": [
+        "pkg:pypi/annotated-types@0.8.0",
+        "pkg:pypi/pydantic-core@2.46.5",
+        "pkg:pypi/typing-extensions@4.16.0",
+        "pkg:pypi/typing-inspection@0.4.4"
+      ]
     }
   ]
 }
