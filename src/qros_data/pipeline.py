@@ -15,7 +15,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 from .errors import DataQualityError, FailClosedError
-from .qa import PRICE_TYPE, validate_bars
+from .qa import EXPECTED_ARROW_SCHEMA, validate_bars
 from .receipt import RawReceiptStore, parse_aware_timestamp
 
 DATASET_ID = re.compile(r"^[A-Za-z0-9_.-]{1,128}$")
@@ -78,13 +78,7 @@ def normalize_payload(payload: bytes, *, expected_dataset_id: str) -> pa.Table:
             normalized.append({"schema_version":SCHEMA_VERSION,"dataset_id":expected_dataset_id,"instrument_id":str(row["instrument_id"]),"timestamp":timestamp,"open":_parse_price(row["open"],f"row {index} open"),"high":_parse_price(row["high"],f"row {index} high"),"low":_parse_price(row["low"],f"row {index} low"),"close":_parse_price(row["close"],f"row {index} close"),"volume":int(row["volume"])})
         except (KeyError, TypeError, ValueError) as exc:
             raise FailClosedError(f"row {index} cannot be normalized") from exc
-    schema = pa.schema([
-        pa.field("schema_version", pa.string(), nullable=False), pa.field("dataset_id", pa.string(), nullable=False),
-        pa.field("instrument_id", pa.string(), nullable=False), pa.field("timestamp", pa.timestamp("us", tz="UTC"), nullable=False),
-        pa.field("open", PRICE_TYPE, nullable=False), pa.field("high", PRICE_TYPE, nullable=False), pa.field("low", PRICE_TYPE, nullable=False),
-        pa.field("close", PRICE_TYPE, nullable=False), pa.field("volume", pa.int64(), nullable=False),
-    ])
-    return pa.Table.from_pylist(normalized, schema=schema)
+    return pa.Table.from_pylist(normalized, schema=EXPECTED_ARROW_SCHEMA)
 
 
 def _validation_record(source_hash: str, classification: str, reasons: list[str]) -> dict:

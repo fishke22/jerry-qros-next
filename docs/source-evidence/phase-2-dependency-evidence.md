@@ -20,3 +20,11 @@ All have verified permissive license metadata. PyPI metadata for mypy-extensions
 actions/setup-python v6.2.0 is pinned to commit a309ff8b426b58ec0e2a45f0f869d46889d02405 and its official repository LICENSE is MIT.
 
 No paid service, paid runner, cloud database, broker SDK or external market-data feed is introduced.
+
+## Verified implementation caveat
+
+A Windows x64 smoke run with Python 3.14.6 and the exact Phase 2 dependency lock reproduced a Pandera 0.33.0/Narwhals limitation: constructing a Pandera PyArrow column with `pyarrow.decimal128(18, 4)` raises `TypeError: data type 'Decimal(precision=18, scale=4)' not understood by Engine`.
+
+This conflicts with the documented general support for parameterized PyArrow data types. QROS therefore does not treat that documentation claim as verified capability for decimal columns. The canonical Arrow schema still requires decimal128(18,4); PyArrow enforces that physical type, Pandera validates a strict supported-column projection, and deterministic QROS checks validate OHLC semantics.
+
+Status: `VERIFIED_LIMITATION / WORKAROUND_WITHOUT_SCHEMA_RELAXATION`.
