@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jerry-qros-next.local/contracts/universe-membership/v1",
+  "title": "QROS Historical Universe Membership v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "contract_version",
+    "universe_id",
+    "instrument_id",
+    "effective_from",
+    "effective_to",
+    "listed_date",
+    "delisted_date",
+    "source_snapshot_id",
+    "research_only",
+    "validation_status"
+  ],
+  "properties": {
+    "contract_id": {
+      "const": "universe-membership"
+    },
+    "contract_version": {
+      "const": "1"
+    },
+    "universe_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "instrument_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "effective_from": {
+      "type": "string",
+      "minLength": 1
+    },
+    "effective_to": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "listed_date": {
+      "type": "string",
+      "minLength": 1
+    },
+    "delisted_date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_snapshot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "research_only": {
+      "const": true
+    },
+    "validation_status": {
+      "enum": [
+        "PASS_REVIEW_ONLY",
+        "FAIL_REQUIRES_REPAIR",
+        "BLOCKED_INSUFFICIENT_EVIDENCE",
+        "UNKNOWN"
+      ]
+    }
+  }
+}

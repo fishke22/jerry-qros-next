@@ -1,0 +1,13 @@
+{
+  "contract_id": "data-receipt",
+  "contract_version": "1",
+  "dataset_id": "synthetic.unknown",
+  "source_id": "SYNTHETIC_TEST",
+  "source_timestamp": null,
+  "first_known_timestamp": null,
+  "received_at": "2026-08-30T08:01:02+08:00",
+  "source_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "normalizer_version": "synthetic-normalizer-v1",
+  "validator_version": "synthetic-validator-v1",
+  "quality_status": "UNKNOWN"
+}

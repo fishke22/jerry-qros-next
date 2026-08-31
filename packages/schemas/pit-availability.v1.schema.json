@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jerry-qros-next.local/contracts/pit-availability/v1",
+  "title": "QROS Point-in-Time Availability v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "contract_version",
+    "dataset_id",
+    "data_date",
+    "source_release_time",
+    "received_at",
+    "first_known_timestamp",
+    "earliest_usable_timestamp",
+    "timezone",
+    "confidence",
+    "point_in_time_safe_eligible",
+    "research_only"
+  ],
+  "properties": {
+    "contract_id": {
+      "const": "pit-availability"
+    },
+    "contract_version": {
+      "const": "1"
+    },
+    "dataset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "data_date": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_release_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "received_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "first_known_timestamp": {
+      "type": "string",
+      "minLength": 1
+    },
+    "earliest_usable_timestamp": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timezone": {
+      "type": "string",
+      "minLength": 1
+    },
+    "confidence": {
+      "enum": [
+        "CONFIRMED",
+        "INFERRED",
+        "UNKNOWN"
+      ]
+    },
+    "point_in_time_safe_eligible": {
+      "type": "boolean"
+    },
+    "research_only": {
+      "const": true
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "point_in_time_safe_eligible": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "confidence": {
+            "const": "CONFIRMED"
+          },
+          "source_release_time": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  ]
+}

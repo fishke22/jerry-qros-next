@@ -1,0 +1,11 @@
+{
+  "contract_id": "validation-result",
+  "contract_version": "1",
+  "subject_id": "synthetic-evidence-002",
+  "classification": "BLOCKED_INSUFFICIENT_EVIDENCE",
+  "blocking_reasons": [
+    "missing source timestamp"
+  ],
+  "gate_opened": false,
+  "research_only": true
+}

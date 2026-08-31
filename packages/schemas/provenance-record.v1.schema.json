@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jerry-qros-next.local/contracts/provenance-record/v1",
+  "title": "QROS Provenance Record v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "contract_version",
+    "artifact_id",
+    "artifact_type",
+    "source_artifacts",
+    "source_hashes",
+    "output_hash",
+    "code_revision",
+    "config_hash",
+    "generated_at",
+    "research_only",
+    "validation_status"
+  ],
+  "properties": {
+    "contract_id": {
+      "const": "provenance-record"
+    },
+    "contract_version": {
+      "const": "1"
+    },
+    "artifact_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifact_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "source_hashes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^sha256:[0-9a-f]{64}$"
+      }
+    },
+    "output_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "code_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "config_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "generated_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "research_only": {
+      "const": true
+    },
+    "validation_status": {
+      "enum": [
+        "PASS_REVIEW_ONLY",
+        "FAIL_REQUIRES_REPAIR",
+        "BLOCKED_INSUFFICIENT_EVIDENCE",
+        "UNKNOWN"
+      ]
+    }
+  }
+}

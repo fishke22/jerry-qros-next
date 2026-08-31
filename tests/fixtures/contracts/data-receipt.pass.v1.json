@@ -1,0 +1,13 @@
+{
+  "contract_id": "data-receipt",
+  "contract_version": "1",
+  "dataset_id": "synthetic.twse.daily",
+  "source_id": "SYNTHETIC_TEST",
+  "source_timestamp": "2026-08-30T08:00:00+08:00",
+  "first_known_timestamp": "2026-08-30T08:01:00+08:00",
+  "received_at": "2026-08-30T08:01:02+08:00",
+  "source_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "normalizer_version": "synthetic-normalizer-v1",
+  "validator_version": "synthetic-validator-v1",
+  "quality_status": "PASS"
+}
