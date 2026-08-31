@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - foundation/phase-0-governance
   workflow_dispatch:
 permissions:
   contents: read
@@ -22,5 +21,11 @@ jobs:
         run: python scripts/validate_policies.py
       - name: Validate versioned contracts
         run: python scripts/validate_contracts.py
+      - name: Enforce immutable contract versions
+        run: python scripts/validate_contract_immutability.py
+      - name: Validate supply-chain evidence
+        run: python scripts/validate_supply_chain.py
+      - name: Validate SHA256SUMS
+        run: python scripts/validate_sha256sums.py
       - name: Run tests
         run: python -m unittest discover -s tests -v
