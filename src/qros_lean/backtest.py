@@ -32,9 +32,9 @@ def canonical_bytes(value: dict) -> bytes:
 def normalize_result(
     raw: dict, *, algorithm_hash: str, input_hash: str, config_hash: str
 ) -> dict:
-    stats = raw.get("Statistics")
+    stats = raw.get("statistics")
     if not isinstance(stats, dict):
-        raise RuntimeError("LEAN result Statistics missing")
+        raise RuntimeError("LEAN result statistics missing")
     for key, expected in EXPECTED.items():
         actual = str(stats.get(key))
         if actual != expected:

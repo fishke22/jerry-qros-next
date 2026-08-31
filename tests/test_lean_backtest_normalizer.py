@@ -6,7 +6,7 @@ from qros_lean.backtest import normalize_result
 class LeanBacktestNormalizerTests(unittest.TestCase):
     def test_normalized_result_is_stable_and_review_only(self):
         raw = {
-            "Statistics": {
+            "statistics": {
                 "QROS Rows": "5",
                 "QROS Sum": "510.0000",
                 "QROS Last": "104.0000",
@@ -28,7 +28,7 @@ class LeanBacktestNormalizerTests(unittest.TestCase):
 
     def test_statistic_mismatch_fails_closed(self):
         raw = {
-            "Statistics": {
+            "statistics": {
                 "QROS Rows": "4",
                 "QROS Sum": "510.0000",
                 "QROS Last": "104.0000",
