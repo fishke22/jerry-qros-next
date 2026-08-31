@@ -4,6 +4,12 @@ All notable QROS Next engineering milestones are recorded here.
 
 ## Unreleased
 
+### Phase 3A
+- Pinned QuantConnect LEAN as the sole canonical quant engine using an external gitlink/submodule.
+- Pinned .NET SDK 10.0.400 and actions/setup-dotnet v6.0.0 by immutable revision.
+- Added fail-closed LEAN pin/process adapter and source-build integration gate.
+- Kept Yuanta, brokerage and live trading outside the integration boundary.
+
 ### Phase 2
 - Added the first executable Data Receipt → Arrow/Pandera QA → Parquet → DuckDB vertical slice.
 - Added immutable raw receipt, validation and provenance records.

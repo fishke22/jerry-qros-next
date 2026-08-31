@@ -1,4 +1,4 @@
-import json,unittest
+import json,subprocess,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 class Phase0PolicyTests(unittest.TestCase):
@@ -15,4 +15,8 @@ class Phase0PolicyTests(unittest.TestCase):
   r=json.loads((ROOT/"config"/"data-source-registry.json").read_text(encoding="utf-8"))
   for s in r["sources"]:
    if s["terms_verified_at"] is None:self.assertTrue(s["status"].startswith("DENY_"),s["source_id"])
+ def test_external_lean_is_gitlink_not_qros_owned_blob_tree(self):
+  line=subprocess.check_output(["git","ls-files","-s","external/lean"],cwd=ROOT,text=True).strip()
+  self.assertTrue(line.startswith("160000 "))
+  self.assertIn("b692bf4788e8b54fc23bdcb5659666bf055ce89f",line)
 if __name__=="__main__":unittest.main()

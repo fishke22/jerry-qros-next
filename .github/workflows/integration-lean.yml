@@ -1,0 +1,37 @@
+name: lean-integration
+on:
+  pull_request:
+    paths:
+      - '.gitmodules'
+      - 'external/lean'
+      - 'global.json'
+      - 'src/qros_lean/**'
+      - 'scripts/validate_lean_pin.py'
+      - 'config/dependency-registry.json'
+      - 'supply-chain/**'
+      - '.github/workflows/integration-lean.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: lean-integration-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  lean-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout QROS and pinned LEAN
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          submodules: true
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.0.400'
+      - name: Verify pins
+        run: |
+          test "$(dotnet --version)" = "10.0.400"
+          python scripts/validate_lean_pin.py --require-populated
+      - name: Build pinned LEAN Launcher
+        run: dotnet build external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true

@@ -2,18 +2,18 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.7",
   "serialNumber": "urn:uuid:6d1c1155-5a77-4c3e-b2a1-4acb7d4f1b10",
-  "version": 2,
+  "version": 3,
   "metadata": {
-    "timestamp": "2026-08-31T13:40:00Z",
+    "timestamp": "2026-08-31T14:20:00Z",
     "component": {
       "type": "application",
-      "bom-ref": "pkg:generic/jerry-qros-next@phase2-data-slice",
+      "bom-ref": "pkg:generic/jerry-qros-next@phase3a-lean-pin",
       "name": "Jerry QROS Next",
-      "version": "phase2-data-slice",
+      "version": "phase3a-lean-pin",
       "properties": [
         {
           "name": "qros:runtime-component-count",
-          "value": "13"
+          "value": "14"
         },
         {
           "name": "qros:package-authorized",
@@ -356,16 +356,55 @@
           "value": "79878165bb86f2cf5d41d159a0ff1792a796cf496882d2fe1b1c6c7049b9cdd7"
         }
       ]
+    },
+    {
+      "type": "framework",
+      "bom-ref": "pkg:github/QuantConnect/Lean@b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+      "name": "QuantConnect/Lean",
+      "version": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+      "purl": "pkg:github/QuantConnect/Lean@b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/QuantConnect/Lean"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:dependency-class",
+          "value": "canonical-quant-engine"
+        },
+        {
+          "name": "qros:integration-mode",
+          "value": "git-submodule-process-adapter"
+        },
+        {
+          "name": "qros:target-framework",
+          "value": "net10.0"
+        }
+      ]
     }
   ],
   "dependencies": [
     {
-      "ref": "pkg:generic/jerry-qros-next@phase2-data-slice",
+      "ref": "pkg:generic/jerry-qros-next@phase3a-lean-pin",
       "dependsOn": [
         "pkg:pypi/duckdb@1.5.5",
         "pkg:pypi/pyarrow@25.0.1",
-        "pkg:pypi/pandera@0.33.0"
+        "pkg:pypi/pandera@0.33.0",
+        "pkg:github/QuantConnect/Lean@b692bf4788e8b54fc23bdcb5659666bf055ce89f"
       ]
+    },
+    {
+      "ref": "pkg:github/QuantConnect/Lean@b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+      "dependsOn": []
     },
     {
       "ref": "pkg:pypi/pandera@0.33.0",
