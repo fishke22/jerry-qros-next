@@ -102,7 +102,10 @@
       "runtime_scope": "QUANT_ENGINE",
       "introduction_authorized": true,
       "lock_required": true,
-      "notes": "Exact upstream gitlink at external/lean; no fork/copy."
+      "notes": "Exact upstream gitlink at external/lean; no fork/copy.",
+      "security_status": "BLOCKED_KNOWN_HIGH_CRITICAL_TRANSITIVE_VULNERABILITIES",
+      "runtime_promotion_allowed": false,
+      "security_review": "config/lean-security-review.json"
     },
     {
       "dependency_id": "tauri",

@@ -65,7 +65,15 @@ jobs:
             src/qros_lean/backtest.py \
             supply-chain/build-environment.json \
             tests/test_lean_backtest_normalizer.py \
-            tests/test_phase3b_contract.py
+            tests/test_phase3b_contract.py \
+            config/lean-security-review.json \
+            docs/adr/0007-lean-security-blocker.md \
+            docs/security/LEAN_DEPENDENCY_SECURITY_REVIEW.md \
+            scripts/validate_lean_security.py \
+            tests/test_lean_security_policy.py \
+            config/dependency-registry.json \
+            config/supply-chain-policy.json \
+            .github/workflows/phase0-policy.yml
       - name: Build pinned LEAN Launcher
         run: dotnet build external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
       - name: Build QROS synthetic algorithm
@@ -74,3 +82,5 @@ jobs:
         env:
           PYTHONPATH: src
         run: python scripts/run_lean_synthetic_backtest.py --output-dir "$RUNNER_TEMP/qros-phase3b"
+      - name: Enforce LEAN runtime promotion security gate
+        run: python scripts/validate_lean_security.py --enforce-runtime-promotion

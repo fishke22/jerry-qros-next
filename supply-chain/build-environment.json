@@ -53,7 +53,7 @@
     "build_warnings": "UPSTREAM_ANALYZER_WARNINGS_NON_BLOCKING",
     "exact_dotnet_verified": "10.0.400",
     "synthetic_backtest": {
-      "status": "PENDING_CI",
+      "status": "FUNCTIONAL_CI_PASS_SECURITY_BLOCKED",
       "algorithm": "QrosSyntheticBacktestAlgorithm",
       "input": "fixtures_synthetic/lean/qros-synthetic-daily.csv",
       "expected_rows": 5,
@@ -61,8 +61,17 @@
       "expected_last": "104.0000",
       "expected_orders": 0,
       "repetitions": 2,
-      "normalized_result_contract": "lean-backtest-result/v1"
-    }
+      "normalized_result_contract": "lean-backtest-result/v1",
+      "ci_run_id": 33405771315,
+      "ci_job_id": 99532872381,
+      "normalized_hash": "sha256:6da211cffdf7f667b212f9bf083d9f2d78e40b42895e6b6ed0342b76b5d6e5f1",
+      "functional_result": "PASS",
+      "security_result": "BLOCKED_KNOWN_HIGH_CRITICAL_NUGET_VULNERABILITIES",
+      "merge_allowed": false
+    },
+    "security_status": "BLOCKED_PENDING_UPSTREAM_DEPENDENCY_REMEDIATION",
+    "runtime_promotion_allowed": false,
+    "lean_transitive_sbom_status": "INCOMPLETE_REQUIRES_FULL_NUGET_GRAPH_BEFORE_PROMOTION"
   },
   "windows_lean_smoke": {
     "submodule_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",

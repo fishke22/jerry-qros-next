@@ -1,0 +1,86 @@
+{
+  "review_version": 1,
+  "reviewed_at": "2026-08-31",
+  "engine": "QuantConnect/Lean",
+  "engine_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+  "source_build_ci": {
+    "run_id": 33405771315,
+    "job_id": 99532872381
+  },
+  "unknown_is_deny": true,
+  "runtime_promotion_allowed": false,
+  "phase3b_merge_allowed": false,
+  "disposition": "BLOCKED_PENDING_UPSTREAM_OR_INDEPENDENTLY_REVIEWED_REMEDIATION",
+  "lean_transitive_sbom_status": "INCOMPLETE_REQUIRES_FULL_NUGET_GRAPH",
+  "blockers": [
+    {
+      "package": "DotNetZip",
+      "version": "1.16.0",
+      "severity": "HIGH",
+      "advisory": "GHSA-xhg6-9j5j-w4vf",
+      "cve": "CVE-2024-48510",
+      "affected": ">=1.10.1, <=1.16.0",
+      "patched_versions": "NONE_FOR_DOTNETZIP",
+      "observed_scope": "QuantConnect.Compression direct PackageReference; propagated through LEAN build",
+      "platform_scope": "ALL",
+      "reason": "Directory traversal / arbitrary code execution risk when extracting attacker-controlled ZIP entries",
+      "upstream_issue": "https://github.com/QuantConnect/Lean/issues/8795"
+    },
+    {
+      "package": "System.Drawing.Common",
+      "version": "4.7.0",
+      "severity": "CRITICAL",
+      "advisory": "GHSA-rxg9-xrhp-64gj",
+      "cve": "CVE-2021-24112",
+      "affected": ">=4.0.0,<4.7.2",
+      "patched_versions": "4.7.2",
+      "observed_scope": "Transitive package observed by NuGet during pinned LEAN and QROS algorithm builds",
+      "platform_scope": "MACOS_LINUX",
+      "reason": "Remote code execution when parsing certain graphics files; Linux CI is in affected platform scope"
+    },
+    {
+      "package": "System.Net.Http.WinHttpHandler",
+      "version": "4.4.0",
+      "severity": "HIGH",
+      "advisory": "GHSA-6xh7-4v2w-36q6",
+      "cve": "CVE-2017-0247",
+      "affected": ">=4.3.0,<4.5.4",
+      "patched_versions": "4.5.4",
+      "observed_scope": "Transitive package observed in QuantConnect.Messaging build",
+      "platform_scope": "PACKAGE_ADVISORY",
+      "reason": "Known high-severity advisory reported by NuGet restore/build"
+    },
+    {
+      "package": "System.Private.ServiceModel",
+      "version": "4.4.0",
+      "severity": "HIGH",
+      "advisory": "GHSA-jc8g-xhw5-6x46",
+      "cve": "CVE-2018-0786",
+      "affected": "=4.4.0",
+      "patched_versions": "4.4.1",
+      "observed_scope": "Transitive package observed in QuantConnect.Messaging build",
+      "platform_scope": "PACKAGE_ADVISORY",
+      "reason": "Improper certificate validation / security feature bypass"
+    },
+    {
+      "package": "System.ServiceModel.Primitives",
+      "version": "4.4.0",
+      "severity": "HIGH",
+      "advisory": "GHSA-jc8g-xhw5-6x46",
+      "cve": "CVE-2018-0786",
+      "affected": "=4.4.0",
+      "patched_versions": "4.4.1",
+      "observed_scope": "Transitive package observed in QuantConnect.Messaging build",
+      "platform_scope": "PACKAGE_ADVISORY",
+      "reason": "Improper certificate validation / security feature bypass"
+    }
+  ],
+  "remediation_gate": {
+    "accepted_when_any": [
+      "A_NEW_OFFICIAL_LEAN_REVISION_REMOVES_ALL_BLOCKING_HIGH_CRITICAL_ADVISORIES_AND_PASSES_REGRESSION",
+      "AN_INDEPENDENTLY_REVIEWED_QROS_PATCH_OR_FORK_IS_EXPLICITLY_AUTHORIZED_BY_ARCHITECTURE_AMENDMENT_AND_PASSES_FULL_QUANT_REGRESSION",
+      "A_PROVEN_MINIMAL_BUILD_EXCLUDES_VULNERABLE_COMPONENTS_FROM_RUNTIME_AND_FULL_TRANSITIVE_SBOM_CONFIRMS_NO_BLOCKING_ADVISORY"
+    ],
+    "currently_satisfied": false
+  }
+}
