@@ -4,6 +4,10 @@ All notable QROS Next engineering milestones are recorded here.
 
 ## Unreleased
 
+### Phase 3D
+- User explicitly selected Option B: research-only upstream-aligned LEAN security patch experiment.
+- Added isolated Messaging/NetMQ 4.0.4.3 candidate with dependency-audit and deterministic-backtest regression gates.
+
 ### Phase 3C
 - Started fail-closed LEAN dependency-remediation research on a stacked branch.
 - Recorded current official upstream master/issue/PR evidence without changing the LEAN pin.

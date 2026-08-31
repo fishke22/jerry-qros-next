@@ -1,10 +1,10 @@
 {
   "research_version": 1,
   "phase": "Phase 3C — LEAN Dependency Security Remediation Research",
-  "status": "RESEARCH_ACCEPTED_SECURITY_REMEDIATION_UNAVAILABLE",
+  "status": "OPTION_B_RESEARCH_PATCH_EXPERIMENT_AUTHORIZED",
   "evidence_date": "2026-09-01",
   "research_only": true,
-  "architecture_amendment_approved": false,
+  "architecture_amendment_approved": true,
   "lean_source_patch_authorized": false,
   "lean_fork_authorized": false,
   "lean_gitlink_change_authorized": false,
@@ -135,5 +135,22 @@
       "security_compatibility_verified": false,
       "lean_api_compatibility_verified": false
     }
+  },
+  "lean_source_patch_experiment_authorized": true,
+  "user_authorization": {
+    "selection": "Option B",
+    "interpreted_scope": "RESEARCH_ONLY_UPSTREAM_ALIGNED_LEAN_SECURITY_PATCH_EXPERIMENT",
+    "authorized_at": "2026-09-01",
+    "does_not_authorize": [
+      "RUNTIME_PROMOTION",
+      "PHASE3B_MERGE",
+      "LEAN_FORK_PROMOTION",
+      "GITLINK_CHANGE",
+      "DOTNET_TOOLCHAIN_UPGRADE",
+      "YUANTA",
+      "LIVE_TRADING",
+      "PACKAGING",
+      "RELEASE"
+    ]
   }
 }

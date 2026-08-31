@@ -1,0 +1,57 @@
+{
+  "experiment_version": 1,
+  "phase": "Phase 3D — LEAN security patch experiment",
+  "status": "MESSAGING_CANDIDATE_PENDING_CI",
+  "research_only": true,
+  "user_authorization": "Option B",
+  "base_lean_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+  "runtime_promotion_allowed": false,
+  "gitlink_change_allowed": false,
+  "fork_promotion_allowed": false,
+  "dependency_override_promotion_allowed": false,
+  "candidate_order": [
+    "MESSAGING_NETMQ_4_0_4_3",
+    "COMPRESSION_SYSTEM_IO_MIGRATION"
+  ],
+  "candidates": {
+    "MESSAGING_NETMQ_4_0_4_3": {
+      "status": "PENDING_CI",
+      "modified_paths": [
+        "Messaging/QuantConnect.Messaging.csproj"
+      ],
+      "old_version": "4.0.1.6",
+      "new_version": "4.0.4.3",
+      "source": "NuGet NetMQ / zeromq/netmq official project",
+      "observed_at": "2026-09-01",
+      "target_framework_evidence": ".NET 10 compatible",
+      "license": "LGPL-3.0-family",
+      "license_change_from_existing_dependency": false,
+      "expected_removed_blockers": [
+        "System.ServiceModel.Primitives 4.4.0 / GHSA-jc8g-xhw5-6x46",
+        "System.Private.ServiceModel 4.4.0 / GHSA-jc8g-xhw5-6x46",
+        "System.Net.Http.WinHttpHandler 4.4.0 / GHSA-6xh7-4v2w-36q6"
+      ],
+      "expected_remaining_blockers": [
+        "DotNetZip 1.16.0 / GHSA-xhg6-9j5j-w4vf",
+        "System.Drawing.Common 4.7.0 / GHSA-rxg9-xrhp-64gj"
+      ],
+      "acceptance": [
+        "ONLY_EXPECTED_LEAN_FILE_MODIFIED",
+        "RESTORE_SUCCESS",
+        "MESSAGING_HIGH_BLOCKERS_ABSENT",
+        "COMPRESSION_BLOCKERS_STILL_DETECTED",
+        "LEAN_LAUNCHER_BUILD_PASS",
+        "QROS_SYNTHETIC_ALGORITHM_BUILD_PASS",
+        "DETERMINISTIC_BACKTEST_PASS"
+      ],
+      "promotion_allowed": false
+    },
+    "COMPRESSION_SYSTEM_IO_MIGRATION": {
+      "status": "PLANNED_AFTER_MESSAGING_CANDIDATE",
+      "promotion_allowed": false,
+      "implementation_authorized": true,
+      "expected_scope": "Remove DotNetZip/Ionic.Zip dependency through System.IO.Compression-aligned source changes",
+      "note": "Must be evaluated independently after Messaging result so failure attribution remains clear."
+    }
+  }
+}
