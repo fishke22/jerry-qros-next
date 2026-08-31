@@ -19,5 +19,14 @@
   },
   "reproducibility_status": "PHASE_2_HASH_LOCKED_PYPI_RUNTIME",
   "paid_compute_allowed": false,
-  "data_runtime_exists": true
+  "data_runtime_exists": true,
+  "windows_smoke": {
+    "observed_python": "3.14.6 x64",
+    "canonical_python_pin": "3.14.7",
+    "dependency_install": "PASS_HASH_LOCKED_WHEELS",
+    "phase2_functional_tests": "5/5 PASS",
+    "full_repository_tests": "18/18 PASS",
+    "scope": "COMPATIBILITY_SMOKE_NOT_CANONICAL_TOOLCHAIN_PROOF",
+    "workspace": "TEMP_ONLY_OUTSIDE_CANONICAL_REPOSITORY"
+  }
 }
