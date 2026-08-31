@@ -1,7 +1,7 @@
 {
   "experiment_version": 1,
   "phase": "Phase 3D — LEAN security patch experiment",
-  "status": "MESSAGING_CANDIDATE_PENDING_CI",
+  "status": "MESSAGING_PASS_COMPRESSION_PENDING_CI",
   "research_only": true,
   "user_authorization": "Option B",
   "base_lean_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
@@ -15,7 +15,7 @@
   ],
   "candidates": {
     "MESSAGING_NETMQ_4_0_4_3": {
-      "status": "PENDING_CI",
+      "status": "RESEARCH_CANDIDATE_PASS",
       "modified_paths": [
         "Messaging/QuantConnect.Messaging.csproj"
       ],
@@ -44,14 +44,71 @@
         "QROS_SYNTHETIC_ALGORITHM_BUILD_PASS",
         "DETERMINISTIC_BACKTEST_PASS"
       ],
-      "promotion_allowed": false
+      "promotion_allowed": false,
+      "ci_run_id": 33452583461,
+      "ci_job_id": 99685556630,
+      "observed_service_model_version": "10.0.652802",
+      "observed_remaining_vulnerabilities": [
+        "DotNetZip 1.16.0 / HIGH",
+        "System.Drawing.Common 4.7.0 / CRITICAL"
+      ],
+      "quant_behavior": {
+        "statistics": {
+          "qros_rows": 5,
+          "qros_sum": "510.0000",
+          "qros_last": "104.0000",
+          "total_orders": 0
+        },
+        "deterministic_backtest": "PASS",
+        "note": "Normalized hash changed because assembly evidence changed; quant statistics and zero-order behavior remained identical."
+      }
     },
     "COMPRESSION_SYSTEM_IO_MIGRATION": {
-      "status": "PLANNED_AFTER_MESSAGING_CANDIDATE",
+      "status": "PENDING_CI",
       "promotion_allowed": false,
       "implementation_authorized": true,
-      "expected_scope": "Remove DotNetZip/Ionic.Zip dependency through System.IO.Compression-aligned source changes",
-      "note": "Must be evaluated independently after Messaging result so failure attribution remains clear."
+      "technique": "QROS_OWNED_SYSTEM_IO_COMPRESSION_COMPATIBILITY_BRIDGE",
+      "modified_paths": [
+        "Compression/QuantConnect.Compression.csproj",
+        "Compression/QrosRuntimeCompressionCompat.cs"
+      ],
+      "removes_package": "DotNetZip 1.16.0",
+      "adds_third_party_package": false,
+      "runtime_library": "System.IO.Compression",
+      "expected_removed_blockers": [
+        "DotNetZip 1.16.0 / GHSA-xhg6-9j5j-w4vf",
+        "System.Drawing.Common 4.7.0 / GHSA-rxg9-xrhp-64gj"
+      ],
+      "expected_remaining_blockers": [
+        "System.ServiceModel.Primitives 4.4.0 / GHSA-jc8g-xhw5-6x46",
+        "System.Private.ServiceModel 4.4.0 / GHSA-jc8g-xhw5-6x46",
+        "System.Net.Http.WinHttpHandler 4.4.0 / GHSA-6xh7-4v2w-36q6"
+      ],
+      "acceptance": [
+        "ONLY_EXPECTED_LEAN_FILES_MODIFIED",
+        "RESTORE_SUCCESS",
+        "COMPRESSION_HIGH_CRITICAL_BLOCKERS_ABSENT",
+        "MESSAGING_BLOCKERS_STILL_DETECTED",
+        "LEAN_LAUNCHER_BUILD_PASS",
+        "QROS_COMPRESSION_COMPAT_SMOKE_PASS",
+        "QROS_SYNTHETIC_ALGORITHM_BUILD_PASS",
+        "DETERMINISTIC_BACKTEST_PASS"
+      ],
+      "caveat": "Compatibility bridge is not an upstream final design and is not promotable without separate review."
     }
+  },
+  "combined_candidate": {
+    "status": "PENDING_CI",
+    "applies": [
+      "MESSAGING_NETMQ_4_0_4_3",
+      "COMPRESSION_SYSTEM_IO_MIGRATION"
+    ],
+    "acceptance": [
+      "NO_HIGH_OR_CRITICAL_NUGET_VULNERABILITY_IN_LAUNCHER_GRAPH",
+      "LEAN_LAUNCHER_BUILD_PASS",
+      "QROS_COMPRESSION_COMPAT_SMOKE_PASS",
+      "DETERMINISTIC_BACKTEST_PASS"
+    ],
+    "promotion_allowed": false
   }
 }

@@ -20,8 +20,11 @@ def validate() -> dict:
     r = load()
     if r.get("research_only") is not True:
         raise AssertionError("Phase 3C must remain research-only")
+    if r.get("architecture_amendment_approved") is not True:
+        raise AssertionError("Option B research amendment must be approved")
+    if r.get("lean_source_patch_experiment_authorized") is not True:
+        raise AssertionError("Option B research patch experiment must be authorized")
     for key in (
-        "architecture_amendment_approved",
         "lean_source_patch_authorized",
         "lean_fork_authorized",
         "lean_gitlink_change_authorized",
@@ -51,8 +54,8 @@ def validate() -> dict:
         raise AssertionError("security remediation incorrectly marked available")
     if gate.get("hard_stop_active") is not True:
         raise AssertionError("security hard stop must remain active")
-    if gate.get("architecture_amendment_approved") is not False:
-        raise AssertionError("architecture amendment unexpectedly approved")
+    if gate.get("architecture_amendment_approved") is not True:
+        raise AssertionError("Option B research amendment missing from next gate")
     return r
 
 

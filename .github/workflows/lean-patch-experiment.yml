@@ -71,5 +71,104 @@ jobs:
         env:
           PYTHONPATH: src
         run: python scripts/run_lean_synthetic_backtest.py --output-dir "$RUNNER_TEMP/qros-phase3d-messaging"
-      - name: Confirm experiment is not promotable
-        run: python scripts/validate_lean_patch_experiment.py --require-runtime-promotion
+      - name: Confirm experiment remains research-only
+        run: python scripts/validate_lean_patch_experiment.py
+
+  compression-runtime-bridge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout QROS and exact pinned LEAN
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          submodules: true
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.0.400'
+      - name: Setup Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: '3.14.7'
+          check-latest: false
+      - name: Verify authorization and exact pin
+        run: |
+          python scripts/validate_lean_pin.py --require-populated
+          python scripts/validate_lean_patch_experiment.py
+      - name: Apply isolated Compression candidate
+        run: python scripts/apply_lean_patch_experiment.py --candidate compression-system-io-bridge
+      - name: Verify source-change scope
+        shell: bash
+        run: |
+          git -C external/lean status --porcelain
+          test "$(git -C external/lean diff --name-only)" = "Compression/QuantConnect.Compression.csproj"
+          test -f external/lean/Compression/QrosRuntimeCompressionCompat.cs
+          test "$(git -C external/lean status --porcelain | wc -l)" = "2"
+      - name: Restore patched Launcher graph
+        run: dotnet restore external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --nologo
+      - name: Audit patched vulnerable graph
+        shell: bash
+        run: |
+          dotnet list external/lean/Launcher/QuantConnect.Lean.Launcher.csproj package --vulnerable --include-transitive | tee "$RUNNER_TEMP/vulnerable.txt"
+          ! grep -q "DotNetZip.*1.16.0.*High" "$RUNNER_TEMP/vulnerable.txt"
+          ! grep -q "System.Drawing.Common.*4.7.0.*Critical" "$RUNNER_TEMP/vulnerable.txt"
+          grep -q "System.Net.Http.WinHttpHandler.*4.4.0.*High" "$RUNNER_TEMP/vulnerable.txt"
+          grep -q "System.Private.ServiceModel.*4.4.0.*High" "$RUNNER_TEMP/vulnerable.txt"
+          grep -q "System.ServiceModel.Primitives.*4.4.0.*High" "$RUNNER_TEMP/vulnerable.txt"
+      - name: Build patched LEAN Launcher
+        run: dotnet build external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
+      - name: Run QROS Compression compatibility smoke
+        run: dotnet run --project integration/lean/QrosCompressionCompatSmoke/QrosCompressionCompatSmoke.csproj --configuration Release
+      - name: Build QROS synthetic algorithm
+        run: dotnet build integration/lean/QrosSyntheticAlgorithm/QrosSyntheticAlgorithm.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
+      - name: Run deterministic QROS backtest twice
+        env:
+          PYTHONPATH: src
+        run: python scripts/run_lean_synthetic_backtest.py --output-dir "$RUNNER_TEMP/qros-phase3d-compression"
+      - name: Confirm experiment remains research-only
+        run: python scripts/validate_lean_patch_experiment.py
+
+  combined-security-patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout QROS and exact pinned LEAN
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          submodules: true
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.0.400'
+      - name: Setup Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: '3.14.7'
+          check-latest: false
+      - name: Verify authorization and exact pin
+        run: |
+          python scripts/validate_lean_pin.py --require-populated
+          python scripts/validate_lean_patch_experiment.py
+      - name: Apply both isolated candidates
+        run: |
+          python scripts/apply_lean_patch_experiment.py --candidate messaging-netmq-4.0.4.3
+          python scripts/apply_lean_patch_experiment.py --candidate compression-system-io-bridge
+      - name: Restore combined Launcher graph
+        run: dotnet restore external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --nologo
+      - name: Require no HIGH or CRITICAL NuGet advisories
+        shell: bash
+        run: |
+          dotnet list external/lean/Launcher/QuantConnect.Lean.Launcher.csproj package --vulnerable --include-transitive | tee "$RUNNER_TEMP/vulnerable.txt"
+          ! grep -Eq "High|Critical" "$RUNNER_TEMP/vulnerable.txt"
+      - name: Build combined patched LEAN Launcher
+        run: dotnet build external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
+      - name: Run QROS Compression compatibility smoke
+        run: dotnet run --project integration/lean/QrosCompressionCompatSmoke/QrosCompressionCompatSmoke.csproj --configuration Release
+      - name: Build QROS synthetic algorithm
+        run: dotnet build integration/lean/QrosSyntheticAlgorithm/QrosSyntheticAlgorithm.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
+      - name: Run deterministic QROS backtest twice
+        env:
+          PYTHONPATH: src
+        run: python scripts/run_lean_synthetic_backtest.py --output-dir "$RUNNER_TEMP/qros-phase3d-combined"
+      - name: Confirm experiment remains research-only
+        run: python scripts/validate_lean_patch_experiment.py

@@ -18,6 +18,13 @@ class LeanPatchExperimentTests(unittest.TestCase):
         self.assertFalse(r["lean_fork_authorized"])
         self.assertFalse(r["lean_gitlink_change_authorized"])
 
+    def test_compression_candidate_is_authorized_but_not_promotable(self):
+        e=json.loads((ROOT/"config"/"lean-patch-experiment.json").read_text(encoding="utf-8"))
+        candidate=e["candidates"]["COMPRESSION_SYSTEM_IO_MIGRATION"]
+        self.assertTrue(candidate["implementation_authorized"])
+        self.assertFalse(candidate["promotion_allowed"])
+        self.assertFalse(e["combined_candidate"]["promotion_allowed"])
+
     def test_messaging_patch_is_exact_and_fail_closed(self):
         with tempfile.TemporaryDirectory() as d:
             p=Path(d)/"x.csproj"

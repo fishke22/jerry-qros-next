@@ -89,7 +89,7 @@
     "research_evidence_accepted": true,
     "security_remediation_available": false,
     "hard_stop_active": true,
-    "architecture_amendment_approved": false,
+    "architecture_amendment_approved": true,
     "runtime_promotion_allowed": false,
     "required_user_decision_only_if_unblocking_before_upstream": [
       "AUTHORIZE_RESEARCH_ONLY_UPSTREAM_ALIGNED_LEAN_PATCH_EXPERIMENT",

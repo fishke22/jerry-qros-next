@@ -5,22 +5,41 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 LEAN = ROOT / "external" / "lean"
 
-CANDIDATES = {
-    "messaging-netmq-4.0.4.3": {
-        "path": LEAN / "Messaging" / "QuantConnect.Messaging.csproj",
-        "old": '<PackageReference Include="NetMQ" Version="4.0.1.6" />',
-        "new": '<PackageReference Include="NetMQ" Version="4.0.4.3" />',
-    }
-}
+MESSAGING_OLD = '<PackageReference Include="NetMQ" Version="4.0.1.6" />'
+MESSAGING_NEW = '<PackageReference Include="NetMQ" Version="4.0.4.3" />'
+DOTNETZIP_LINE = '    <PackageReference Include="DotNetZip" Version="1.16.0" />\n'
+
+RUNTIME_COMPRESSION_BRIDGE = "// QROS RESEARCH-ONLY COMPATIBILITY BRIDGE.\n// Not an upstream LEAN source file. Do not promote without architecture review.\nusing System;\nusing System.Collections;\nusing System.Collections.Generic;\nusing System.IO;\nusing System.IO.Compression;\nusing System.Linq;\n\nnamespace Ionic.Zip\n{\n    public enum Zip64Option\n    {\n        Default = 0,\n        Always = 1\n    }\n\n    public class ZipException : Exception\n    {\n        public ZipException(string message) : base(message) { }\n        public ZipException(string message, Exception inner) : base(message, inner) { }\n    }\n\n    public sealed class ZipEntry\n    {\n        private readonly byte[] _content;\n\n        internal ZipEntry(string fileName, byte[] content)\n        {\n            FileName = fileName;\n            _content = content ?? Array.Empty<byte>();\n        }\n\n        public string FileName { get; }\n        public long UncompressedSize => _content.LongLength;\n\n        public Stream OpenReader()\n        {\n            return new MemoryStream(_content, writable: false);\n        }\n\n        public void Extract(Stream target)\n        {\n            using var source = OpenReader();\n            source.CopyTo(target);\n        }\n\n        internal byte[] Content => _content;\n    }\n\n    public sealed class ZipFile : IEnumerable<ZipEntry>, IDisposable\n    {\n        private readonly List<ZipEntry> _entries = new();\n\n        public ZipFile(string path)\n        {\n            if (File.Exists(path))\n            {\n                using var stream = File.OpenRead(path);\n                Load(stream);\n            }\n        }\n\n        private ZipFile(Stream stream)\n        {\n            Load(stream);\n        }\n\n        public static ZipFile Read(string path)\n        {\n            try\n            {\n                return new ZipFile(path);\n            }\n            catch (Exception exception) when (exception is InvalidDataException || exception is IOException)\n            {\n                throw new ZipException($\"Cannot read '{path}' as a zip file\", exception);\n            }\n        }\n\n        public static ZipFile Read(Stream stream)\n        {\n            try\n            {\n                return new ZipFile(stream);\n            }\n            catch (Exception exception) when (exception is InvalidDataException || exception is IOException)\n            {\n                throw new ZipException(\"Cannot read stream as a zip file\", exception);\n            }\n        }\n\n        public Zip64Option UseZip64WhenSaving { get; set; }\n\n        public IReadOnlyList<ZipEntry> Entries => _entries;\n        public int Count => _entries.Count;\n        public ZipEntry this[int index] => _entries[index];\n\n        public ZipEntry this[string fileName] =>\n            _entries.FirstOrDefault(x =>\n                string.Equals(x.FileName, fileName, StringComparison.OrdinalIgnoreCase));\n\n        public bool ContainsEntry(string fileName) => this[fileName] != null;\n\n        public void RemoveEntry(string fileName)\n        {\n            var entry = this[fileName];\n            if (entry != null)\n            {\n                _entries.Remove(entry);\n            }\n        }\n\n        public ZipEntry AddEntry(string fileName, byte[] content)\n        {\n            var entry = new ZipEntry(fileName, content);\n            _entries.Add(entry);\n            return entry;\n        }\n\n        public void Save(string path)\n        {\n            using var output = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);\n            using var archive = new ZipArchive(output, ZipArchiveMode.Create, leaveOpen: false);\n            foreach (var entry in _entries)\n            {\n                var archiveEntry = archive.CreateEntry(entry.FileName, CompressionLevel.Optimal);\n                using var target = archiveEntry.Open();\n                target.Write(entry.Content, 0, entry.Content.Length);\n            }\n        }\n\n        public IEnumerator<ZipEntry> GetEnumerator() => _entries.GetEnumerator();\n        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();\n        public void Dispose() { }\n\n        private void Load(Stream stream)\n        {\n            using var archive = new ZipArchive(stream, ZipArchiveMode.Read, leaveOpen: true);\n            foreach (var entry in archive.Entries)\n            {\n                using var source = entry.Open();\n                using var memory = new MemoryStream();\n                source.CopyTo(memory);\n                _entries.Add(new ZipEntry(entry.FullName, memory.ToArray()));\n            }\n        }\n    }\n}\n\nnamespace Ionic.Zlib\n{\n    public class ZlibException : Exception\n    {\n        public ZlibException(string message) : base(message) { }\n        public ZlibException(string message, Exception inner) : base(message, inner) { }\n    }\n}\n"
 
 
-def apply(candidate: str) -> Path:
-    cfg = CANDIDATES[candidate]
-    path = cfg["path"]
+def _replace_once(path: Path, old: str, new: str) -> None:
     text = path.read_text(encoding="utf-8-sig")
-    if cfg["new"] in text:
-        raise RuntimeError("candidate already applied; refusing ambiguous state")
-    if text.count(cfg["old"]) != 1:
-        raise RuntimeError("expected exact old dependency line not found once")
-    path.write_text(text.replace(cfg["old"], cfg["new"]), encoding="utf-8")
-    return path
+    if new and new in text:
+        raise RuntimeError(f"candidate already applied to {path}")
+    if text.count(old) != 1:
+        raise RuntimeError(f"expected exact source text not found once in {path}")
+    path.write_text(text.replace(old, new), encoding="utf-8")
+
+
+def apply(candidate: str) -> list[Path]:
+    if candidate == "messaging-netmq-4.0.4.3":
+        path = LEAN / "Messaging" / "QuantConnect.Messaging.csproj"
+        _replace_once(path, MESSAGING_OLD, MESSAGING_NEW)
+        return [path]
+
+    if candidate == "compression-system-io-bridge":
+        project = LEAN / "Compression" / "QuantConnect.Compression.csproj"
+        bridge_path = LEAN / "Compression" / "QrosRuntimeCompressionCompat.cs"
+        if bridge_path.exists():
+            raise RuntimeError("compression compatibility bridge already exists")
+        _replace_once(project, DOTNETZIP_LINE, "")
+        bridge_path.write_text(RUNTIME_COMPRESSION_BRIDGE, encoding="utf-8")
+        return [project, bridge_path]
+
+    raise KeyError(candidate)
+
+
+CANDIDATES = {
+    "messaging-netmq-4.0.4.3",
+    "compression-system-io-bridge",
+}

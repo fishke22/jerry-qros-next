@@ -14,9 +14,10 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidate", choices=sorted(CANDIDATES), required=True)
     args = parser.parse_args()
-    path = apply(args.candidate)
+    paths = apply(args.candidate)
     print(f"QROS LEAN patch experiment applied: {args.candidate}")
-    print(path.relative_to(ROOT / "external" / "lean"))
+    for path in paths:
+        print(path.relative_to(ROOT / "external" / "lean"))
     return 0
 
 
