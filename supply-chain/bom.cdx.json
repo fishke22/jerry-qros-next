@@ -1,0 +1,44 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.7",
+  "serialNumber": "urn:uuid:6d1c1155-5a77-4c3e-b2a1-4acb7d4f1b10",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-08-31T13:20:00Z",
+    "component": {
+      "type": "application",
+      "bom-ref": "pkg:generic/jerry-qros-next@phase1b-foundation",
+      "name": "Jerry QROS Next",
+      "version": "phase1b-foundation",
+      "properties": [
+        {
+          "name": "qros:runtime-component-count",
+          "value": "0"
+        },
+        {
+          "name": "qros:package-authorized",
+          "value": "false"
+        },
+        {
+          "name": "qros:release-authorized",
+          "value": "false"
+        },
+        {
+          "name": "qros:yuanta-integration-authorized",
+          "value": "false"
+        },
+        {
+          "name": "qros:live-trading-authorized",
+          "value": "false"
+        }
+      ]
+    }
+  },
+  "components": [],
+  "dependencies": [
+    {
+      "ref": "pkg:generic/jerry-qros-next@phase1b-foundation",
+      "dependsOn": []
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "manifest_version": 1,
+  "qros_source_revision": {
+    "strategy": "GIT_COMMIT_AT_BUILD",
+    "repository": "fishke22/jerry-qros-next",
+    "default_branch": "main"
+  },
+  "external_revisions": [
+    {
+      "component": "actions/checkout",
+      "revision": "de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+      "usage": "CI_ONLY",
+      "status": "ADOPTED"
+    },
+    {
+      "component": "QuantConnect/Lean",
+      "observed_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+      "usage": "EVIDENCE_ONLY",
+      "status": "NOT_INTRODUCED_REVERIFY_IN_PHASE_3"
+    }
+  ]
+}

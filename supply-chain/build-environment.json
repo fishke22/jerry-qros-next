@@ -1,0 +1,21 @@
+{
+  "manifest_version": 1,
+  "phase": "Phase 1B foundation",
+  "product_build_exists": false,
+  "ci": {
+    "provider": "GitHub Actions",
+    "runner_class": "standard GitHub-hosted runner",
+    "runner_label": "ubuntu-latest",
+    "last_observed_os": "Ubuntu 24.04.4 LTS",
+    "last_observed_runner_version": "2.337.0",
+    "python": "CI_IMAGE_DEFAULT_UNPINNED",
+    "status": "GOVERNANCE_TEST_ENVIRONMENT_ONLY"
+  },
+  "windows_product_build": {
+    "target": "Windows 11 x64",
+    "status": "NOT_STARTED",
+    "exact_toolchain": "UNSPECIFIED"
+  },
+  "reproducibility_status": "FOUNDATION_ONLY_NO_PRODUCT_BUILD",
+  "paid_compute_allowed": false
+}

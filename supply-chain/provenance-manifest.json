@@ -1,0 +1,17 @@
+{
+  "manifest_version": 1,
+  "canonical_repository": "fishke22/jerry-qros-next",
+  "authority": {
+    "artifact": "deep-research-report.md",
+    "sha256": "fe954d6a3bd74d657375a67612db2c0825434559fbeaef2af1010d034914835c",
+    "status": "AUTHORITATIVE_SPEC_WITH_APPROVED_PUBLIC_REPO_AMENDMENT"
+  },
+  "source_revision_strategy": "GIT_COMMIT_AT_BUILD",
+  "contract_manifest": "packages/contracts/contract-manifest.json",
+  "dependency_registry": "config/dependency-registry.json",
+  "data_source_registry": "config/data-source-registry.json",
+  "cost_policy": "config/cost-policy.json",
+  "local_source_promotion_policy": "config/local-source-promotion-policy.json",
+  "generated_evidence_policy": "FAIL_CLOSED",
+  "unknown_is_deny": true
+}
