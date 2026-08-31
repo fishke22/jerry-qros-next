@@ -119,8 +119,19 @@ def query_parquet(path: Path) -> dict:
     try:
         connection.execute("SET autoinstall_known_extensions=false")
         connection.execute("SET autoload_known_extensions=false")
-        row = connection.execute("SELECT count(*)::BIGINT, min(timestamp), max(timestamp), sum(volume)::HUGEINT FROM read_parquet(?)", [str(path)]).fetchone()
-        return {"row_count":int(row[0]),"min_timestamp":row[1].isoformat() if row[1] is not None else None,"max_timestamp":row[2].isoformat() if row[2] is not None else None,"total_volume":int(row[3]) if row[3] is not None else 0}
+        connection.execute("SET TimeZone='UTC'")
+        row = connection.execute(
+            "SELECT count(*)::BIGINT, CAST(min(timestamp) AS VARCHAR), "
+            "CAST(max(timestamp) AS VARCHAR), sum(volume)::HUGEINT "
+            "FROM read_parquet(?)",
+            [str(path)],
+        ).fetchone()
+        return {
+            "row_count": int(row[0]),
+            "min_timestamp": row[1],
+            "max_timestamp": row[2],
+            "total_volume": int(row[3]) if row[3] is not None else 0,
+        }
     finally:
         connection.close()
 

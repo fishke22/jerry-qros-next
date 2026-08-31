@@ -40,3 +40,11 @@ The same Windows smoke environment showed that PyArrow 25.0.1 cannot materialize
 QROS therefore uses `timestamp(us, +00:00)` for this Phase 2 canonical physical schema. This preserves UTC offset semantics and avoids adding `tzdata` or `pytz` solely for a named-zone alias.
 
 Status: `VERIFIED_WINDOWS_PLATFORM_BEHAVIOR / NO_EXTRA_DEPENDENCY_REQUIRED`.
+
+## DuckDB Python timezone conversion
+
+Windows smoke testing also showed DuckDB 1.5.5 can query the timezone-aware Parquet data without `pytz`, but returning a timezone-aware timestamp as a Python object triggers `ModuleNotFoundError: No module named 'pytz'`.
+
+QROS query summaries therefore set `TimeZone='UTC'` and cast aggregate timestamps to text inside DuckDB SQL. This was chosen instead of adding `pytz` solely for result-object materialization.
+
+Status: `VERIFIED_WINDOWS_PLATFORM_BEHAVIOR / QUERY_BOUNDARY_ADAPTED`.
