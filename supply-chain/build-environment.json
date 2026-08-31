@@ -45,6 +45,23 @@
     "integration_mode": "GIT_SUBMODULE_PROCESS_ADAPTER",
     "target_framework": "net10.0",
     "build_project": "Launcher/QuantConnect.Lean.Launcher.csproj",
-    "status": "PINNED_BUILD_GATE_PENDING"
+    "status": "CI_SOURCE_BUILD_PASS",
+    "ci_run_id": 33402286561,
+    "ci_job_id": 99521269638,
+    "build_result": "SUCCESS",
+    "build_duration": "1m34s",
+    "build_warnings": "UPSTREAM_ANALYZER_WARNINGS_NON_BLOCKING",
+    "exact_dotnet_verified": "10.0.400"
+  },
+  "windows_lean_smoke": {
+    "submodule_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+    "policy_contract_supply_chain_sha_tests": "PASS",
+    "tests": "24/24 PASS",
+    "installed_dotnet_sdks": [
+      "8.0.423",
+      "10.0.301"
+    ],
+    "exact_dotnet_10_0_400_available": false,
+    "local_source_build": "NOT_RUN_FAIL_CLOSED_EXACT_SDK_UNAVAILABLE"
   }
 }
