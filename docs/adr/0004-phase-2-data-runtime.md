@@ -23,7 +23,7 @@ Current official evidence supports a Windows 11 x64 Python 3.14 runtime: DuckDB 
 9. UNKNOWN receipt timing blocks canonical writes.
 10. PASS_REVIEW_ONLY never opens an execution or trading gate.
 11. All PyPI dependencies are exact-version and wheel-hash locked for CPython 3.14 Windows x64 and Ubuntu x86-64 where platform-specific.
-12. DuckDB extension auto-install/auto-load is disabled in this slice.\n13. Verified Windows smoke testing found Pandera 0.33.0/Narwhals unable to resolve `pyarrow.decimal128(18,4)` despite documentation indicating parameterized Arrow types are supported. Decimal physical typing therefore remains a PyArrow responsibility; this limitation is recorded rather than silently relaxed.
+12. DuckDB extension auto-install/auto-load is disabled in this slice.\n13. Verified Windows smoke testing found Pandera 0.33.0/Narwhals unable to resolve `pyarrow.decimal128(18,4)` despite documentation indicating parameterized Arrow types are supported. Decimal physical typing therefore remains a PyArrow responsibility; this limitation is recorded rather than silently relaxed.\n14. Store canonical timestamps as `timestamp(us, +00:00)` rather than the named zone `UTC`. PyArrow 25 on Windows requires an external IANA timezone database to materialize named-zone timestamps, while the fixed UTC offset round-trips without an additional runtime dependency.
 
 ## Consequences
 

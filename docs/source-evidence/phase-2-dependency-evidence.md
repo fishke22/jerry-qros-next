@@ -28,3 +28,15 @@ A Windows x64 smoke run with Python 3.14.6 and the exact Phase 2 dependency lock
 This conflicts with the documented general support for parameterized PyArrow data types. QROS therefore does not treat that documentation claim as verified capability for decimal columns. The canonical Arrow schema still requires decimal128(18,4); PyArrow enforces that physical type, Pandera validates a strict supported-column projection, and deterministic QROS checks validate OHLC semantics.
 
 Status: `VERIFIED_LIMITATION / WORKAROUND_WITHOUT_SCHEMA_RELAXATION`.
+
+## Windows timezone behavior
+
+The same Windows smoke environment showed that PyArrow 25.0.1 cannot materialize a `timestamp(..., tz="UTC")` scalar to Python without an external timezone database. A direct verification showed:
+
+- named `UTC` → ArrowInvalid without zoneinfo data;
+- fixed `+00:00` → successful timezone-aware round-trip;
+- timezone-less → successful but loses offset semantics.
+
+QROS therefore uses `timestamp(us, +00:00)` for this Phase 2 canonical physical schema. This preserves UTC offset semantics and avoids adding `tzdata` or `pytz` solely for a named-zone alias.
+
+Status: `VERIFIED_WINDOWS_PLATFORM_BEHAVIOR / NO_EXTRA_DEPENDENCY_REQUIRED`.
