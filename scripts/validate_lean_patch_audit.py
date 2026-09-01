@@ -89,6 +89,14 @@ def audit_coverage(
                 framework.get("framework"), str
             ):
                 raise ValueError(f"{label} audit framework identity missing")
+            for package_key in ("topLevelPackages", "transitivePackages"):
+                if package_key not in framework or not isinstance(
+                    framework[package_key], list
+                ):
+                    raise ValueError(
+                        f"{label} audit package evidence missing or invalid: "
+                        f"{path} / {framework['framework']} / {package_key}"
+                    )
             key = (path, framework["framework"])
             if key in coverage:
                 raise ValueError(
