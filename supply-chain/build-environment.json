@@ -124,6 +124,7 @@
       6,
       7,
       11
-    ]
+    ],
+    "accepted_head_evidence_ref": "refs/heads/evidence/phase-3d-accepted-head"
   }
 }
