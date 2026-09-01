@@ -198,6 +198,7 @@ def main() -> int:
             "patch_script": first["runtime_overlay"]["patch_script_hash"],
             "patched_graph": first["runtime_overlay"]["patched_graph_hash"],
             "launcher_assembly": first["runtime_overlay"]["launcher_assembly_hash"],
+            "runtime_assembly_manifest": first["runtime_overlay"]["runtime_assembly_manifest_hash"],
             "lean_raw_result_run_a": raw_a,
             "lean_raw_result_run_b": raw_b,
         },
