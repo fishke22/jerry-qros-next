@@ -39,10 +39,10 @@ def license_for(name,version,overrides):
         elif tag=="licenseUrl" and el.text:
             url=el.text.strip()
     if lic:
-        return {"status":"EXPRESSION" if lic["type"]=="expression" else "FILE_OR_OTHER","value":lic["value"],"source":str(nuspecs[0])}
+        return {"status":"EXPRESSION" if lic["type"]=="expression" else "FILE_OR_OTHER","value":lic["value"],"source":f"NUGET_NUSPEC:{name}/{version}/{nuspecs[0].name}"}
     if url:
-        return {"status":"URL_ONLY","value":url,"source":str(nuspecs[0])}
-    return {"status":"UNKNOWN","value":None,"source":str(nuspecs[0])}
+        return {"status":"URL_ONLY","value":url,"source":f"NUGET_NUSPEC:{name}/{version}/{nuspecs[0].name}"}
+    return {"status":"UNKNOWN","value":None,"source":f"NUGET_NUSPEC:{name}/{version}/{nuspecs[0].name}"}
 
 def main():
     p=argparse.ArgumentParser()
