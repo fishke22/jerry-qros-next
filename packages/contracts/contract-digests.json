@@ -33,11 +33,11 @@
     },
     {
       "path": "packages/schemas/provenance-record.v2.schema.json",
-      "git_blob_sha": "96a5799c80fc4f238d4f5f531ac172d203527ed6"
+      "git_blob_sha": "8db616025d775f66de40388faa40ea707f02434a"
     },
     {
       "path": "packages/schemas/lean-backtest-result.v2.schema.json",
-      "git_blob_sha": "f5d4b469f67e7e43683cc138de8903c5ed10693e"
+      "git_blob_sha": "7a59f93cb77749031b8025508b13f9ff5e3f00c0"
     }
   ]
 }
