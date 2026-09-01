@@ -9,6 +9,7 @@ Status: ACCEPTED / MERGED — LOCAL RESEARCH-BACKTEST HARDENING ONLY
 - Repository: `fishke22/jerry-qros-next`
 - PR: #15
 - Accepted head: `968255313ff0bff9051d50d17da335bd9da10207`
+- Durable accepted-head ref: `refs/heads/evidence/phase-3e-accepted-head`
 - Accepted tree: `f49978fe60d85c642505e636e72d407ddb9745b5`
 - Squash integration commit: `791d99363228126e199d6cdac89857612743a2c9`
 - Integration tree: `f49978fe60d85c642505e636e72d407ddb9745b5`
@@ -52,7 +53,8 @@ All associated P1 review threads were answered with exact-head evidence and reso
 
 - main commit: `791d99363228126e199d6cdac89857612743a2c9`
 - main qros-gate run `33522024604`: PASS
-- accepted/integration tree equivalence: PASS
+- durable accepted-head ref resolves to the recorded accepted head: PASS
+- accepted/integration tree equivalence resolved from Git objects: PASS
 - LEAN gitlink unchanged: PASS
 - package authorization: false
 - release authorization: false
