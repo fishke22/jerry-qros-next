@@ -1,6 +1,7 @@
 using System.IO.Compression;
 using System.Reflection;
 using Ionic.Zip;
+using IonicZipFile = Ionic.Zip.ZipFile;
 
 const int UncompressedBytes = 32 * 1024 * 1024;
 using var compressed = new MemoryStream();
@@ -16,7 +17,7 @@ using (var archive = new ZipArchive(compressed, ZipArchiveMode.Create, leaveOpen
 }
 var compressedBytes = compressed.Length;
 compressed.Position = 0;
-using var zip = ZipFile.Read(compressed);
+using var zip = IonicZipFile.Read(compressed);
 var first = zip[0];
 var field = typeof(Ionic.Zip.ZipEntry).GetField("_content", BindingFlags.Instance | BindingFlags.NonPublic)
     ?? throw new InvalidOperationException("research bridge _content field not found");

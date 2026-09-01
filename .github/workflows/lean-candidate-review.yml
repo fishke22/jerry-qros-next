@@ -10,6 +10,7 @@ on:
       - 'scripts/validate_lean_promotion_review.py'
       - 'src/qros_patched_lean_sbom.py'
       - 'tests/test_patched_lean_sbom.py'
+      - 'tests/test_lean_promotion_review.py'
       - 'integration/lean/QrosCompressionResourceProbe/**'
       - '.github/workflows/lean-candidate-review.yml'
       - '.github/workflows/phase0-policy.yml'
@@ -43,6 +44,26 @@ jobs:
           python scripts/validate_lean_pin.py --require-populated
           python scripts/validate_lean_patch_experiment.py
           python scripts/validate_lean_promotion_review.py
+      - name: Print Phase 3E canonical SHA256 evidence
+        shell: bash
+        run: |
+          for path in \
+            .github/workflows/lean-candidate-review.yml \
+            .github/workflows/phase0-policy.yml \
+            CHANGELOG.md \
+            config/lean-promotion-review.json \
+            docs/adr/0012-phase-3e-lean-candidate-promotion-review.md \
+            docs/source-evidence/phase-3e-lean-candidate-promotion-review.md \
+            integration/lean/QrosCompressionResourceProbe/Program.cs \
+            integration/lean/QrosCompressionResourceProbe/QrosCompressionResourceProbe.csproj \
+            scripts/generate_patched_lean_sbom.py \
+            scripts/prepare_phase3e_test_project.py \
+            scripts/validate_lean_promotion_review.py \
+            src/qros_patched_lean_sbom.py \
+            tests/test_lean_promotion_review.py \
+            tests/test_patched_lean_sbom.py; do
+            git show "HEAD:$path" | sha256sum | sed "s#  -#  $path#"
+          done
       - name: Apply Phase 3D combined research candidate
         run: |
           python scripts/apply_lean_patch_experiment.py --candidate messaging-netmq-4.0.4.3
@@ -80,7 +101,7 @@ jobs:
           dotnet build integration/lean/QrosSyntheticAlgorithm/QrosSyntheticAlgorithm.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
           python scripts/run_lean_synthetic_backtest.py --output-dir "$RUNNER_TEMP/qros-phase3e-linux"
       - name: Confirm promotion remains denied
-        run: python scripts/validate_lean_promotion_review.py --require-promotion
+        run: python scripts/validate_lean_promotion_review.py
 
   windows-review:
     runs-on: windows-latest
@@ -132,4 +153,4 @@ jobs:
           $env:PYTHONPATH="src"
           python scripts/run_lean_synthetic_backtest.py --output-dir "$env:RUNNER_TEMP\qros-phase3e-windows"
       - name: Confirm promotion remains denied
-        run: python scripts/validate_lean_promotion_review.py --require-promotion
+        run: python scripts/validate_lean_promotion_review.py
