@@ -42,7 +42,10 @@ jobs:
             scripts/generate_patched_lean_evidence.py \
             scripts/validate_lean_promotion_readiness.py \
             scripts/validate_streaming_bridge_source.py \
-            src/qros_lean_patch_experiment.py; do
+            src/qros_lean_patch_experiment.py \
+            supply-chain/patched-lean-phase3e.cdx.json \
+            supply-chain/patched-lean-phase3e-license-review.json \
+            tests/test_phase3e_static_evidence.py; do
               git show "HEAD:$path" | sha256sum | sed "s#  -#  $path#"
           done
       - name: Verify boundaries and apply final research candidate

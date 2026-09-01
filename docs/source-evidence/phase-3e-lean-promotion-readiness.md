@@ -46,3 +46,26 @@ The first generator pass identified 57/59 licenses from restored NuGet metadata 
 - AsyncIO 0.1.69: the exact NuGet page links `somdoron/AsyncIO` as project/source repository. The last observed source commit before the 2018-12-24 package publication, `0b0cf4c65b049b2e483b172e530f4db970db25e4`, carries MPL-2.0; no later repository commit was observed through 2019-01-15. Independent third-party component notices also identify AsyncIO 0.1.69 as MPL-2.0. Classified VERIFIED_WITH_SOURCE_AND_COMPONENT_NOTICE_CROSSCHECK, with the caveat that the package nuspec itself lacks usable license metadata.
 
 These exact overrides identify license terms for research review only. They do not constitute release/redistribution clearance.
+
+## Frozen patched supply-chain evidence
+
+Linux run `33457059553`, job `99699166911`, reproduced the complete Phase 3E cloud path with path-normalized evidence:
+
+- patched Launcher vulnerability audit — no HIGH/CRITICAL advisories;
+- stream-backed bridge source gate — PASS;
+- patched LEAN build — PASS;
+- targeted compression regression — PASS;
+- compression security smoke — PASS;
+- deterministic quant regression — PASS;
+- normalized result hash `sha256:87c031f5214f0f40589f1e232a42438e7533b2009638c3a9abf3a38b88ec8afd`;
+- CycloneDX 1.7 components — 59;
+- package license identification — 59/59;
+- unknown licenses — 0;
+- absolute runner paths in license evidence — 0;
+- release clearance — false.
+
+The generated artifacts are frozen at:
+- `supply-chain/patched-lean-phase3e.cdx.json`
+- `supply-chain/patched-lean-phase3e-license-review.json`
+
+This clears the Phase 3D transitive-SBOM and unknown-license evidence blockers for research evaluation only. It does not clear physical Windows 11 validation, divergence ownership, release obligations, or promotion authorization.

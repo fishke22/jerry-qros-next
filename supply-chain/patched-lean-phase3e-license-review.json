@@ -1,0 +1,558 @@
+{
+  "overrides_registry": "config/patched-lean-license-overrides.json",
+  "package_count": 59,
+  "packages": [
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Accord/3.6.0/accord.nuspec",
+        "status": "URL_ONLY",
+        "value": "http://accord-framework.net/license.txt"
+      },
+      "name": "Accord",
+      "version": "3.6.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Accord.Fuzzy/3.6.0/accord.fuzzy.nuspec",
+        "status": "URL_ONLY",
+        "value": "http://accord-framework.net/license.txt"
+      },
+      "name": "Accord.Fuzzy",
+      "version": "3.6.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Accord.MachineLearning/3.6.0/accord.machinelearning.nuspec",
+        "status": "URL_ONLY",
+        "value": "http://accord-framework.net/license.txt"
+      },
+      "name": "Accord.MachineLearning",
+      "version": "3.6.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Accord.Math/3.6.0/accord.math.nuspec",
+        "status": "URL_ONLY",
+        "value": "http://accord-framework.net/license.txt"
+      },
+      "name": "Accord.Math",
+      "version": "3.6.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Accord.Statistics/3.6.0/accord.statistics.nuspec",
+        "status": "URL_ONLY",
+        "value": "http://accord-framework.net/license.txt"
+      },
+      "name": "Accord.Statistics",
+      "version": "3.6.0"
+    },
+    {
+      "license": {
+        "confidence": "VERIFIED_WITH_SOURCE_AND_COMPONENT_NOTICE_CROSSCHECK",
+        "evidence": {
+          "license_path": "LICENSE.md",
+          "note": "NuGet 0.1.69 page identifies somdoron/AsyncIO as project/source repository. The last repository commit observed from 2018-12-02 through 2019-01-15 carries MPL-2.0; third-party component notices independently identify AsyncIO 0.1.69 as MPL-2.0. The package nuspec itself does not expose a usable license field.",
+          "package": "https://www.nuget.org/packages/AsyncIO/0.1.69",
+          "repository": "https://github.com/somdoron/AsyncIO",
+          "revision": "0b0cf4c65b049b2e483b172e530f4db970db25e4"
+        },
+        "source": "QROS_REVIEWED_OVERRIDE",
+        "status": "REVIEWED_EXPRESSION",
+        "value": "MPL-2.0"
+      },
+      "name": "AsyncIO",
+      "version": "0.1.69"
+    },
+    {
+      "license": {
+        "confidence": "VERIFIED_EXACT_SOURCE_VERSION",
+        "evidence": {
+          "license_path": "LICENSE",
+          "note": "Source commit dated 2017-03-12 contains CloneExtensions.csproj Version 1.3.0 and the Apache-2.0 LICENSE, matching the NuGet 1.3.0 publication date/version.",
+          "package": "https://www.nuget.org/packages/CloneExtensions/1.3.0",
+          "repository": "https://github.com/MarcinJuraszek/CloneExtensions",
+          "revision": "3a14000a39880cee62daa06b20dbe38a611b05aa"
+        },
+        "source": "QROS_REVIEWED_OVERRIDE",
+        "status": "REVIEWED_EXPRESSION",
+        "value": "Apache-2.0"
+      },
+      "name": "CloneExtensions",
+      "version": "1.3.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:CsvHelper/19.0.0/csvhelper.nuspec",
+        "status": "EXPRESSION",
+        "value": "MS-PL OR Apache-2.0"
+      },
+      "name": "CsvHelper",
+      "version": "19.0.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:DynamicInterop/0.9.1/dynamicinterop.nuspec",
+        "status": "URL_ONLY",
+        "value": "https://github.com/jmp75/dynamic-interop-dll/blob/feature/netstandard2/License.txt"
+      },
+      "name": "DynamicInterop",
+      "version": "0.9.1"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:DynamicObj/2.0.0/dynamicobj.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "DynamicObj",
+      "version": "2.0.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:fasterflect/3.0.0/fasterflect.nuspec",
+        "status": "EXPRESSION",
+        "value": "Apache-2.0"
+      },
+      "name": "fasterflect",
+      "version": "3.0.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:FSharp.Core/8.0.400/fsharp.core.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "FSharp.Core",
+      "version": "8.0.400"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Giraffe.ViewEngine.StrongName/2.0.0-alpha1/giraffe.viewengine.strongname.nuspec",
+        "status": "EXPRESSION",
+        "value": "Apache-2.0"
+      },
+      "name": "Giraffe.ViewEngine.StrongName",
+      "version": "2.0.0-alpha1"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Humanizer.Core/2.14.1/humanizer.core.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Humanizer.Core",
+      "version": "2.14.1"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:MathNet.Numerics/5.0.0/mathnet.numerics.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "MathNet.Numerics",
+      "version": "5.0.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:McMaster.Extensions.CommandLineUtils/2.6.0/mcmaster.extensions.commandlineutils.nuspec",
+        "status": "EXPRESSION",
+        "value": "Apache-2.0"
+      },
+      "name": "McMaster.Extensions.CommandLineUtils",
+      "version": "2.6.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.AspNetCore.Html.Abstractions/2.2.0/microsoft.aspnetcore.html.abstractions.nuspec",
+        "status": "URL_ONLY",
+        "value": "https://raw.githubusercontent.com/aspnet/AspNetCore/2.0.0/LICENSE.txt"
+      },
+      "name": "Microsoft.AspNetCore.Html.Abstractions",
+      "version": "2.2.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.Bcl.AsyncInterfaces/8.0.0/microsoft.bcl.asyncinterfaces.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Microsoft.Bcl.AsyncInterfaces",
+      "version": "8.0.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.Bcl.HashCode/1.1.1/microsoft.bcl.hashcode.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Microsoft.Bcl.HashCode",
+      "version": "1.1.1"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.CodeAnalysis/4.8.0/microsoft.codeanalysis.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Microsoft.CodeAnalysis",
+      "version": "4.8.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.CodeAnalysis.Analyzers/3.3.4/microsoft.codeanalysis.analyzers.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Microsoft.CodeAnalysis.Analyzers",
+      "version": "3.3.4"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.CodeAnalysis.Common/4.8.0/microsoft.codeanalysis.common.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Microsoft.CodeAnalysis.Common",
+      "version": "4.8.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.CodeAnalysis.CSharp/4.8.0/microsoft.codeanalysis.csharp.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Microsoft.CodeAnalysis.CSharp",
+      "version": "4.8.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.CodeAnalysis.CSharp.Workspaces/4.8.0/microsoft.codeanalysis.csharp.workspaces.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Microsoft.CodeAnalysis.CSharp.Workspaces",
+      "version": "4.8.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.CodeAnalysis.VisualBasic/4.8.0/microsoft.codeanalysis.visualbasic.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Microsoft.CodeAnalysis.VisualBasic",
+      "version": "4.8.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.CodeAnalysis.VisualBasic.Workspaces/4.8.0/microsoft.codeanalysis.visualbasic.workspaces.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Microsoft.CodeAnalysis.VisualBasic.Workspaces",
+      "version": "4.8.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.CodeAnalysis.Workspaces.Common/4.8.0/microsoft.codeanalysis.workspaces.common.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Microsoft.CodeAnalysis.Workspaces.Common",
+      "version": "4.8.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.DotNet.Interactive/1.0.0-beta.24229.4/microsoft.dotnet.interactive.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Microsoft.DotNet.Interactive",
+      "version": "1.0.0-beta.24229.4"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.DotNet.Interactive.Documents/1.0.0-beta.24229.4/microsoft.dotnet.interactive.documents.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Microsoft.DotNet.Interactive.Documents",
+      "version": "1.0.0-beta.24229.4"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.DotNet.Interactive.Formatting/1.0.0-beta.24229.4/microsoft.dotnet.interactive.formatting.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Microsoft.DotNet.Interactive.Formatting",
+      "version": "1.0.0-beta.24229.4"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.Extensions.ObjectPool/10.0.0/microsoft.extensions.objectpool.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Microsoft.Extensions.ObjectPool",
+      "version": "10.0.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Microsoft.IO.RecyclableMemoryStream/3.0.1/microsoft.io.recyclablememorystream.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Microsoft.IO.RecyclableMemoryStream",
+      "version": "3.0.1"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:NaCl.Net/0.1.13/nacl.net.nuspec",
+        "status": "EXPRESSION",
+        "value": "MPL-2.0"
+      },
+      "name": "NaCl.Net",
+      "version": "0.1.13"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:NetMQ/4.0.4.3/netmq.nuspec",
+        "status": "URL_ONLY",
+        "value": "https://github.com/zeromq/netmq/blob/master/COPYING.LESSER"
+      },
+      "name": "NetMQ",
+      "version": "4.0.4.3"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Newtonsoft.Json/13.0.2/newtonsoft.json.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Newtonsoft.Json",
+      "version": "13.0.2"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:NodaTime/3.0.5/nodatime.nuspec",
+        "status": "EXPRESSION",
+        "value": "Apache-2.0"
+      },
+      "name": "NodaTime",
+      "version": "3.0.5"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Plotly.NET/5.1.0/plotly.net.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Plotly.NET",
+      "version": "5.1.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Plotly.NET.CSharp/0.13.0/plotly.net.csharp.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Plotly.NET.CSharp",
+      "version": "0.13.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:Plotly.NET.Interactive/5.0.0/plotly.net.interactive.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "Plotly.NET.Interactive",
+      "version": "5.0.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:protobuf-net/3.1.33/protobuf-net.nuspec",
+        "status": "EXPRESSION",
+        "value": "Apache-2.0"
+      },
+      "name": "protobuf-net",
+      "version": "3.1.33"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:protobuf-net.Core/3.1.33/protobuf-net.core.nuspec",
+        "status": "EXPRESSION",
+        "value": "Apache-2.0"
+      },
+      "name": "protobuf-net.Core",
+      "version": "3.1.33"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:QLNet/1.13.1/qlnet.nuspec",
+        "status": "URL_ONLY",
+        "value": "https://github.com/amaggiulli/QLNet/blob/develop/LICENSE"
+      },
+      "name": "QLNet",
+      "version": "1.13.1"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:QuantConnect.pythonnet/2.0.65/quantconnect.pythonnet.nuspec",
+        "status": "FILE_OR_OTHER",
+        "value": "LICENSE"
+      },
+      "name": "QuantConnect.pythonnet",
+      "version": "2.0.65"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:RestSharp/106.12.0/restsharp.nuspec",
+        "status": "EXPRESSION",
+        "value": "Apache-2.0"
+      },
+      "name": "RestSharp",
+      "version": "106.12.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:SharpZipLib/1.3.3/sharpziplib.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "SharpZipLib",
+      "version": "1.3.3"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:System.CommandLine/2.0.0-beta4.22272.1/system.commandline.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "System.CommandLine",
+      "version": "2.0.0-beta4.22272.1"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:System.CommandLine.NamingConventionBinder/2.0.0-beta4.22272.1/system.commandline.namingconventionbinder.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "System.CommandLine.NamingConventionBinder",
+      "version": "2.0.0-beta4.22272.1"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:System.ComponentModel.Annotations/4.7.0/system.componentmodel.annotations.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "System.ComponentModel.Annotations",
+      "version": "4.7.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:System.ComponentModel.Composition/6.0.0/system.componentmodel.composition.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "System.ComponentModel.Composition",
+      "version": "6.0.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:System.Composition/7.0.0/system.composition.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "System.Composition",
+      "version": "7.0.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:System.Composition.AttributedModel/7.0.0/system.composition.attributedmodel.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "System.Composition.AttributedModel",
+      "version": "7.0.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:System.Composition.Convention/7.0.0/system.composition.convention.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "System.Composition.Convention",
+      "version": "7.0.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:System.Composition.Hosting/7.0.0/system.composition.hosting.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "System.Composition.Hosting",
+      "version": "7.0.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:System.Composition.Runtime/7.0.0/system.composition.runtime.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "System.Composition.Runtime",
+      "version": "7.0.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:System.Composition.TypedParts/7.0.0/system.composition.typedparts.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "System.Composition.TypedParts",
+      "version": "7.0.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:System.Reactive/6.0.0/system.reactive.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "System.Reactive",
+      "version": "6.0.0"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:System.Security.Cryptography.Pkcs/10.0.10/system.security.cryptography.pkcs.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "System.Security.Cryptography.Pkcs",
+      "version": "10.0.10"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:System.Security.Cryptography.Xml/10.0.10/system.security.cryptography.xml.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "System.Security.Cryptography.Xml",
+      "version": "10.0.10"
+    },
+    {
+      "license": {
+        "source": "NUGET_NUSPEC:System.ServiceModel.Primitives/10.0.652802/system.servicemodel.primitives.nuspec",
+        "status": "EXPRESSION",
+        "value": "MIT"
+      },
+      "name": "System.ServiceModel.Primitives",
+      "version": "10.0.652802"
+    }
+  ],
+  "release_clearance": false,
+  "review_version": 2,
+  "scope": "PATCHED_LEAN_LAUNCHER_TRANSITIVE_NUGET_GRAPH",
+  "status": "PASS_RESEARCH_IDENTIFICATION",
+  "unknown_license_count": 0
+}
