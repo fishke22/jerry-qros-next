@@ -23,6 +23,8 @@ class LeanBacktestNormalizerTests(unittest.TestCase):
             "patch_script_hash": "sha256:" + patch_char * 64,
             "patched_graph_hash": "sha256:" + graph_char * 64,
             "launcher_assembly_hash": "sha256:" + launcher_char * 64,
+            "runtime_assembly_manifest_hash": "sha256:" + "1" * 64,
+            "runtime_assembly_count": "3",
         }
 
     def _kwargs(self, algorithm_char="a", overlay=None):
