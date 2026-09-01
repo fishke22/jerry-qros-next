@@ -25,7 +25,12 @@ class Phase3BContractTests(unittest.TestCase):
         overlay = schema["properties"]["runtime_overlay"]
         self.assertFalse(overlay["additionalProperties"])
         self.assertEqual(set(overlay["required"]), {
-            "mode", "patch_script_hash", "patched_graph_hash", "launcher_assembly_hash"
+            "mode",
+            "patch_script_hash",
+            "patched_graph_hash",
+            "launcher_assembly_hash",
+            "runtime_assembly_manifest_hash",
+            "runtime_assembly_count",
         })
 
     def test_v2_provenance_contract_binds_runtime_identity(self):
