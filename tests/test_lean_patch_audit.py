@@ -73,6 +73,17 @@ class LeanPatchAuditEvidenceTests(unittest.TestCase):
                 doc([{"id": "ProDotNetZip", "resolvedVersion": "1.20.0"}]), vuln_doc
             )
 
+    def test_null_vulnerability_collection_is_rejected(self):
+        vuln_doc = doc([{
+            "id": "Example",
+            "resolvedVersion": "1.0.0",
+            "vulnerabilities": None,
+        }])
+        with self.assertRaises(ValueError):
+            validate_audit_documents(
+                doc([{"id": "ProDotNetZip", "resolvedVersion": "1.20.0"}]), vuln_doc
+            )
+
     def test_missing_vulnerability_severity_is_rejected(self):
         vuln_doc = doc([{
             "id": "Example",
