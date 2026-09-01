@@ -77,6 +77,19 @@ def validate_source_and_provenance():
  if evidence_head!=c["accepted_head"]:fail("Phase 3 accepted-head evidence ref target drift")
  accepted_tree=git_tree(evidence_ref);integration_tree=git_tree(c["integration_commit"])
  if accepted_tree!=c.get("accepted_tree") or integration_tree!=c.get("integration_tree") or accepted_tree!=integration_tree:fail("Phase 3 merge tree proof drift")
+ h=e.get("phase3e_hardening_closure",{})
+ if h.get("status")!="ACCEPTED_MERGED_LOCAL_RESEARCH_BACKTEST_HARDENING_ONLY" or h.get("pr")!=15:fail("Phase 3E closure status drift")
+ if h.get("accepted_head")!="968255313ff0bff9051d50d17da335bd9da10207" or h.get("integration_commit")!="791d99363228126e199d6cdac89857612743a2c9" or h.get("tree_equivalent") is not True:fail("Phase 3E merge closure evidence drift")
+ evidence_ref3e="refs/remotes/origin/evidence/phase-3e-accepted-head"
+ if h.get("accepted_head_evidence_ref")!="refs/heads/evidence/phase-3e-accepted-head":fail("Phase 3E accepted-head evidence ref drift")
+ evidence_head3e=subprocess.check_output(["git","rev-parse",evidence_ref3e],cwd=ROOT,text=True).strip()
+ if evidence_head3e!=h["accepted_head"]:fail("Phase 3E accepted-head evidence ref target drift")
+ accepted_tree3e=git_tree(evidence_ref3e);integration_tree3e=git_tree(h["integration_commit"])
+ if accepted_tree3e!=h.get("accepted_tree") or integration_tree3e!=h.get("integration_tree") or accepted_tree3e!=integration_tree3e:fail("Phase 3E merge tree proof drift")
+ if h.get("runtime_result_contract")!="lean-backtest-result/v2" or h.get("runtime_assembly_count")!=191:fail("Phase 3E runtime identity evidence drift")
+ for key in ("package_authorized","release_authorized","yuanta_integration_authorized","live_trading_authorized"):
+  if h.get(key) is not False:fail("Phase 3E hard gate drift: "+key)
+ if h.get("incremental_monetary_cost")!=0:fail("Phase 3E zero-cost closure drift")
 def validate_phase3d_lean_evidence():
  g=load("supply-chain/lean/launcher-patched-nuget-graph.json");m=load("supply-chain/lean/launcher-patched-nuget-license-metadata.json");d=load("config/lean-nuget-license-dispositions.json");b=load("supply-chain/lean/launcher-patched-bom.cdx.json")
  if g.get("package_count")!=55 or g.get("project_count")!=19:fail("Phase 3D NuGet graph count drift")
