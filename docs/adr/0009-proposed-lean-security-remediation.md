@@ -1,8 +1,9 @@
 # ADR-0009 — Proposed LEAN security-remediation decision
 
-- Status: PROPOSED / NOT APPROVED
+- Status: ACCEPTED RESEARCH DECISION / OPTION A / HARD STOP ACTIVE
 - Date: 2026-09-01
 - Evidence: Phase 3C exact-pinned NuGet audit
+- Approval scope: Option A only; no architecture amendment, source patch, fork, gitlink change, runtime promotion, merge, Phase 4, Yuanta, live trading, packaging, or release authorization
 
 ## Finding
 
@@ -39,10 +40,12 @@ The experiment would need complete transitive SBOM/license review and the existi
 
 REJECT.
 
-## Proposed decision
+## Decision
 
-Default to **Option A**. Do not create a QROS LEAN fork/patch while upstream is actively migrating compression and a current official secure revision may become available.
+**Option A is accepted.**
 
-If schedule pressure justifies Option B, it requires an explicit user architecture authorization before any source/dependency modification.
+Remain on the current exact LEAN pin and keep the Phase 3 security hard stop active until an official LEAN revision satisfies the established remediation gate and passes independent QROS re-validation.
 
-This ADR does not itself authorize Option B.
+This acceptance records the selected research disposition only. It does **not** approve an architecture amendment and does **not** authorize Option B, any LEAN source/dependency modification, PR #6 or PR #7 merge, runtime promotion, Phase 4, Yuanta integration, live trading, packaging, or release.
+
+If schedule pressure later justifies Option B, it still requires a separate explicit user architecture authorization before any source/dependency modification.
