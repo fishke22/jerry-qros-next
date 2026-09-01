@@ -43,36 +43,90 @@ def high_or_critical(doc: dict) -> list[dict]:
     return hits
 
 
+def _nonempty_problem_fields(doc: dict) -> list[str]:
+    problems = []
+    for node in walk(doc):
+        for key in ("problem", "problems", "error", "errors"):
+            if key in node and node[key] not in (None, "", [], {}, False):
+                problems.append(key)
+    return problems
+
+
+def audit_coverage(doc: dict, label: str) -> set[tuple[str, str]]:
+    if not isinstance(doc, dict):
+        raise ValueError(f"{label} audit root must be an object")
+    if doc.get("version") not in (1, "1"):
+        raise ValueError(f"{label} audit output version is missing or unsupported")
+    problems = _nonempty_problem_fields(doc)
+    if problems:
+        raise ValueError(f"{label} audit reports problem/error fields: {sorted(set(problems))}")
+
+    projects = doc.get("projects")
+    if not isinstance(projects, list) or not projects:
+        raise ValueError(f"{label} audit project coverage missing")
+
+    coverage: set[tuple[str, str]] = set()
+    for project in projects:
+        if not isinstance(project, dict) or not isinstance(project.get("path"), str):
+            raise ValueError(f"{label} audit project path missing")
+        frameworks = project.get("frameworks")
+        if not isinstance(frameworks, list) or not frameworks:
+            raise ValueError(f"{label} audit framework coverage missing for {project.get('path')}")
+        for framework in frameworks:
+            if not isinstance(framework, dict) or not isinstance(framework.get("framework"), str):
+                raise ValueError(f"{label} audit framework identity missing")
+            key = (project["path"], framework["framework"])
+            if key in coverage:
+                raise ValueError(f"{label} audit duplicate project/framework coverage: {key}")
+            coverage.add(key)
+    return coverage
+
+
+def validate_audit_documents(all_doc: dict, vuln_doc: dict) -> tuple[set[tuple[str, str]], list[dict]]:
+    all_coverage = audit_coverage(all_doc, "all-packages")
+    vulnerable_coverage = audit_coverage(vuln_doc, "vulnerable")
+    if all_coverage != vulnerable_coverage:
+        raise ValueError("NuGet audit coverage mismatch between all-packages and vulnerable outputs")
+    pairs = package_pairs(all_doc)
+    if not pairs:
+        raise ValueError("NuGet all-packages audit contains no resolved package evidence")
+    return pairs, high_or_critical(vuln_doc)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--all", required=True, type=Path)
     parser.add_argument("--vulnerable", required=True, type=Path)
     args = parser.parse_args()
-
-    all_doc = json.loads(args.all.read_text(encoding="utf-8"))
-    vuln_doc = json.loads(args.vulnerable.read_text(encoding="utf-8"))
-    pairs = package_pairs(all_doc)
+    try:
+        all_doc = json.loads(args.all.read_text(encoding="utf-8"))
+        vuln_doc = json.loads(args.vulnerable.read_text(encoding="utf-8"))
+        pairs, severe = validate_audit_documents(all_doc, vuln_doc)
+    except (json.JSONDecodeError, OSError, ValueError) as exc:
+        print(f"DENY: incomplete or invalid NuGet vulnerability evidence: {exc}")
+        return 2
 
     violations = []
     for package, version in sorted(BANNED.items()):
         for observed_name, observed_version in sorted(pairs):
-            if observed_name.lower() == package.lower() and (version is None or observed_version == version):
+            if observed_name.lower() == package.lower() and (
+                version is None or observed_version == version
+            ):
                 violations.append(f"banned package present: {observed_name} {observed_version}")
-
-    severe = high_or_critical(vuln_doc)
     if severe:
         violations.append(f"NuGet audit reported {len(severe)} HIGH/CRITICAL vulnerability record(s)")
+    if not any(
+        name.lower() == "prodotnetzip" and version == "1.20.0"
+        for name, version in pairs
+    ):
+        violations.append("expected ProDotNetZip 1.20.0 not present in resolved graph")
 
     if violations:
         for violation in violations:
             print(f"DENY: {violation}")
         return 2
 
-    if not any(name.lower() == "prodotnetzip" and version == "1.20.0" for name, version in pairs):
-        print("DENY: expected ProDotNetZip 1.20.0 not present in resolved graph")
-        return 2
-
-    print("QROS patched LEAN dependency gate: PASS")
+    print("QROS patched LEAN dependency gate: PASS / AUDIT COVERAGE VERIFIED")
     return 0
 
 
