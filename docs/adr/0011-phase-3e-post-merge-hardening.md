@@ -22,10 +22,10 @@ These findings block Phase 4.
 1. Require the exact LEAN revision and a clean worktree before patching.
 2. Derive expected patched files from committed base files and verify the exact post-patch file set and contents.
 3. Add `lean-backtest-result/v2` and `provenance-record/v2`; do not mutate immutable v1 schemas.
-4. Bind normalized identity to patch-script SHA-256, patched-graph SHA-256, and built Launcher assembly SHA-256.
+4. Bind normalized identity to patch-script SHA-256, patched-graph SHA-256, Launcher assembly SHA-256, and a canonical SHA-256 manifest over the complete Launcher output DLL closure; require Launcher, Compression, and Messaging assemblies to be present.
 5. Preserve the historical Phase 3B quantitative semantic hash through an explicit v2-to-v1 semantic projection; full artifact identity remains runtime-bound.
 6. Reject incomplete NuGet audit evidence unless project/framework coverage is present and matches the all-packages audit.
-7. Resolve historical accepted/integration Git trees from Git and compare them with recorded evidence.
+7. Preserve the Phase 3D accepted head under durable ref `refs/heads/evidence/phase-3d-accepted-head`, explicitly fetch that ref in governance CI, verify it still targets the recorded accepted commit, then resolve and compare the historical Git trees.
 8. Enforce `next_gate.runtime_promotion_allowed=false` in the historical Phase 3C snapshot.
 9. Refuse to overwrite an existing backtest evidence directory.
 10. Expand integration workflow path triggers for LEAN security-policy changes.
