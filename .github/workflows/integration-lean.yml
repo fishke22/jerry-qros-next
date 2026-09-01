@@ -17,8 +17,12 @@ on:
       - 'integration/lean/**'
       - 'fixtures_synthetic/lean/**'
       - 'packages/contracts/**'
-      - 'packages/schemas/lean-backtest-result.v1.schema.json'
+      - 'packages/schemas/lean-backtest-result.v*.schema.json'
+      - 'packages/schemas/provenance-record.v*.schema.json'
       - 'config/dependency-registry.json'
+      - 'config/lean-security-review.json'
+      - 'scripts/validate_lean_security.py'
+      - 'tests/test_lean_security_policy.py'
       - 'config/lean-nuget-license-dispositions.json'
       - 'supply-chain/**'
       - '.github/workflows/integration-lean.yml'
@@ -106,11 +110,11 @@ jobs:
       - name: Run deterministic QROS to LEAN backtest twice
         env:
           PYTHONPATH: src
-        run: python scripts/run_lean_synthetic_backtest.py --output-dir "$RUNNER_TEMP/qros-phase3d"
-      - name: Verify Phase 3B semantic regression baseline
+        run: python scripts/run_lean_synthetic_backtest.py --output-dir "$RUNNER_TEMP/qros-phase3e"
+      - name: Verify Phase 3B quantitative semantic regression baseline
         env:
           PYTHONPATH: src
-        run: python scripts/validate_lean_semantic_regression.py "$RUNNER_TEMP/qros-phase3d/lean-backtest-result.v1.json"
+        run: python scripts/validate_lean_semantic_regression.py "$RUNNER_TEMP/qros-phase3e/lean-backtest-result.v2.json"
       - name: Confirm accepted runtime scope remains restricted
         run: |
           python scripts/validate_lean_security.py --enforce-runtime-promotion

@@ -16,17 +16,18 @@ COMPRESSION_OLD = '    <PackageReference Include="DotNetZip" Version="1.16.0" />
 COMPRESSION_NEW = '    <PackageReference Include="ProDotNetZip" Version="1.20.0" />'
 MESSAGING_NETMQ_OLD = '    <PackageReference Include="NetMQ" Version="4.0.1.6" />\n'
 MESSAGING_NETMQ_NEW = ''
+_BS = chr(92)
 MESSAGING_ITEM_OLD = (
     '  <ItemGroup>\n'
-    '    <Compile Include="..\\\\Common\\\\Properties\\\\SharedAssemblyInfo.cs" '
-    'Link="Properties\\\\SharedAssemblyInfo.cs" />\n'
+    f'    <Compile Include="..{_BS}Common{_BS}Properties{_BS}SharedAssemblyInfo.cs" '
+    f'Link="Properties{_BS}SharedAssemblyInfo.cs" />\n'
     '  </ItemGroup>'
 )
 MESSAGING_ITEM_NEW = (
     '  <ItemGroup>\n'
     '    <Compile Remove="StreamingMessageHandler.cs" />\n'
-    '    <Compile Include="..\\\\Common\\\\Properties\\\\SharedAssemblyInfo.cs" '
-    'Link="Properties\\\\SharedAssemblyInfo.cs" />\n'
+    f'    <Compile Include="..{_BS}Common{_BS}Properties{_BS}SharedAssemblyInfo.cs" '
+    f'Link="Properties{_BS}SharedAssemblyInfo.cs" />\n'
     '  </ItemGroup>'
 )
 EXPECTED_MODIFIED_PATHS = {COMPRESSION_RELATIVE, MESSAGING_RELATIVE}
