@@ -4,6 +4,10 @@ All notable QROS Next engineering milestones are recorded here.
 
 ## Unreleased
 
+### Phase 3E
+- Started review-only promotion assessment for the Phase 3D patched LEAN candidate.
+- Added patched transitive CycloneDX/license extraction, upstream CompressionTests, high-compression resource probe, and exact Windows .NET 10.0.400 validation.
+
 ### Phase 3D
 - Phase 3D research candidate passed repaired dependency, CA5389, compression-smoke and deterministic-backtest gates; promotion remains denied pending resource/coverage/SBOM/Windows review.
 - User explicitly selected Option B: research-only upstream-aligned LEAN security patch experiment.

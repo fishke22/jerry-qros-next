@@ -1,0 +1,135 @@
+name: lean-candidate-review
+on:
+  pull_request:
+    paths:
+      - 'config/lean-promotion-review.json'
+      - 'docs/adr/0012-phase-3e-lean-candidate-promotion-review.md'
+      - 'docs/source-evidence/phase-3e-lean-candidate-promotion-review.md'
+      - 'scripts/generate_patched_lean_sbom.py'
+      - 'scripts/prepare_phase3e_test_project.py'
+      - 'scripts/validate_lean_promotion_review.py'
+      - 'src/qros_patched_lean_sbom.py'
+      - 'tests/test_patched_lean_sbom.py'
+      - 'integration/lean/QrosCompressionResourceProbe/**'
+      - '.github/workflows/lean-candidate-review.yml'
+      - '.github/workflows/phase0-policy.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: lean-candidate-review-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  linux-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout QROS and exact pinned LEAN
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          submodules: true
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.0.400'
+      - name: Setup Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: '3.14.7'
+          check-latest: false
+      - name: Validate review boundary and exact pin
+        run: |
+          test "$(dotnet --version)" = "10.0.400"
+          python scripts/validate_lean_pin.py --require-populated
+          python scripts/validate_lean_patch_experiment.py
+          python scripts/validate_lean_promotion_review.py
+      - name: Apply Phase 3D combined research candidate
+        run: |
+          python scripts/apply_lean_patch_experiment.py --candidate messaging-netmq-4.0.4.3
+          python scripts/apply_lean_patch_experiment.py --candidate compression-system-io-bridge
+          python scripts/apply_lean_patch_experiment.py --candidate compression-path-traversal-hardening
+      - name: Restore and audit patched Launcher
+        shell: bash
+        run: |
+          dotnet restore external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --nologo
+          dotnet list external/lean/Launcher/QuantConnect.Lean.Launcher.csproj package --vulnerable --include-transitive | tee "$RUNNER_TEMP/vulnerable.txt"
+          ! grep -Eq "High|Critical" "$RUNNER_TEMP/vulnerable.txt"
+      - name: Generate patched transitive CycloneDX and license report
+        env:
+          PYTHONPATH: src
+        run: |
+          python scripts/generate_patched_lean_sbom.py \
+            --assets external/lean/Launcher/obj/project.assets.json \
+            --packages-root "$HOME/.nuget/packages" \
+            --output "$RUNNER_TEMP/patched-lean-bom.cdx.json" \
+            --license-output "$RUNNER_TEMP/patched-lean-license-report.json" \
+            --emit-gzip-base64
+      - name: Run high-compression resource probe
+        run: dotnet run --project integration/lean/QrosCompressionResourceProbe/QrosCompressionResourceProbe.csproj --configuration Release
+      - name: Prepare upstream test harness
+        run: python scripts/prepare_phase3e_test_project.py
+      - name: Restore upstream LEAN tests
+        run: dotnet restore external/lean/Tests/QuantConnect.Tests.csproj --nologo
+      - name: Run upstream LEAN CompressionTests
+        run: dotnet test external/lean/Tests/QuantConnect.Tests.csproj --configuration Release --no-restore --filter "FullyQualifiedName~QuantConnect.Tests.Compression.CompressionTests" --logger "console;verbosity=normal"
+      - name: Re-run deterministic QROS backtest
+        env:
+          PYTHONPATH: src
+        run: |
+          dotnet build external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
+          dotnet build integration/lean/QrosSyntheticAlgorithm/QrosSyntheticAlgorithm.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
+          python scripts/run_lean_synthetic_backtest.py --output-dir "$RUNNER_TEMP/qros-phase3e-linux"
+      - name: Confirm promotion remains denied
+        run: python scripts/validate_lean_promotion_review.py --require-promotion
+
+  windows-review:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout QROS and exact pinned LEAN
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          submodules: true
+      - name: Setup .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.0.400'
+      - name: Setup Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: '3.14.7'
+          check-latest: false
+      - name: Validate exact Windows toolchain and boundaries
+        shell: pwsh
+        run: |
+          if ((dotnet --version) -ne "10.0.400") { throw "wrong dotnet SDK" }
+          if ((python --version) -ne "Python 3.14.7") { throw "wrong Python" }
+          python scripts/validate_lean_pin.py --require-populated
+          python scripts/validate_lean_patch_experiment.py
+          python scripts/validate_lean_promotion_review.py
+      - name: Apply Phase 3D combined research candidate
+        run: |
+          python scripts/apply_lean_patch_experiment.py --candidate messaging-netmq-4.0.4.3
+          python scripts/apply_lean_patch_experiment.py --candidate compression-system-io-bridge
+          python scripts/apply_lean_patch_experiment.py --candidate compression-path-traversal-hardening
+      - name: Restore and audit patched Launcher
+        shell: pwsh
+        run: |
+          dotnet restore external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --nologo
+          $audit = dotnet list external/lean/Launcher/QuantConnect.Lean.Launcher.csproj package --vulnerable --include-transitive
+          $audit | Write-Output
+          if (($audit -join "`n") -match "High|Critical") { throw "HIGH/CRITICAL advisory remains" }
+      - name: Build patched LEAN Launcher on Windows
+        run: dotnet build external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
+      - name: Run Windows Compression compatibility smoke
+        run: dotnet run --project integration/lean/QrosCompressionCompatSmoke/QrosCompressionCompatSmoke.csproj --configuration Release
+      - name: Run Windows resource probe
+        run: dotnet run --project integration/lean/QrosCompressionResourceProbe/QrosCompressionResourceProbe.csproj --configuration Release
+      - name: Run deterministic QROS backtest on Windows
+        shell: pwsh
+        run: |
+          dotnet build integration/lean/QrosSyntheticAlgorithm/QrosSyntheticAlgorithm.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
+          $env:PYTHONPATH="src"
+          python scripts/run_lean_synthetic_backtest.py --output-dir "$env:RUNNER_TEMP\qros-phase3e-windows"
+      - name: Confirm promotion remains denied
+        run: python scripts/validate_lean_promotion_review.py --require-promotion
