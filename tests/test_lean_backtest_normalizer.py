@@ -21,6 +21,7 @@ class LeanBacktestNormalizerTests(unittest.TestCase):
         return {
             "mode": PATCH_MODE,
             "patch_script_hash": "sha256:" + patch_char * 64,
+            "patch_implementation_hash": "sha256:" + "2" * 64,
             "patched_graph_hash": "sha256:" + graph_char * 64,
             "launcher_assembly_hash": "sha256:" + launcher_char * 64,
             "runtime_assembly_manifest_hash": "sha256:" + "1" * 64,
@@ -39,7 +40,7 @@ class LeanBacktestNormalizerTests(unittest.TestCase):
         first = normalize_result(self._raw(), **self._kwargs())
         second = normalize_result(self._raw(), **self._kwargs())
         self.assertEqual(first, second)
-        self.assertEqual(first["contract_version"], "2")
+        self.assertEqual(first["contract_version"], "3")
         self.assertEqual(first["normalized_hash"], second["normalized_hash"])
         self.assertTrue(first["research_only"])
         self.assertFalse(first["gate_opened"])
