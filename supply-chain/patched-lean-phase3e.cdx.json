@@ -1,0 +1,1758 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [
+    {
+      "bom-ref": "pkg:nuget/Accord@3.6.0",
+      "licenses": [
+        {
+          "license": {
+            "name": "URL_ONLY",
+            "url": "http://accord-framework.net/license.txt"
+          }
+        }
+      ],
+      "name": "Accord",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "URL_ONLY"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Accord/3.6.0/accord.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Accord@3.6.0",
+      "type": "library",
+      "version": "3.6.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Accord.Fuzzy@3.6.0",
+      "licenses": [
+        {
+          "license": {
+            "name": "URL_ONLY",
+            "url": "http://accord-framework.net/license.txt"
+          }
+        }
+      ],
+      "name": "Accord.Fuzzy",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "URL_ONLY"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Accord.Fuzzy/3.6.0/accord.fuzzy.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Accord.Fuzzy@3.6.0",
+      "type": "library",
+      "version": "3.6.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Accord.MachineLearning@3.6.0",
+      "licenses": [
+        {
+          "license": {
+            "name": "URL_ONLY",
+            "url": "http://accord-framework.net/license.txt"
+          }
+        }
+      ],
+      "name": "Accord.MachineLearning",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "URL_ONLY"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Accord.MachineLearning/3.6.0/accord.machinelearning.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Accord.MachineLearning@3.6.0",
+      "type": "library",
+      "version": "3.6.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Accord.Math@3.6.0",
+      "licenses": [
+        {
+          "license": {
+            "name": "URL_ONLY",
+            "url": "http://accord-framework.net/license.txt"
+          }
+        }
+      ],
+      "name": "Accord.Math",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "URL_ONLY"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Accord.Math/3.6.0/accord.math.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Accord.Math@3.6.0",
+      "type": "library",
+      "version": "3.6.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Accord.Statistics@3.6.0",
+      "licenses": [
+        {
+          "license": {
+            "name": "URL_ONLY",
+            "url": "http://accord-framework.net/license.txt"
+          }
+        }
+      ],
+      "name": "Accord.Statistics",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "URL_ONLY"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Accord.Statistics/3.6.0/accord.statistics.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Accord.Statistics@3.6.0",
+      "type": "library",
+      "version": "3.6.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/AsyncIO@0.1.69",
+      "licenses": [
+        {
+          "expression": "MPL-2.0"
+        }
+      ],
+      "name": "AsyncIO",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "REVIEWED_EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "QROS_REVIEWED_OVERRIDE"
+        }
+      ],
+      "purl": "pkg:nuget/AsyncIO@0.1.69",
+      "type": "library",
+      "version": "0.1.69"
+    },
+    {
+      "bom-ref": "pkg:nuget/CloneExtensions@1.3.0",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "CloneExtensions",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "REVIEWED_EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "QROS_REVIEWED_OVERRIDE"
+        }
+      ],
+      "purl": "pkg:nuget/CloneExtensions@1.3.0",
+      "type": "library",
+      "version": "1.3.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/CsvHelper@19.0.0",
+      "licenses": [
+        {
+          "expression": "MS-PL OR Apache-2.0"
+        }
+      ],
+      "name": "CsvHelper",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:CsvHelper/19.0.0/csvhelper.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/CsvHelper@19.0.0",
+      "type": "library",
+      "version": "19.0.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/DynamicInterop@0.9.1",
+      "licenses": [
+        {
+          "license": {
+            "name": "URL_ONLY",
+            "url": "https://github.com/jmp75/dynamic-interop-dll/blob/feature/netstandard2/License.txt"
+          }
+        }
+      ],
+      "name": "DynamicInterop",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "URL_ONLY"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:DynamicInterop/0.9.1/dynamicinterop.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/DynamicInterop@0.9.1",
+      "type": "library",
+      "version": "0.9.1"
+    },
+    {
+      "bom-ref": "pkg:nuget/DynamicObj@2.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "DynamicObj",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:DynamicObj/2.0.0/dynamicobj.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/DynamicObj@2.0.0",
+      "type": "library",
+      "version": "2.0.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/fasterflect@3.0.0",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "fasterflect",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:fasterflect/3.0.0/fasterflect.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/fasterflect@3.0.0",
+      "type": "library",
+      "version": "3.0.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/FSharp.Core@8.0.400",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "FSharp.Core",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:FSharp.Core/8.0.400/fsharp.core.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/FSharp.Core@8.0.400",
+      "type": "library",
+      "version": "8.0.400"
+    },
+    {
+      "bom-ref": "pkg:nuget/Giraffe.ViewEngine.StrongName@2.0.0-alpha1",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "Giraffe.ViewEngine.StrongName",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Giraffe.ViewEngine.StrongName/2.0.0-alpha1/giraffe.viewengine.strongname.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Giraffe.ViewEngine.StrongName@2.0.0-alpha1",
+      "type": "library",
+      "version": "2.0.0-alpha1"
+    },
+    {
+      "bom-ref": "pkg:nuget/Humanizer.Core@2.14.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Humanizer.Core",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Humanizer.Core/2.14.1/humanizer.core.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Humanizer.Core@2.14.1",
+      "type": "library",
+      "version": "2.14.1"
+    },
+    {
+      "bom-ref": "pkg:nuget/MathNet.Numerics@5.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "MathNet.Numerics",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:MathNet.Numerics/5.0.0/mathnet.numerics.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/MathNet.Numerics@5.0.0",
+      "type": "library",
+      "version": "5.0.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/McMaster.Extensions.CommandLineUtils@2.6.0",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "McMaster.Extensions.CommandLineUtils",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:McMaster.Extensions.CommandLineUtils/2.6.0/mcmaster.extensions.commandlineutils.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/McMaster.Extensions.CommandLineUtils@2.6.0",
+      "type": "library",
+      "version": "2.6.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.AspNetCore.Html.Abstractions@2.2.0",
+      "licenses": [
+        {
+          "license": {
+            "name": "URL_ONLY",
+            "url": "https://raw.githubusercontent.com/aspnet/AspNetCore/2.0.0/LICENSE.txt"
+          }
+        }
+      ],
+      "name": "Microsoft.AspNetCore.Html.Abstractions",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "URL_ONLY"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.AspNetCore.Html.Abstractions/2.2.0/microsoft.aspnetcore.html.abstractions.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.AspNetCore.Html.Abstractions@2.2.0",
+      "type": "library",
+      "version": "2.2.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@8.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Microsoft.Bcl.AsyncInterfaces",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.Bcl.AsyncInterfaces/8.0.0/microsoft.bcl.asyncinterfaces.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@8.0.0",
+      "type": "library",
+      "version": "8.0.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.Bcl.HashCode@1.1.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Microsoft.Bcl.HashCode",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.Bcl.HashCode/1.1.1/microsoft.bcl.hashcode.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.Bcl.HashCode@1.1.1",
+      "type": "library",
+      "version": "1.1.1"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis@4.8.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Microsoft.CodeAnalysis",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.CodeAnalysis/4.8.0/microsoft.codeanalysis.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis@4.8.0",
+      "type": "library",
+      "version": "4.8.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.Analyzers@3.3.4",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Microsoft.CodeAnalysis.Analyzers",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.CodeAnalysis.Analyzers/3.3.4/microsoft.codeanalysis.analyzers.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis.Analyzers@3.3.4",
+      "type": "library",
+      "version": "3.3.4"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Microsoft.CodeAnalysis.Common",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.CodeAnalysis.Common/4.8.0/microsoft.codeanalysis.common.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+      "type": "library",
+      "version": "4.8.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.CSharp@4.8.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Microsoft.CodeAnalysis.CSharp",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.CodeAnalysis.CSharp/4.8.0/microsoft.codeanalysis.csharp.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis.CSharp@4.8.0",
+      "type": "library",
+      "version": "4.8.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.CSharp.Workspaces@4.8.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Microsoft.CodeAnalysis.CSharp.Workspaces",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.CodeAnalysis.CSharp.Workspaces/4.8.0/microsoft.codeanalysis.csharp.workspaces.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis.CSharp.Workspaces@4.8.0",
+      "type": "library",
+      "version": "4.8.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic@4.8.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Microsoft.CodeAnalysis.VisualBasic",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.CodeAnalysis.VisualBasic/4.8.0/microsoft.codeanalysis.visualbasic.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic@4.8.0",
+      "type": "library",
+      "version": "4.8.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic.Workspaces@4.8.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Microsoft.CodeAnalysis.VisualBasic.Workspaces",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.CodeAnalysis.VisualBasic.Workspaces/4.8.0/microsoft.codeanalysis.visualbasic.workspaces.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic.Workspaces@4.8.0",
+      "type": "library",
+      "version": "4.8.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.Workspaces.Common@4.8.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Microsoft.CodeAnalysis.Workspaces.Common",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.CodeAnalysis.Workspaces.Common/4.8.0/microsoft.codeanalysis.workspaces.common.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis.Workspaces.Common@4.8.0",
+      "type": "library",
+      "version": "4.8.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.DotNet.Interactive@1.0.0-beta.24229.4",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Microsoft.DotNet.Interactive",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.DotNet.Interactive/1.0.0-beta.24229.4/microsoft.dotnet.interactive.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.DotNet.Interactive@1.0.0-beta.24229.4",
+      "type": "library",
+      "version": "1.0.0-beta.24229.4"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.DotNet.Interactive.Documents@1.0.0-beta.24229.4",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Microsoft.DotNet.Interactive.Documents",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.DotNet.Interactive.Documents/1.0.0-beta.24229.4/microsoft.dotnet.interactive.documents.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.DotNet.Interactive.Documents@1.0.0-beta.24229.4",
+      "type": "library",
+      "version": "1.0.0-beta.24229.4"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.DotNet.Interactive.Formatting@1.0.0-beta.24229.4",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Microsoft.DotNet.Interactive.Formatting",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.DotNet.Interactive.Formatting/1.0.0-beta.24229.4/microsoft.dotnet.interactive.formatting.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.DotNet.Interactive.Formatting@1.0.0-beta.24229.4",
+      "type": "library",
+      "version": "1.0.0-beta.24229.4"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.Extensions.ObjectPool@10.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Microsoft.Extensions.ObjectPool",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.Extensions.ObjectPool/10.0.0/microsoft.extensions.objectpool.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.Extensions.ObjectPool@10.0.0",
+      "type": "library",
+      "version": "10.0.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Microsoft.IO.RecyclableMemoryStream@3.0.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Microsoft.IO.RecyclableMemoryStream",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Microsoft.IO.RecyclableMemoryStream/3.0.1/microsoft.io.recyclablememorystream.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Microsoft.IO.RecyclableMemoryStream@3.0.1",
+      "type": "library",
+      "version": "3.0.1"
+    },
+    {
+      "bom-ref": "pkg:nuget/NaCl.Net@0.1.13",
+      "licenses": [
+        {
+          "expression": "MPL-2.0"
+        }
+      ],
+      "name": "NaCl.Net",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:NaCl.Net/0.1.13/nacl.net.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/NaCl.Net@0.1.13",
+      "type": "library",
+      "version": "0.1.13"
+    },
+    {
+      "bom-ref": "pkg:nuget/NetMQ@4.0.4.3",
+      "licenses": [
+        {
+          "license": {
+            "name": "URL_ONLY",
+            "url": "https://github.com/zeromq/netmq/blob/master/COPYING.LESSER"
+          }
+        }
+      ],
+      "name": "NetMQ",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "URL_ONLY"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:NetMQ/4.0.4.3/netmq.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/NetMQ@4.0.4.3",
+      "type": "library",
+      "version": "4.0.4.3"
+    },
+    {
+      "bom-ref": "pkg:nuget/Newtonsoft.Json@13.0.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Newtonsoft.Json",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Newtonsoft.Json/13.0.2/newtonsoft.json.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Newtonsoft.Json@13.0.2",
+      "type": "library",
+      "version": "13.0.2"
+    },
+    {
+      "bom-ref": "pkg:nuget/NodaTime@3.0.5",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "NodaTime",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:NodaTime/3.0.5/nodatime.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/NodaTime@3.0.5",
+      "type": "library",
+      "version": "3.0.5"
+    },
+    {
+      "bom-ref": "pkg:nuget/Plotly.NET@5.1.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Plotly.NET",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Plotly.NET/5.1.0/plotly.net.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Plotly.NET@5.1.0",
+      "type": "library",
+      "version": "5.1.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Plotly.NET.CSharp@0.13.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Plotly.NET.CSharp",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Plotly.NET.CSharp/0.13.0/plotly.net.csharp.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Plotly.NET.CSharp@0.13.0",
+      "type": "library",
+      "version": "0.13.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/Plotly.NET.Interactive@5.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "Plotly.NET.Interactive",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:Plotly.NET.Interactive/5.0.0/plotly.net.interactive.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/Plotly.NET.Interactive@5.0.0",
+      "type": "library",
+      "version": "5.0.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/protobuf-net@3.1.33",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "protobuf-net",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:protobuf-net/3.1.33/protobuf-net.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/protobuf-net@3.1.33",
+      "type": "library",
+      "version": "3.1.33"
+    },
+    {
+      "bom-ref": "pkg:nuget/protobuf-net.Core@3.1.33",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "protobuf-net.Core",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:protobuf-net.Core/3.1.33/protobuf-net.core.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/protobuf-net.Core@3.1.33",
+      "type": "library",
+      "version": "3.1.33"
+    },
+    {
+      "bom-ref": "pkg:nuget/QLNet@1.13.1",
+      "licenses": [
+        {
+          "license": {
+            "name": "URL_ONLY",
+            "url": "https://github.com/amaggiulli/QLNet/blob/develop/LICENSE"
+          }
+        }
+      ],
+      "name": "QLNet",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "URL_ONLY"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:QLNet/1.13.1/qlnet.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/QLNet@1.13.1",
+      "type": "library",
+      "version": "1.13.1"
+    },
+    {
+      "bom-ref": "pkg:nuget/QuantConnect.pythonnet@2.0.65",
+      "licenses": [
+        {
+          "license": {
+            "name": "FILE_OR_OTHER"
+          }
+        }
+      ],
+      "name": "QuantConnect.pythonnet",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "FILE_OR_OTHER"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:QuantConnect.pythonnet/2.0.65/quantconnect.pythonnet.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/QuantConnect.pythonnet@2.0.65",
+      "type": "library",
+      "version": "2.0.65"
+    },
+    {
+      "bom-ref": "pkg:nuget/RestSharp@106.12.0",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "name": "RestSharp",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:RestSharp/106.12.0/restsharp.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/RestSharp@106.12.0",
+      "type": "library",
+      "version": "106.12.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/SharpZipLib@1.3.3",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "SharpZipLib",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:SharpZipLib/1.3.3/sharpziplib.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/SharpZipLib@1.3.3",
+      "type": "library",
+      "version": "1.3.3"
+    },
+    {
+      "bom-ref": "pkg:nuget/System.CommandLine@2.0.0-beta4.22272.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "System.CommandLine",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:System.CommandLine/2.0.0-beta4.22272.1/system.commandline.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/System.CommandLine@2.0.0-beta4.22272.1",
+      "type": "library",
+      "version": "2.0.0-beta4.22272.1"
+    },
+    {
+      "bom-ref": "pkg:nuget/System.CommandLine.NamingConventionBinder@2.0.0-beta4.22272.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "System.CommandLine.NamingConventionBinder",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:System.CommandLine.NamingConventionBinder/2.0.0-beta4.22272.1/system.commandline.namingconventionbinder.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/System.CommandLine.NamingConventionBinder@2.0.0-beta4.22272.1",
+      "type": "library",
+      "version": "2.0.0-beta4.22272.1"
+    },
+    {
+      "bom-ref": "pkg:nuget/System.ComponentModel.Annotations@4.7.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "System.ComponentModel.Annotations",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:System.ComponentModel.Annotations/4.7.0/system.componentmodel.annotations.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/System.ComponentModel.Annotations@4.7.0",
+      "type": "library",
+      "version": "4.7.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/System.ComponentModel.Composition@6.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "System.ComponentModel.Composition",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:System.ComponentModel.Composition/6.0.0/system.componentmodel.composition.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/System.ComponentModel.Composition@6.0.0",
+      "type": "library",
+      "version": "6.0.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/System.Composition@7.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "System.Composition",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:System.Composition/7.0.0/system.composition.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/System.Composition@7.0.0",
+      "type": "library",
+      "version": "7.0.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/System.Composition.AttributedModel@7.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "System.Composition.AttributedModel",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:System.Composition.AttributedModel/7.0.0/system.composition.attributedmodel.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/System.Composition.AttributedModel@7.0.0",
+      "type": "library",
+      "version": "7.0.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/System.Composition.Convention@7.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "System.Composition.Convention",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:System.Composition.Convention/7.0.0/system.composition.convention.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/System.Composition.Convention@7.0.0",
+      "type": "library",
+      "version": "7.0.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/System.Composition.Hosting@7.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "System.Composition.Hosting",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:System.Composition.Hosting/7.0.0/system.composition.hosting.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/System.Composition.Hosting@7.0.0",
+      "type": "library",
+      "version": "7.0.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/System.Composition.Runtime@7.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "System.Composition.Runtime",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:System.Composition.Runtime/7.0.0/system.composition.runtime.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/System.Composition.Runtime@7.0.0",
+      "type": "library",
+      "version": "7.0.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/System.Composition.TypedParts@7.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "System.Composition.TypedParts",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:System.Composition.TypedParts/7.0.0/system.composition.typedparts.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/System.Composition.TypedParts@7.0.0",
+      "type": "library",
+      "version": "7.0.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/System.Reactive@6.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "System.Reactive",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:System.Reactive/6.0.0/system.reactive.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/System.Reactive@6.0.0",
+      "type": "library",
+      "version": "6.0.0"
+    },
+    {
+      "bom-ref": "pkg:nuget/System.Security.Cryptography.Pkcs@10.0.10",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "System.Security.Cryptography.Pkcs",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:System.Security.Cryptography.Pkcs/10.0.10/system.security.cryptography.pkcs.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/System.Security.Cryptography.Pkcs@10.0.10",
+      "type": "library",
+      "version": "10.0.10"
+    },
+    {
+      "bom-ref": "pkg:nuget/System.Security.Cryptography.Xml@10.0.10",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "System.Security.Cryptography.Xml",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:System.Security.Cryptography.Xml/10.0.10/system.security.cryptography.xml.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/System.Security.Cryptography.Xml@10.0.10",
+      "type": "library",
+      "version": "10.0.10"
+    },
+    {
+      "bom-ref": "pkg:nuget/System.ServiceModel.Primitives@10.0.652802",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "name": "System.ServiceModel.Primitives",
+      "properties": [
+        {
+          "name": "qros:license-status",
+          "value": "EXPRESSION"
+        },
+        {
+          "name": "qros:license-source",
+          "value": "NUGET_NUSPEC:System.ServiceModel.Primitives/10.0.652802/system.servicemodel.primitives.nuspec"
+        }
+      ],
+      "purl": "pkg:nuget/System.ServiceModel.Primitives@10.0.652802",
+      "type": "library",
+      "version": "10.0.652802"
+    }
+  ],
+  "dependencies": [
+    {
+      "dependsOn": [
+        "pkg:nuget/Accord.Fuzzy@3.6.0",
+        "pkg:nuget/Accord.MachineLearning@3.6.0",
+        "pkg:nuget/Accord.Math@3.6.0",
+        "pkg:nuget/Accord.Statistics@3.6.0",
+        "pkg:nuget/Accord@3.6.0",
+        "pkg:nuget/AsyncIO@0.1.69",
+        "pkg:nuget/CloneExtensions@1.3.0",
+        "pkg:nuget/CsvHelper@19.0.0",
+        "pkg:nuget/DynamicInterop@0.9.1",
+        "pkg:nuget/DynamicObj@2.0.0",
+        "pkg:nuget/FSharp.Core@8.0.400",
+        "pkg:nuget/Giraffe.ViewEngine.StrongName@2.0.0-alpha1",
+        "pkg:nuget/Humanizer.Core@2.14.1",
+        "pkg:nuget/MathNet.Numerics@5.0.0",
+        "pkg:nuget/McMaster.Extensions.CommandLineUtils@2.6.0",
+        "pkg:nuget/Microsoft.AspNetCore.Html.Abstractions@2.2.0",
+        "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@8.0.0",
+        "pkg:nuget/Microsoft.Bcl.HashCode@1.1.1",
+        "pkg:nuget/Microsoft.CodeAnalysis.Analyzers@3.3.4",
+        "pkg:nuget/Microsoft.CodeAnalysis.CSharp.Workspaces@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.CSharp@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic.Workspaces@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.Workspaces.Common@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis@4.8.0",
+        "pkg:nuget/Microsoft.DotNet.Interactive.Documents@1.0.0-beta.24229.4",
+        "pkg:nuget/Microsoft.DotNet.Interactive.Formatting@1.0.0-beta.24229.4",
+        "pkg:nuget/Microsoft.DotNet.Interactive@1.0.0-beta.24229.4",
+        "pkg:nuget/Microsoft.Extensions.ObjectPool@10.0.0",
+        "pkg:nuget/Microsoft.IO.RecyclableMemoryStream@3.0.1",
+        "pkg:nuget/NaCl.Net@0.1.13",
+        "pkg:nuget/NetMQ@4.0.4.3",
+        "pkg:nuget/Newtonsoft.Json@13.0.2",
+        "pkg:nuget/NodaTime@3.0.5",
+        "pkg:nuget/Plotly.NET.CSharp@0.13.0",
+        "pkg:nuget/Plotly.NET.Interactive@5.0.0",
+        "pkg:nuget/Plotly.NET@5.1.0",
+        "pkg:nuget/QLNet@1.13.1",
+        "pkg:nuget/QuantConnect.pythonnet@2.0.65",
+        "pkg:nuget/RestSharp@106.12.0",
+        "pkg:nuget/SharpZipLib@1.3.3",
+        "pkg:nuget/System.CommandLine.NamingConventionBinder@2.0.0-beta4.22272.1",
+        "pkg:nuget/System.CommandLine@2.0.0-beta4.22272.1",
+        "pkg:nuget/System.ComponentModel.Annotations@4.7.0",
+        "pkg:nuget/System.ComponentModel.Composition@6.0.0",
+        "pkg:nuget/System.Composition.AttributedModel@7.0.0",
+        "pkg:nuget/System.Composition.Convention@7.0.0",
+        "pkg:nuget/System.Composition.Hosting@7.0.0",
+        "pkg:nuget/System.Composition.Runtime@7.0.0",
+        "pkg:nuget/System.Composition.TypedParts@7.0.0",
+        "pkg:nuget/System.Composition@7.0.0",
+        "pkg:nuget/System.Reactive@6.0.0",
+        "pkg:nuget/System.Security.Cryptography.Pkcs@10.0.10",
+        "pkg:nuget/System.Security.Cryptography.Xml@10.0.10",
+        "pkg:nuget/System.ServiceModel.Primitives@10.0.652802",
+        "pkg:nuget/fasterflect@3.0.0",
+        "pkg:nuget/protobuf-net.Core@3.1.33",
+        "pkg:nuget/protobuf-net@3.1.33"
+      ],
+      "ref": "pkg:generic/qros-patched-lean@phase3e"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/Accord@3.6.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Accord.Math@3.6.0",
+        "pkg:nuget/Accord.Statistics@3.6.0",
+        "pkg:nuget/Accord@3.6.0"
+      ],
+      "ref": "pkg:nuget/Accord.Fuzzy@3.6.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Accord.Math@3.6.0",
+        "pkg:nuget/Accord.Statistics@3.6.0",
+        "pkg:nuget/Accord@3.6.0"
+      ],
+      "ref": "pkg:nuget/Accord.MachineLearning@3.6.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Accord@3.6.0"
+      ],
+      "ref": "pkg:nuget/Accord.Math@3.6.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Accord.Math@3.6.0",
+        "pkg:nuget/Accord@3.6.0"
+      ],
+      "ref": "pkg:nuget/Accord.Statistics@3.6.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/AsyncIO@0.1.69"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/CloneExtensions@1.3.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/CsvHelper@19.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/DynamicInterop@0.9.1"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/FSharp.Core@8.0.400",
+        "pkg:nuget/Newtonsoft.Json@13.0.2"
+      ],
+      "ref": "pkg:nuget/DynamicObj@2.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/fasterflect@3.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/FSharp.Core@8.0.400"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/FSharp.Core@8.0.400"
+      ],
+      "ref": "pkg:nuget/Giraffe.ViewEngine.StrongName@2.0.0-alpha1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/Humanizer.Core@2.14.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/MathNet.Numerics@5.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/System.ComponentModel.Annotations@4.7.0"
+      ],
+      "ref": "pkg:nuget/McMaster.Extensions.CommandLineUtils@2.6.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/Microsoft.AspNetCore.Html.Abstractions@2.2.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@8.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/Microsoft.Bcl.HashCode@1.1.1"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Microsoft.CodeAnalysis.CSharp.Workspaces@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic.Workspaces@4.8.0"
+      ],
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis@4.8.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis.Analyzers@3.3.4"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Microsoft.CodeAnalysis.Analyzers@3.3.4"
+      ],
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0"
+      ],
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis.CSharp@4.8.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Humanizer.Core@2.14.1",
+        "pkg:nuget/Microsoft.CodeAnalysis.CSharp@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.Workspaces.Common@4.8.0"
+      ],
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis.CSharp.Workspaces@4.8.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0"
+      ],
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic@4.8.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.Workspaces.Common@4.8.0"
+      ],
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic.Workspaces@4.8.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Humanizer.Core@2.14.1",
+        "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@8.0.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+        "pkg:nuget/System.Composition@7.0.0"
+      ],
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis.Workspaces.Common@4.8.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Microsoft.CodeAnalysis@4.8.0",
+        "pkg:nuget/Microsoft.DotNet.Interactive.Documents@1.0.0-beta.24229.4",
+        "pkg:nuget/Microsoft.DotNet.Interactive.Formatting@1.0.0-beta.24229.4",
+        "pkg:nuget/System.CommandLine.NamingConventionBinder@2.0.0-beta4.22272.1",
+        "pkg:nuget/System.CommandLine@2.0.0-beta4.22272.1",
+        "pkg:nuget/System.Reactive@6.0.0"
+      ],
+      "ref": "pkg:nuget/Microsoft.DotNet.Interactive@1.0.0-beta.24229.4"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@8.0.0",
+        "pkg:nuget/Microsoft.Bcl.HashCode@1.1.1",
+        "pkg:nuget/System.CommandLine@2.0.0-beta4.22272.1"
+      ],
+      "ref": "pkg:nuget/Microsoft.DotNet.Interactive.Documents@1.0.0-beta.24229.4"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Microsoft.AspNetCore.Html.Abstractions@2.2.0",
+        "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@8.0.0"
+      ],
+      "ref": "pkg:nuget/Microsoft.DotNet.Interactive.Formatting@1.0.0-beta.24229.4"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/Microsoft.Extensions.ObjectPool@10.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/Microsoft.IO.RecyclableMemoryStream@3.0.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/NaCl.Net@0.1.13"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/AsyncIO@0.1.69",
+        "pkg:nuget/NaCl.Net@0.1.13",
+        "pkg:nuget/System.Security.Cryptography.Xml@10.0.10",
+        "pkg:nuget/System.ServiceModel.Primitives@10.0.652802"
+      ],
+      "ref": "pkg:nuget/NetMQ@4.0.4.3"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/Newtonsoft.Json@13.0.2"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/NodaTime@3.0.5"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/DynamicObj@2.0.0",
+        "pkg:nuget/FSharp.Core@8.0.400",
+        "pkg:nuget/Giraffe.ViewEngine.StrongName@2.0.0-alpha1",
+        "pkg:nuget/Newtonsoft.Json@13.0.2"
+      ],
+      "ref": "pkg:nuget/Plotly.NET@5.1.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Plotly.NET@5.1.0"
+      ],
+      "ref": "pkg:nuget/Plotly.NET.CSharp@0.13.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/FSharp.Core@8.0.400",
+        "pkg:nuget/Microsoft.DotNet.Interactive.Formatting@1.0.0-beta.24229.4",
+        "pkg:nuget/Microsoft.DotNet.Interactive@1.0.0-beta.24229.4",
+        "pkg:nuget/Plotly.NET@5.1.0"
+      ],
+      "ref": "pkg:nuget/Plotly.NET.Interactive@5.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/protobuf-net.Core@3.1.33"
+      ],
+      "ref": "pkg:nuget/protobuf-net@3.1.33"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/protobuf-net.Core@3.1.33"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/QLNet@1.13.1"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/fasterflect@3.0.0"
+      ],
+      "ref": "pkg:nuget/QuantConnect.pythonnet@2.0.65"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/RestSharp@106.12.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/SharpZipLib@1.3.3"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/System.CommandLine@2.0.0-beta4.22272.1"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/System.CommandLine@2.0.0-beta4.22272.1"
+      ],
+      "ref": "pkg:nuget/System.CommandLine.NamingConventionBinder@2.0.0-beta4.22272.1"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/System.ComponentModel.Annotations@4.7.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/System.ComponentModel.Composition@6.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/System.Composition.AttributedModel@7.0.0",
+        "pkg:nuget/System.Composition.Convention@7.0.0",
+        "pkg:nuget/System.Composition.Hosting@7.0.0",
+        "pkg:nuget/System.Composition.Runtime@7.0.0",
+        "pkg:nuget/System.Composition.TypedParts@7.0.0"
+      ],
+      "ref": "pkg:nuget/System.Composition@7.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/System.Composition.AttributedModel@7.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/System.Composition.AttributedModel@7.0.0"
+      ],
+      "ref": "pkg:nuget/System.Composition.Convention@7.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/System.Composition.Runtime@7.0.0"
+      ],
+      "ref": "pkg:nuget/System.Composition.Hosting@7.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/System.Composition.Runtime@7.0.0"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/System.Composition.AttributedModel@7.0.0",
+        "pkg:nuget/System.Composition.Hosting@7.0.0",
+        "pkg:nuget/System.Composition.Runtime@7.0.0"
+      ],
+      "ref": "pkg:nuget/System.Composition.TypedParts@7.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/System.Reactive@6.0.0"
+    },
+    {
+      "dependsOn": [],
+      "ref": "pkg:nuget/System.Security.Cryptography.Pkcs@10.0.10"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/System.Security.Cryptography.Pkcs@10.0.10"
+      ],
+      "ref": "pkg:nuget/System.Security.Cryptography.Xml@10.0.10"
+    },
+    {
+      "dependsOn": [
+        "pkg:nuget/Microsoft.Extensions.ObjectPool@10.0.0",
+        "pkg:nuget/System.Security.Cryptography.Xml@10.0.10"
+      ],
+      "ref": "pkg:nuget/System.ServiceModel.Primitives@10.0.652802"
+    }
+  ],
+  "metadata": {
+    "component": {
+      "bom-ref": "pkg:generic/qros-patched-lean@phase3e",
+      "name": "QROS patched LEAN research candidate",
+      "properties": [
+        {
+          "name": "qros:research-only",
+          "value": "true"
+        },
+        {
+          "name": "qros:base-lean-revision",
+          "value": "b692bf4788e8b54fc23bdcb5659666bf055ce89f"
+        },
+        {
+          "name": "qros:release-clearance",
+          "value": "false"
+        }
+      ],
+      "type": "application",
+      "version": "phase3e"
+    }
+  },
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-00000000003e",
+  "specVersion": "1.7",
+  "version": 1
+}

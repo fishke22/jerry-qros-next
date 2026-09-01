@@ -38,6 +38,8 @@ jobs:
         run: python scripts/validate_lean_remediation_research.py
       - name: Validate Phase 3D patch-experiment authorization
         run: python scripts/validate_lean_patch_experiment.py
+      - name: Validate Phase 3E promotion-readiness boundary
+        run: python scripts/validate_lean_promotion_readiness.py
       - name: Validate SHA256SUMS
         run: python scripts/validate_sha256sums.py
       - name: Run tests

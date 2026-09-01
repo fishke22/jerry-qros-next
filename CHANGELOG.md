@@ -4,6 +4,11 @@ All notable QROS Next engineering milestones are recorded here.
 
 ## Unreleased
 
+### Phase 3E
+- Started promotion-readiness evidence collection for the Option B research candidate.
+- Reworked the experimental ZipFile compatibility layer to stream existing archive entries instead of buffering full entry contents.
+- Added patched-graph CycloneDX/license evidence generation, targeted compression regression, and standard Windows CI compatibility.
+
 ### Phase 3D
 - Phase 3D research candidate passed repaired dependency, CA5389, compression-smoke and deterministic-backtest gates; promotion remains denied pending resource/coverage/SBOM/Windows review.
 - User explicitly selected Option B: research-only upstream-aligned LEAN security patch experiment.

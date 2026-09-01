@@ -1,0 +1,32 @@
+{
+  "registry_version": 1,
+  "reviewed_at": "2026-09-01",
+  "release_clearance": false,
+  "purpose": "Exact package/version license identification where restored NuGet nuspec metadata is missing a usable license field.",
+  "overrides": [
+    {
+      "package": "AsyncIO",
+      "version": "0.1.69",
+      "spdx": "MPL-2.0",
+      "confidence": "VERIFIED_WITH_SOURCE_AND_COMPONENT_NOTICE_CROSSCHECK",
+      "package_evidence": "https://www.nuget.org/packages/AsyncIO/0.1.69",
+      "source_repository": "https://github.com/somdoron/AsyncIO",
+      "source_revision": "0b0cf4c65b049b2e483b172e530f4db970db25e4",
+      "source_license_path": "LICENSE.md",
+      "source_license_at_revision": "MPL-2.0",
+      "note": "NuGet 0.1.69 page identifies somdoron/AsyncIO as project/source repository. The last repository commit observed from 2018-12-02 through 2019-01-15 carries MPL-2.0; third-party component notices independently identify AsyncIO 0.1.69 as MPL-2.0. The package nuspec itself does not expose a usable license field."
+    },
+    {
+      "package": "CloneExtensions",
+      "version": "1.3.0",
+      "spdx": "Apache-2.0",
+      "confidence": "VERIFIED_EXACT_SOURCE_VERSION",
+      "package_evidence": "https://www.nuget.org/packages/CloneExtensions/1.3.0",
+      "source_repository": "https://github.com/MarcinJuraszek/CloneExtensions",
+      "source_revision": "3a14000a39880cee62daa06b20dbe38a611b05aa",
+      "source_license_path": "LICENSE",
+      "source_license_at_revision": "Apache-2.0",
+      "note": "Source commit dated 2017-03-12 contains CloneExtensions.csproj Version 1.3.0 and the Apache-2.0 LICENSE, matching the NuGet 1.3.0 publication date/version."
+    }
+  ]
+}

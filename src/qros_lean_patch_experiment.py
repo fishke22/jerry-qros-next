@@ -9,7 +9,343 @@ MESSAGING_OLD = '<PackageReference Include="NetMQ" Version="4.0.1.6" />'
 MESSAGING_NEW = '<PackageReference Include="NetMQ" Version="4.0.4.3" />'
 DOTNETZIP_LINE = '    <PackageReference Include="DotNetZip" Version="1.16.0" />\n'
 
-RUNTIME_COMPRESSION_BRIDGE = "// QROS RESEARCH-ONLY COMPATIBILITY BRIDGE.\n// Not an upstream LEAN source file. Do not promote without architecture review.\nusing System;\nusing System.Collections;\nusing System.Collections.Generic;\nusing System.IO;\nusing System.IO.Compression;\nusing System.Linq;\n\nnamespace Ionic.Zip\n{\n    public enum Zip64Option\n    {\n        Default = 0,\n        Always = 1\n    }\n\n    public class ZipException : Exception\n    {\n        public ZipException() { }\n        public ZipException(string message) : base(message) { }\n        public ZipException(string message, Exception inner) : base(message, inner) { }\n    }\n\n    public sealed class ZipEntry\n    {\n        private readonly byte[] _content;\n\n        internal ZipEntry(string fileName, byte[] content)\n        {\n            FileName = fileName;\n            _content = content ?? Array.Empty<byte>();\n        }\n\n        public string FileName { get; }\n        public long UncompressedSize => _content.LongLength;\n\n        public Stream OpenReader()\n        {\n            return new MemoryStream(_content, writable: false);\n        }\n\n        public void Extract(Stream target)\n        {\n            using var source = OpenReader();\n            source.CopyTo(target);\n        }\n\n        internal byte[] Content => _content;\n    }\n\n    public sealed class ZipInputStream : Stream\n    {\n        private readonly FileStream _fileStream;\n        private readonly ZipArchive _archive;\n        private readonly IEnumerator<ZipArchiveEntry> _entries;\n        private Stream _currentStream;\n\n        public ZipInputStream(string path)\n        {\n            _fileStream = File.OpenRead(path);\n            _archive = new ZipArchive(_fileStream, ZipArchiveMode.Read, leaveOpen: false);\n            _entries = _archive.Entries.GetEnumerator();\n        }\n\n        public ZipEntry GetNextEntry()\n        {\n            _currentStream?.Dispose();\n            _currentStream = null;\n\n            if (!_entries.MoveNext())\n            {\n                return null;\n            }\n\n            var current = _entries.Current;\n            _currentStream = current.Open();\n            return new ZipEntry(current.FullName, Array.Empty<byte>());\n        }\n\n        public override bool CanRead => _currentStream?.CanRead ?? false;\n        public override bool CanSeek => false;\n        public override bool CanWrite => false;\n        public override long Length => _currentStream?.Length ?? 0;\n        public override long Position\n        {\n            get => _currentStream?.Position ?? 0;\n            set => throw new NotSupportedException();\n        }\n\n        public override void Flush()\n        {\n        }\n\n        public override int Read(byte[] buffer, int offset, int count)\n        {\n            if (_currentStream == null)\n            {\n                return 0;\n            }\n            return _currentStream.Read(buffer, offset, count);\n        }\n\n        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();\n        public override void SetLength(long value) => throw new NotSupportedException();\n        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();\n\n        protected override void Dispose(bool disposing)\n        {\n            if (disposing)\n            {\n                _currentStream?.Dispose();\n                _entries.Dispose();\n                _archive.Dispose();\n                _fileStream.Dispose();\n            }\n            base.Dispose(disposing);\n        }\n    }\n\n    public sealed class ZipFile : IEnumerable<ZipEntry>, IDisposable\n    {\n        private readonly List<ZipEntry> _entries = new();\n\n        public ZipFile(string path)\n        {\n            if (File.Exists(path))\n            {\n                using var stream = File.OpenRead(path);\n                Load(stream);\n            }\n        }\n\n        private ZipFile(Stream stream)\n        {\n            Load(stream);\n        }\n\n        public static ZipFile Read(string path)\n        {\n            try\n            {\n                return new ZipFile(path);\n            }\n            catch (Exception exception) when (exception is InvalidDataException || exception is IOException)\n            {\n                throw new ZipException($\"Cannot read '{path}' as a zip file\", exception);\n            }\n        }\n\n        public static ZipFile Read(Stream stream)\n        {\n            try\n            {\n                return new ZipFile(stream);\n            }\n            catch (Exception exception) when (exception is InvalidDataException || exception is IOException)\n            {\n                throw new ZipException(\"Cannot read stream as a zip file\", exception);\n            }\n        }\n\n        public Zip64Option UseZip64WhenSaving { get; set; }\n\n        public IReadOnlyList<ZipEntry> Entries => _entries;\n        public IEnumerable<string> EntryFileNames => _entries.Select(x => x.FileName);\n        public int Count => _entries.Count;\n        public ZipEntry this[int index] => _entries[index];\n\n        public ZipEntry this[string fileName] =>\n            _entries.FirstOrDefault(x =>\n                string.Equals(x.FileName, fileName, StringComparison.OrdinalIgnoreCase));\n\n        public bool ContainsEntry(string fileName) => this[fileName] != null;\n\n        public void RemoveEntry(string fileName)\n        {\n            var entry = this[fileName];\n            if (entry != null)\n            {\n                _entries.Remove(entry);\n            }\n        }\n\n        public ZipEntry AddEntry(string fileName, byte[] content)\n        {\n            var entry = new ZipEntry(fileName, content);\n            _entries.Add(entry);\n            return entry;\n        }\n\n        public void Save(string path)\n        {\n            using var output = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);\n            using var archive = new ZipArchive(output, ZipArchiveMode.Create, leaveOpen: false);\n            foreach (var entry in _entries)\n            {\n                var archiveEntry = archive.CreateEntry(entry.FileName, CompressionLevel.Optimal);\n                using var target = archiveEntry.Open();\n                target.Write(entry.Content, 0, entry.Content.Length);\n            }\n        }\n\n        public IEnumerator<ZipEntry> GetEnumerator() => _entries.GetEnumerator();\n        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();\n        public void Dispose() { }\n\n        private void Load(Stream stream)\n        {\n            using var archive = new ZipArchive(stream, ZipArchiveMode.Read, leaveOpen: true);\n            foreach (var entry in archive.Entries)\n            {\n                using var source = entry.Open();\n                using var memory = new MemoryStream();\n                source.CopyTo(memory);\n                _entries.Add(new ZipEntry(entry.FullName, memory.ToArray()));\n            }\n        }\n    }\n}\n\nnamespace Ionic.BZip2\n{\n    public sealed class BZip2InputStream : Stream\n    {\n        private readonly ICSharpCode.SharpZipLib.BZip2.BZip2InputStream _inner;\n\n        public BZip2InputStream(Stream source)\n        {\n            _inner = new ICSharpCode.SharpZipLib.BZip2.BZip2InputStream(source);\n        }\n\n        public override bool CanRead => _inner.CanRead;\n        public override bool CanSeek => _inner.CanSeek;\n        public override bool CanWrite => false;\n        public override long Length => _inner.Length;\n        public override long Position\n        {\n            get => _inner.Position;\n            set => _inner.Position = value;\n        }\n\n        public override void Flush() => _inner.Flush();\n        public override int Read(byte[] buffer, int offset, int count) => _inner.Read(buffer, offset, count);\n        public override long Seek(long offset, SeekOrigin origin) => _inner.Seek(offset, origin);\n        public override void SetLength(long value) => throw new NotSupportedException();\n        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();\n\n        protected override void Dispose(bool disposing)\n        {\n            if (disposing)\n            {\n                _inner.Dispose();\n            }\n            base.Dispose(disposing);\n        }\n    }\n}\n\nnamespace Ionic.Zlib\n{\n    public enum CompressionMode\n    {\n        Compress = 0,\n        Decompress = 1\n    }\n\n    public sealed class GZipStream : Stream\n    {\n        private readonly System.IO.Compression.GZipStream _inner;\n\n        public GZipStream(Stream stream, CompressionMode mode)\n        {\n            _inner = new System.IO.Compression.GZipStream(\n                stream,\n                mode == CompressionMode.Decompress\n                    ? System.IO.Compression.CompressionMode.Decompress\n                    : System.IO.Compression.CompressionMode.Compress);\n        }\n\n        public override bool CanRead => _inner.CanRead;\n        public override bool CanSeek => _inner.CanSeek;\n        public override bool CanWrite => _inner.CanWrite;\n        public override long Length => _inner.Length;\n        public override long Position\n        {\n            get => _inner.Position;\n            set => _inner.Position = value;\n        }\n\n        public override void Flush() => _inner.Flush();\n        public override int Read(byte[] buffer, int offset, int count) => _inner.Read(buffer, offset, count);\n        public override long Seek(long offset, SeekOrigin origin) => _inner.Seek(offset, origin);\n        public override void SetLength(long value) => _inner.SetLength(value);\n        public override void Write(byte[] buffer, int offset, int count) => _inner.Write(buffer, offset, count);\n\n        protected override void Dispose(bool disposing)\n        {\n            if (disposing)\n            {\n                _inner.Dispose();\n            }\n            base.Dispose(disposing);\n        }\n    }\n\n    public class ZlibException : Exception\n    {\n        public ZlibException() { }\n        public ZlibException(string message) : base(message) { }\n        public ZlibException(string message, Exception inner) : base(message, inner) { }\n    }\n}\n"
+RUNTIME_COMPRESSION_BRIDGE = """// QROS RESEARCH-ONLY STREAM-BACKED COMPATIBILITY BRIDGE.
+// Not an upstream LEAN source file. Do not promote without architecture review.
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+
+namespace Ionic.Zip
+{
+    public enum Zip64Option
+    {
+        Default = 0,
+        Always = 1
+    }
+
+    public class ZipException : Exception
+    {
+        public ZipException() { }
+        public ZipException(string message) : base(message) { }
+        public ZipException(string message, Exception inner) : base(message, inner) { }
+    }
+
+    public sealed class ZipEntry
+    {
+        private readonly ZipArchiveEntry _sourceEntry;
+        private readonly byte[] _content;
+        private readonly long _size;
+
+        internal ZipEntry(ZipArchiveEntry sourceEntry)
+        {
+            _sourceEntry = sourceEntry ?? throw new ArgumentNullException(nameof(sourceEntry));
+            FileName = sourceEntry.FullName;
+            _size = sourceEntry.Length;
+        }
+
+        internal ZipEntry(string fileName, long size)
+        {
+            FileName = fileName;
+            _size = size;
+        }
+
+        public ZipEntry(string fileName)
+            : this(fileName, Array.Empty<byte>())
+        {
+        }
+
+        internal ZipEntry(string fileName, byte[] content)
+        {
+            FileName = fileName;
+            _content = content ?? Array.Empty<byte>();
+            _size = _content.LongLength;
+        }
+
+        public string FileName { get; }
+        public string Name => FileName;
+        public long UncompressedSize => _size;
+        public long Size => _size;
+
+        public Stream OpenReader()
+        {
+            if (_sourceEntry != null)
+            {
+                return _sourceEntry.Open();
+            }
+            if (_content != null)
+            {
+                return new MemoryStream(_content, writable: false);
+            }
+            throw new InvalidOperationException("ZipEntry has no readable backing stream");
+        }
+
+        public void Extract(Stream target)
+        {
+            using var source = OpenReader();
+            source.CopyTo(target);
+        }
+
+        internal void CopyTo(Stream target)
+        {
+            using var source = OpenReader();
+            source.CopyTo(target);
+        }
+    }
+
+    public sealed class ZipInputStream : Stream
+    {
+        private readonly Stream _source;
+        private readonly bool _ownsSource;
+        private readonly ZipArchive _archive;
+        private readonly IEnumerator<ZipArchiveEntry> _entries;
+        private Stream _currentStream;
+
+        public ZipInputStream(string path)
+        {
+            _source = File.OpenRead(path);
+            _ownsSource = true;
+            _archive = new ZipArchive(_source, ZipArchiveMode.Read, leaveOpen: true);
+            _entries = _archive.Entries.GetEnumerator();
+        }
+
+        public ZipInputStream(Stream source)
+        {
+            _source = source ?? throw new ArgumentNullException(nameof(source));
+            _archive = new ZipArchive(_source, ZipArchiveMode.Read, leaveOpen: true);
+            _entries = _archive.Entries.GetEnumerator();
+        }
+
+        public ZipEntry GetNextEntry()
+        {
+            _currentStream?.Dispose();
+            _currentStream = null;
+            if (!_entries.MoveNext())
+            {
+                return null;
+            }
+
+            var current = _entries.Current;
+            _currentStream = current.Open();
+            return new ZipEntry(current.FullName, current.Length);
+        }
+
+        public override bool CanRead => _currentStream?.CanRead ?? false;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => _currentStream?.Length ?? 0;
+        public override long Position
+        {
+            get => _currentStream?.Position ?? 0;
+            set => throw new NotSupportedException();
+        }
+
+        public override void Flush() { }
+        public override int Read(byte[] buffer, int offset, int count)
+            => _currentStream?.Read(buffer, offset, count) ?? 0;
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _currentStream?.Dispose();
+                _entries.Dispose();
+                _archive.Dispose();
+                if (_ownsSource)
+                {
+                    _source.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
+    }
+
+    public sealed class ZipFile : IEnumerable<ZipEntry>, IDisposable
+    {
+        private readonly List<ZipEntry> _entries = new();
+        private Stream _sourceStream;
+        private ZipArchive _sourceArchive;
+        private bool _ownsSource;
+
+        public ZipFile(string path)
+        {
+            if (File.Exists(path))
+            {
+                _sourceStream = File.OpenRead(path);
+                _ownsSource = true;
+                LoadSourceArchive();
+            }
+        }
+
+        private ZipFile(Stream stream)
+        {
+            _sourceStream = stream ?? throw new ArgumentNullException(nameof(stream));
+            LoadSourceArchive();
+        }
+
+        public static ZipFile Read(string path)
+        {
+            try
+            {
+                return new ZipFile(path);
+            }
+            catch (Exception exception) when (exception is InvalidDataException || exception is IOException)
+            {
+                throw new ZipException($"Cannot read '{path}' as a zip file", exception);
+            }
+        }
+
+        public static ZipFile Read(Stream stream)
+        {
+            try
+            {
+                return new ZipFile(stream);
+            }
+            catch (Exception exception) when (exception is InvalidDataException || exception is IOException)
+            {
+                throw new ZipException("Cannot read stream as a zip file", exception);
+            }
+        }
+
+        public Zip64Option UseZip64WhenSaving { get; set; }
+        public IReadOnlyList<ZipEntry> Entries => _entries;
+        public IEnumerable<string> EntryFileNames => _entries.Select(x => x.FileName).ToArray();
+        public int Count => _entries.Count;
+        public ZipEntry this[int index] => _entries[index];
+        public ZipEntry this[string fileName] => _entries.FirstOrDefault(
+            x => string.Equals(x.FileName, fileName, StringComparison.OrdinalIgnoreCase));
+
+        public bool ContainsEntry(string fileName) => this[fileName] != null;
+
+        public void RemoveEntry(string fileName)
+        {
+            var entry = this[fileName];
+            if (entry != null)
+            {
+                _entries.Remove(entry);
+            }
+        }
+
+        public ZipEntry AddEntry(string fileName, byte[] content)
+        {
+            var entry = new ZipEntry(fileName, content);
+            _entries.Add(entry);
+            return entry;
+        }
+
+        public void Save(string path)
+        {
+            using var output = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
+            using var archive = new ZipArchive(output, ZipArchiveMode.Create, leaveOpen: false);
+            foreach (var entry in _entries)
+            {
+                var archiveEntry = archive.CreateEntry(entry.FileName, CompressionLevel.Optimal);
+                using var target = archiveEntry.Open();
+                entry.CopyTo(target);
+            }
+        }
+
+        public IEnumerator<ZipEntry> GetEnumerator() => _entries.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public void Dispose()
+        {
+            _sourceArchive?.Dispose();
+            _sourceArchive = null;
+            if (_ownsSource)
+            {
+                _sourceStream?.Dispose();
+            }
+            _sourceStream = null;
+        }
+
+        private void LoadSourceArchive()
+        {
+            _sourceArchive = new ZipArchive(_sourceStream, ZipArchiveMode.Read, leaveOpen: true);
+            foreach (var entry in _sourceArchive.Entries)
+            {
+                _entries.Add(new ZipEntry(entry));
+            }
+        }
+    }
+}
+
+namespace Ionic.BZip2
+{
+    public sealed class BZip2InputStream : Stream
+    {
+        private readonly ICSharpCode.SharpZipLib.BZip2.BZip2InputStream _inner;
+        public BZip2InputStream(Stream source)
+        {
+            _inner = new ICSharpCode.SharpZipLib.BZip2.BZip2InputStream(source);
+        }
+        public override bool CanRead => _inner.CanRead;
+        public override bool CanSeek => _inner.CanSeek;
+        public override bool CanWrite => false;
+        public override long Length => _inner.Length;
+        public override long Position { get => _inner.Position; set => _inner.Position = value; }
+        public override void Flush() => _inner.Flush();
+        public override int Read(byte[] buffer, int offset, int count) => _inner.Read(buffer, offset, count);
+        public override long Seek(long offset, SeekOrigin origin) => _inner.Seek(offset, origin);
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) _inner.Dispose();
+            base.Dispose(disposing);
+        }
+    }
+}
+
+namespace Ionic.Zlib
+{
+    public enum CompressionMode
+    {
+        Compress = 0,
+        Decompress = 1
+    }
+
+    public sealed class GZipStream : Stream
+    {
+        private readonly System.IO.Compression.GZipStream _inner;
+        public GZipStream(Stream stream, CompressionMode mode)
+        {
+            _inner = new System.IO.Compression.GZipStream(
+                stream,
+                mode == CompressionMode.Decompress
+                    ? System.IO.Compression.CompressionMode.Decompress
+                    : System.IO.Compression.CompressionMode.Compress);
+        }
+        public override bool CanRead => _inner.CanRead;
+        public override bool CanSeek => _inner.CanSeek;
+        public override bool CanWrite => _inner.CanWrite;
+        public override long Length => _inner.Length;
+        public override long Position { get => _inner.Position; set => _inner.Position = value; }
+        public override void Flush() => _inner.Flush();
+        public override int Read(byte[] buffer, int offset, int count) => _inner.Read(buffer, offset, count);
+        public override long Seek(long offset, SeekOrigin origin) => _inner.Seek(offset, origin);
+        public override void SetLength(long value) => _inner.SetLength(value);
+        public override void Write(byte[] buffer, int offset, int count) => _inner.Write(buffer, offset, count);
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) _inner.Dispose();
+            base.Dispose(disposing);
+        }
+    }
+
+    public class ZlibException : Exception
+    {
+        public ZlibException() { }
+        public ZlibException(string message) : base(message) { }
+        public ZlibException(string message, Exception inner) : base(message, inner) { }
+    }
+}
+"""
 
 
 def _replace_once(path: Path, old: str, new: str) -> None:

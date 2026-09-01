@@ -1,0 +1,64 @@
+{
+  "phase": "Phase 3E — LEAN promotion-readiness evidence",
+  "status": "CLOUD_PROMOTION_READINESS_EVIDENCE_PASS_PHYSICAL_WINDOWS_PENDING",
+  "research_only": true,
+  "parent_phase3d_head": "928846b1ca4b95f50f35c64cc6474c59fefb634a",
+  "option_b_authorization_inherited": true,
+  "runtime_promotion_allowed": false,
+  "gitlink_change_allowed": false,
+  "fork_promotion_allowed": false,
+  "package_release_allowed": false,
+  "goals": {
+    "stream_backed_bridge": true,
+    "patched_launcher_high_critical_vulnerabilities": "MUST_BE_ZERO",
+    "targeted_compression_regression": "REQUIRED",
+    "patched_transitive_sbom": "REQUIRED",
+    "patched_transitive_license_review": "REQUIRED",
+    "standard_windows_ci": "REQUIRED",
+    "windows_11_x64_physical_smoke": "REQUIRED_BEFORE_PROMOTION"
+  },
+  "current_hard_stop": true,
+  "windows_11_x64_physical_smoke": "PENDING_DESKTOP_SESSION",
+  "promotion_adr_approved": false,
+  "cloud_evidence": {
+    "initial_run_id": 33456276421,
+    "linux_job_id": 99696792445,
+    "linux_core_result": "PASS_BEFORE_INTENTIONAL_PROMOTION_DENY",
+    "windows_job_id": 99696792663,
+    "windows_image": "windows-2025-vs2026",
+    "windows_os": "Microsoft Windows Server 2025",
+    "windows_standard_ci_result": "PASS_BEFORE_INTENTIONAL_PROMOTION_DENY",
+    "linux_normalized_backtest_hash": "sha256:6605a67123b8551dab847d58efe237971e73582f7a6a3ea9946f7d1d74ac7f7d",
+    "windows_normalized_backtest_hash": "sha256:7b925ce0e40f81e58dfdb24b1369c8c9207aa219f1920ceb68aa80f3588098ba",
+    "quant_statistics": {
+      "qros_rows": "5",
+      "qros_sum": "510.0000",
+      "qros_last": "104.0000",
+      "total_orders": "0"
+    },
+    "patched_sbom_component_count": 59,
+    "initial_unknown_licenses": [
+      "AsyncIO 0.1.69",
+      "CloneExtensions 1.3.0"
+    ],
+    "latest_linux_run_id": 33457059553,
+    "latest_linux_job_id": 99699166911,
+    "latest_linux_core_result": "PASS_BEFORE_INTENTIONAL_PROMOTION_DENY",
+    "latest_linux_normalized_backtest_hash": "sha256:87c031f5214f0f40589f1e232a42438e7533b2009638c3a9abf3a38b88ec8afd"
+  },
+  "license_identification": {
+    "status": "PASS_RESEARCH_IDENTIFICATION",
+    "registry": "config/patched-lean-license-overrides.json",
+    "package_count": 59,
+    "unknown_license_count": 0,
+    "release_clearance": false,
+    "static_review": "supply-chain/patched-lean-phase3e-license-review.json"
+  },
+  "patched_sbom": {
+    "format": "CycloneDX",
+    "spec_version": "1.7",
+    "component_count": 59,
+    "path": "supply-chain/patched-lean-phase3e.cdx.json",
+    "evidence_paths_normalized": true
+  }
+}
