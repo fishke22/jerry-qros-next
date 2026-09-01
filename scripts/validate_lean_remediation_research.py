@@ -22,7 +22,7 @@ def validate():
   if c.get(x,{}).get("status")!="REJECTED":raise AssertionError(x+" historical rejection drift")
  g=r.get("next_gate",{})
  if g.get("historical_phase3c_gate") is not True or g.get("current_runtime_gate") is not False:raise AssertionError("Phase 3C gate chronology drift")
- if g.get("research_evidence_accepted") is not True or g.get("security_remediation_available") is not False or g.get("hard_stop_active") is not True or g.get("architecture_amendment_approved") is not False:raise AssertionError("Phase 3C historical gate evidence drift")
+ if g.get("research_evidence_accepted") is not True or g.get("security_remediation_available") is not False or g.get("hard_stop_active") is not True or g.get("architecture_amendment_approved") is not False or g.get("runtime_promotion_allowed") is not False:raise AssertionError("Phase 3C historical gate evidence drift")
  return r
 def main():
  p=argparse.ArgumentParser();p.add_argument("--require-remediation",action="store_true");a=p.parse_args();r=validate();print("QROS Phase 3C historical research-snapshot validation: PASS")
