@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "phase": "Phase 3D accepted local Research/Backtest LEAN runtime overlay",
+  "phase": "Phase 3E post-merge security/provenance hardening accepted",
   "product_build_exists": false,
   "ci": {
     "provider": "GitHub Actions",
@@ -19,7 +19,7 @@
     "status": "DATA_SLICE_SMOKE_TEST_ONLY_NO_PRODUCT_BUILD",
     "exact_toolchain": "CPython 3.14.x x64; canonical target pin 3.14.7"
   },
-  "reproducibility_status": "PHASE_3D_EXACT_HEAD_BIT_REPRODUCIBLE_AND_MERGED_TREE_EQUIVALENT",
+  "reproducibility_status": "PHASE_3E_EXACT_HEAD_RUNTIME_CLOSURE_REPRODUCIBLE_AND_MERGED_TREE_EQUIVALENT",
   "paid_compute_allowed": false,
   "data_runtime_exists": true,
   "windows_smoke": {
@@ -99,7 +99,9 @@
       "algorithm_assembly_hash": "sha256:e05ef74439000c2d1dd93cc8c5335576bed7a3fdac653172f40ba05c0d6bf399",
       "normalized_hash": "sha256:832995016f9adaa7171424e509a7004284a13b9d0c85fed5101f29e3623aead2",
       "semantic_regression_hash": "sha256:d786b5911e0f9e9d2c4959cf3aa7f87d92891c1370fbb276cbf7fff3bc2d15c1"
-    }
+    },
+    "current_result_contract": "lean-backtest-result/v2",
+    "phase3e_runtime_identity_required": true
   },
   "windows_lean_smoke": {
     "submodule_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
@@ -126,5 +128,38 @@
       11
     ],
     "accepted_head_evidence_ref": "refs/heads/evidence/phase-3d-accepted-head"
+  },
+  "phase3e_hardening_closure": {
+    "status": "ACCEPTED_MERGED_LOCAL_RESEARCH_BACKTEST_HARDENING_ONLY",
+    "pr": 15,
+    "accepted_head": "968255313ff0bff9051d50d17da335bd9da10207",
+    "accepted_tree": "f49978fe60d85c642505e636e72d407ddb9745b5",
+    "integration_commit": "791d99363228126e199d6cdac89857612743a2c9",
+    "integration_tree": "f49978fe60d85c642505e636e72d407ddb9745b5",
+    "tree_equivalent": true,
+    "qros_gate_run_id": 33521288679,
+    "lean_security_research_run_id": 33521288691,
+    "lean_integration_run_id": 33521288683,
+    "same_head_reproducibility_jobs": [
+      99900913880,
+      99901744740
+    ],
+    "post_merge_qros_gate_run_id": 33522024604,
+    "fingerprint_source_head": "968255313ff0bff9051d50d17da335bd9da10207",
+    "runtime_result_contract": "lean-backtest-result/v2",
+    "algorithm_assembly_hash": "sha256:f63a8f9d7ef522619e6f17db06a97e2d507c2ee87fc1edd7ff297c03634b4929",
+    "launcher_assembly_hash": "sha256:7338f2253306a45b0dd039c5e0d266102a9b38df79a5f411b636e75756a81c19",
+    "runtime_assembly_count": 191,
+    "runtime_assembly_manifest_hash": "sha256:3a7b926de7e6420de31d942508662061c5e5717fa0df9de86743010374614355",
+    "overlay_identity": "sha256:27b8d17587a2a31fd02c4ba105091e4b0c0dbdde45d1e59fdb105e4b93a65238",
+    "normalized_hash": "sha256:26f58f8d1a563d9cf6749e2d88d4449235aa2ba0c5d71c1dba8bc6168dbcc8ed",
+    "semantic_regression_hash": "sha256:d786b5911e0f9e9d2c4959cf3aa7f87d92891c1370fbb276cbf7fff3bc2d15c1",
+    "input_hash": "sha256:3921a0ab8ed226e6a404aca6024cf28e91100f97fb51766ecd78151c9e063e44",
+    "config_hash": "sha256:4f2e7517fbf5dae1b6fe2275ce3e7fe8873d5209f7fa5b685a2f6cef9ff7e5b8",
+    "package_authorized": false,
+    "release_authorized": false,
+    "yuanta_integration_authorized": false,
+    "live_trading_authorized": false,
+    "incremental_monetary_cost": 0
   }
 }
