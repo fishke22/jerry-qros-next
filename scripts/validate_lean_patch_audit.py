@@ -52,41 +52,69 @@ def _nonempty_problem_fields(doc: dict) -> list[str]:
     return problems
 
 
-def audit_coverage(doc: dict, label: str) -> set[tuple[str, str]]:
+def audit_coverage(
+    doc: dict, label: str, *, require_frameworks: bool
+) -> tuple[set[str], set[tuple[str, str]]]:
     if not isinstance(doc, dict):
         raise ValueError(f"{label} audit root must be an object")
     if doc.get("version") not in (1, "1"):
         raise ValueError(f"{label} audit output version is missing or unsupported")
     problems = _nonempty_problem_fields(doc)
     if problems:
-        raise ValueError(f"{label} audit reports problem/error fields: {sorted(set(problems))}")
+        raise ValueError(
+            f"{label} audit reports problem/error fields: {sorted(set(problems))}"
+        )
 
     projects = doc.get("projects")
     if not isinstance(projects, list) or not projects:
         raise ValueError(f"{label} audit project coverage missing")
 
+    project_paths: set[str] = set()
     coverage: set[tuple[str, str]] = set()
     for project in projects:
         if not isinstance(project, dict) or not isinstance(project.get("path"), str):
             raise ValueError(f"{label} audit project path missing")
-        frameworks = project.get("frameworks")
-        if not isinstance(frameworks, list) or not frameworks:
-            raise ValueError(f"{label} audit framework coverage missing for {project.get('path')}")
+        path = project["path"]
+        if path in project_paths:
+            raise ValueError(f"{label} audit duplicate project: {path}")
+        project_paths.add(path)
+
+        frameworks = project.get("frameworks", [])
+        if not isinstance(frameworks, list):
+            raise ValueError(f"{label} audit frameworks must be a list for {path}")
+        if require_frameworks and not frameworks:
+            raise ValueError(f"{label} audit framework coverage missing for {path}")
         for framework in frameworks:
-            if not isinstance(framework, dict) or not isinstance(framework.get("framework"), str):
+            if not isinstance(framework, dict) or not isinstance(
+                framework.get("framework"), str
+            ):
                 raise ValueError(f"{label} audit framework identity missing")
-            key = (project["path"], framework["framework"])
+            key = (path, framework["framework"])
             if key in coverage:
-                raise ValueError(f"{label} audit duplicate project/framework coverage: {key}")
+                raise ValueError(
+                    f"{label} audit duplicate project/framework coverage: {key}"
+                )
             coverage.add(key)
-    return coverage
+    return project_paths, coverage
 
 
-def validate_audit_documents(all_doc: dict, vuln_doc: dict) -> tuple[set[tuple[str, str]], list[dict]]:
-    all_coverage = audit_coverage(all_doc, "all-packages")
-    vulnerable_coverage = audit_coverage(vuln_doc, "vulnerable")
-    if all_coverage != vulnerable_coverage:
-        raise ValueError("NuGet audit coverage mismatch between all-packages and vulnerable outputs")
+def validate_audit_documents(
+    all_doc: dict, vuln_doc: dict
+) -> tuple[set[tuple[str, str]], list[dict]]:
+    all_projects, all_coverage = audit_coverage(
+        all_doc, "all-packages", require_frameworks=True
+    )
+    vulnerable_projects, vulnerable_coverage = audit_coverage(
+        vuln_doc, "vulnerable", require_frameworks=False
+    )
+    if all_projects != vulnerable_projects:
+        raise ValueError(
+            "NuGet audit project coverage mismatch between all-packages and vulnerable outputs"
+        )
+    if not vulnerable_coverage.issubset(all_coverage):
+        raise ValueError(
+            "NuGet vulnerable audit reports unknown project/framework coverage"
+        )
     pairs = package_pairs(all_doc)
     if not pairs:
         raise ValueError("NuGet all-packages audit contains no resolved package evidence")
