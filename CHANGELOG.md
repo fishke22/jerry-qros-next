@@ -4,6 +4,10 @@ All notable QROS Next engineering milestones are recorded here.
 
 ## Unreleased
 
+### Phase 3E (candidate)
+- Started post-merge fail-closed hardening for exact LEAN patched-worktree verification, runtime-bound v2 backtest/provenance identity, complete NuGet audit evidence, actual Git tree verification, and historical Phase 3C denial enforcement.
+- Kept the exact LEAN gitlink unchanged and introduced no paid dependency, packaging, release, Yuanta integration, or live trading capability.
+
 ### Phase 3D
 - Merge closure: final accepted head `7b5f89a1972fd39abb78e0ad998eacf874e42739` passed independent same-head bit reproducibility and fresh PR #13 qros/security/LEAN workflows.
 - Integrated Phase 3B → 3C → 3D into `main` via PR #13 squash commit `744b53c18ab433346ab01fb26d35c55e5633ba43`; post-merge Git tree is identical to accepted head tree `303e1c043c2e56093641073ab19156f46028acd1`.
