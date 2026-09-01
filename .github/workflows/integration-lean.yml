@@ -18,6 +18,7 @@ on:
       - 'packages/contracts/**'
       - 'packages/schemas/lean-backtest-result.v1.schema.json'
       - 'config/dependency-registry.json'
+      - 'config/lean-nuget-license-dispositions.json'
       - 'supply-chain/**'
       - '.github/workflows/integration-lean.yml'
   workflow_dispatch:
@@ -51,7 +52,7 @@ jobs:
           python scripts/validate_lean_pin.py --require-populated
       - name: Print Phase 3D supply-chain evidence SHA256
         run: |
-          sha256sum             .github/workflows/integration-lean.yml             scripts/validate_lean_nuget_licenses.py             supply-chain/lean/launcher-patched-nuget-graph.json
+          sha256sum             .github/workflows/integration-lean.yml             scripts/validate_lean_nuget_licenses.py             config/lean-nuget-license-dispositions.json             supply-chain/lean/launcher-patched-nuget-graph.json             supply-chain/lean/launcher-patched-nuget-license-metadata.json
       - name: Apply deterministic LEAN security patch candidate
         run: python scripts/apply_lean_security_patch.py
       - name: Restore patched LEAN Launcher
@@ -60,8 +61,8 @@ jobs:
         run: dotnet restore integration/lean/QrosSyntheticAlgorithm/QrosSyntheticAlgorithm.csproj --nologo
       - name: Verify canonical patched Launcher NuGet graph
         run: python scripts/validate_lean_nuget_graph.py --assets external/lean/Launcher/obj/project.assets.json --expected supply-chain/lean/launcher-patched-nuget-graph.json
-      - name: Capture patched Launcher NuGet license metadata
-        run: python scripts/validate_lean_nuget_licenses.py --assets external/lean/Launcher/obj/project.assets.json --print-canonical --allow-unreviewed
+      - name: Verify patched Launcher NuGet licenses
+        run: python scripts/validate_lean_nuget_licenses.py --assets external/lean/Launcher/obj/project.assets.json --expected-metadata supply-chain/lean/launcher-patched-nuget-license-metadata.json --manual-dispositions config/lean-nuget-license-dispositions.json
       - name: Build patched LEAN Launcher
         run: dotnet build external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --configuration Release --nologo --no-restore -p:ContinuousIntegrationBuild=true
       - name: Audit patched LEAN dependency graph
