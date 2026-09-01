@@ -53,7 +53,24 @@ jobs:
           python scripts/validate_lean_pin.py --require-populated
       - name: Print Phase 3D supply-chain evidence SHA256
         run: |
-          sha256sum             .github/workflows/integration-lean.yml             scripts/validate_lean_nuget_licenses.py             config/lean-nuget-license-dispositions.json             supply-chain/lean/launcher-patched-nuget-graph.json             supply-chain/lean/launcher-patched-nuget-license-metadata.json
+          sha256sum \
+            .github/workflows/integration-lean.yml \
+            config/lean-nuget-license-dispositions.json \
+            docs/adr/0010-phase-3d-lean-security-patch-candidate.md \
+            docs/source-evidence/phase-3d-lean-security-patch-candidate.md \
+            scripts/apply_lean_security_patch.py \
+            scripts/validate_lean_nuget_graph.py \
+            scripts/validate_lean_nuget_licenses.py \
+            scripts/validate_lean_nuget_sbom.py \
+            scripts/validate_lean_patch_audit.py \
+            scripts/validate_lean_semantic_regression.py \
+            scripts/validate_supply_chain.py \
+            src/qros_lean/backtest.py \
+            supply-chain/lean/launcher-patched-bom.cdx.json \
+            supply-chain/lean/launcher-patched-nuget-graph.json \
+            supply-chain/lean/launcher-patched-nuget-license-metadata.json \
+            tests/test_lean_backtest_normalizer.py \
+            tests/test_supply_chain.py
       - name: Apply deterministic LEAN security patch candidate
         run: python scripts/apply_lean_security_patch.py
       - name: Restore patched LEAN Launcher
