@@ -3,14 +3,49 @@
   "digest_type": "git-blob-sha1",
   "policy": "EXISTING_MAJOR_CONTRACT_SCHEMA_FILES_ARE_IMMUTABLE; BREAKING_CHANGE_REQUIRES_NEW_VERSION_FILE",
   "contracts": [
-    {"path": "packages/schemas/data-receipt.v1.schema.json", "git_blob_sha": "b5cf6332f71abbd3bf0bfac69a870dc1b33a77ac"},
-    {"path": "packages/schemas/provenance-record.v1.schema.json", "git_blob_sha": "838ff57c3ca6d34c924091c64d41c5c8db77ebfe"},
-    {"path": "packages/schemas/pit-availability.v1.schema.json", "git_blob_sha": "5e5d6542d726d4905648adc7b144e87d711fd335"},
-    {"path": "packages/schemas/universe-membership.v1.schema.json", "git_blob_sha": "93404abb66766f380b09e01a910b19ca66a5857f"},
-    {"path": "packages/schemas/validation-result.v1.schema.json", "git_blob_sha": "32fbfd65f5f212f55c832216177c6a9fd335ecc5"},
-    {"path": "packages/schemas/canonical-market-bar-row.v1.schema.json", "git_blob_sha": "294bc0002dadae40b751c694ddf3a2e237c47605"},
-    {"path": "packages/schemas/lean-backtest-result.v1.schema.json", "git_blob_sha": "53c31f26ed369cf822256d2d3995fcbcf06d5b03"},
-    {"path": "packages/schemas/provenance-record.v2.schema.json", "git_blob_sha": "22df5fbbffa6f9ef29d1cccc18283923de9ddb36"},
-    {"path": "packages/schemas/lean-backtest-result.v2.schema.json", "git_blob_sha": "7a59f93cb77749031b8025508b13f9ff5e3f00c0"}
+    {
+      "path": "packages/schemas/data-receipt.v1.schema.json",
+      "git_blob_sha": "b5cf6332f71abbd3bf0bfac69a870dc1b33a77ac"
+    },
+    {
+      "path": "packages/schemas/provenance-record.v1.schema.json",
+      "git_blob_sha": "838ff57c3ca6d34c924091c64d41c5c8db77ebfe"
+    },
+    {
+      "path": "packages/schemas/pit-availability.v1.schema.json",
+      "git_blob_sha": "5e5d6542d726d4905648adc7b144e87d711fd335"
+    },
+    {
+      "path": "packages/schemas/universe-membership.v1.schema.json",
+      "git_blob_sha": "93404abb66766f380b09e01a910b19ca66a5857f"
+    },
+    {
+      "path": "packages/schemas/validation-result.v1.schema.json",
+      "git_blob_sha": "32fbfd65f5f212f55c832216177c6a9fd335ecc5"
+    },
+    {
+      "path": "packages/schemas/canonical-market-bar-row.v1.schema.json",
+      "git_blob_sha": "294bc0002dadae40b751c694ddf3a2e237c47605"
+    },
+    {
+      "path": "packages/schemas/lean-backtest-result.v1.schema.json",
+      "git_blob_sha": "53c31f26ed369cf822256d2d3995fcbcf06d5b03"
+    },
+    {
+      "path": "packages/schemas/provenance-record.v2.schema.json",
+      "git_blob_sha": "96a5799c80fc4f238d4f5f531ac172d203527ed6"
+    },
+    {
+      "path": "packages/schemas/lean-backtest-result.v2.schema.json",
+      "git_blob_sha": "f5d4b469f67e7e43683cc138de8903c5ed10693e"
+    },
+    {
+      "path": "packages/schemas/provenance-record.v3.schema.json",
+      "git_blob_sha": "f21d8e58db68a9c2cb306102ed3bb5834a5bf121"
+    },
+    {
+      "path": "packages/schemas/lean-backtest-result.v3.schema.json",
+      "git_blob_sha": "7db27211f635ca2bc94657b0dcade99b85bc76be"
+    }
   ]
 }
