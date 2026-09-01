@@ -9,6 +9,7 @@ on:
       - 'scripts/validate_lean_pin.py'
       - 'scripts/apply_lean_security_patch.py'
       - 'scripts/validate_lean_patch_audit.py'
+      - 'scripts/validate_lean_nuget_graph.py'
       - 'scripts/run_lean_synthetic_backtest.py'
       - 'scripts/validate_lean_semantic_regression.py'
       - 'integration/lean/**'
@@ -49,13 +50,17 @@ jobs:
           python scripts/validate_lean_pin.py --require-populated
       - name: Apply deterministic LEAN security patch candidate
         run: python scripts/apply_lean_security_patch.py
+      - name: Restore patched LEAN Launcher
+        run: dotnet restore external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --nologo
+      - name: Capture patched Launcher NuGet graph
+        run: python scripts/validate_lean_nuget_graph.py --assets external/lean/Launcher/obj/project.assets.json --print-canonical
       - name: Build patched LEAN Launcher
-        run: dotnet build external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
+        run: dotnet build external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --configuration Release --nologo --no-restore -p:ContinuousIntegrationBuild=true
       - name: Audit patched LEAN dependency graph
         shell: bash
         run: |
-          dotnet package list --project external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --include-transitive --format json --output-version 1 > "$RUNNER_TEMP/lean-all.json"
-          dotnet package list --project external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --include-transitive --vulnerable --format json --output-version 1 > "$RUNNER_TEMP/lean-vulnerable.json"
+          dotnet package list --project external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --include-transitive --no-restore --format json --output-version 1 > "$RUNNER_TEMP/lean-all.json"
+          dotnet package list --project external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --include-transitive --vulnerable --no-restore --format json --output-version 1 > "$RUNNER_TEMP/lean-vulnerable.json"
           python scripts/validate_lean_patch_audit.py --all "$RUNNER_TEMP/lean-all.json" --vulnerable "$RUNNER_TEMP/lean-vulnerable.json"
       - name: Build QROS synthetic algorithm
         run: dotnet build integration/lean/QrosSyntheticAlgorithm/QrosSyntheticAlgorithm.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
