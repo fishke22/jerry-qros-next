@@ -47,6 +47,12 @@ class LeanPatchAuditEvidenceTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_audit_documents(doc(), doc(framework="net9.0"))
 
+    def test_truncated_framework_package_evidence_is_rejected(self):
+        vulnerable = doc()
+        del vulnerable["projects"][0]["frameworks"][0]["topLevelPackages"]
+        with self.assertRaises(ValueError):
+            validate_audit_documents(doc(), vulnerable)
+
     def test_reported_problem_is_rejected(self):
         with self.assertRaises(ValueError):
             validate_audit_documents(doc(), doc(problems=["advisory service unavailable"]))
