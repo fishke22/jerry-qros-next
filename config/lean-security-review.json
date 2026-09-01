@@ -1,5 +1,5 @@
 {
-  "review_version": 2,
+  "review_version": 3,
   "reviewed_at": "2026-09-01",
   "engine": "QuantConnect/Lean",
   "engine_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
@@ -8,7 +8,7 @@
   "runtime_promotion_allowed": true,
   "runtime_promotion_scope": "LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY_WITH_PHASE3D_PATCH",
   "phase3b_merge_allowed": false,
-  "disposition": "ACCEPTED_PHASE3D_PATCHED_LOCAL_RESEARCH_RUNTIME",
+  "disposition": "ACCEPTED_PHASE3E_HARDENED_PHASE3D_PATCHED_LOCAL_RESEARCH_RUNTIME",
   "lean_transitive_sbom_status": "PATCHED_LAUNCHER_COMPLETE_55_NUGET_PACKAGES",
   "acceptance_evidence": {
     "exact_head": "4050b640f54fab9b0fda28c7d73145a0e44a4294",
@@ -124,5 +124,45 @@
     "currently_satisfied": true,
     "satisfied_by": "INDEPENDENTLY_REVIEWED_QROS_PHASE3D_DETERMINISTIC_PATCH",
     "accepted_scope": "LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY"
+  },
+  "phase3e_hardening_evidence": {
+    "exact_head": "1598c320eeacf452519b8fd7ae8195d928ec74e5",
+    "pr": 18,
+    "merge_commit": "6b08e0cd0bb3536e2f01d88e2bf540d20db54a23",
+    "accepted_tree": "dee4a39e3bc4caf937755768d2ed7278191415ff",
+    "integration_tree": "dee4a39e3bc4caf937755768d2ed7278191415ff",
+    "tree_equivalent": true,
+    "qros_gate": {
+      "run_id": 33529365184,
+      "job_id": 99928262098,
+      "conclusion": "SUCCESS"
+    },
+    "lean_security_research": {
+      "run_id": 33529365278,
+      "job_id": 99929955725,
+      "conclusion": "SUCCESS"
+    },
+    "lean_integration": {
+      "run_id": 33529364975,
+      "first_job_id": 99928609619,
+      "second_same_head_job_id": 99929572680,
+      "conclusion": "SUCCESS",
+      "same_head_reproducible": true
+    },
+    "post_merge_qros_gate": {
+      "run_id": 33530330017,
+      "job_id": 99931568789,
+      "conclusion": "SUCCESS"
+    },
+    "runtime_contract_version": "3",
+    "algorithm_assembly_hash": "sha256:8da207beca34d7caeea556a8b4ad61178275f18583ad59ef3dc998f2bc3dd60e",
+    "normalized_hash": "sha256:43153f0cc229a6c55005581678cbcf02002e9377c4939115e92d4fd5c48e2881",
+    "overlay_identity": "sha256:cd78ab7cea3f10608989c44be1f9bd4c162c04895a21cca77de55ccee5901525",
+    "patch_script_hash": "sha256:0cdd79a6b9a88b8c9bb01f7451a8a1dee4e44efd4e8b9624354f6ec469a1338e",
+    "patch_implementation_hash": "sha256:3880d38003443024458e060bba06fd06090c4fffa3e4698cfd7e5fab33a4fc3c",
+    "runtime_assembly_count": 191,
+    "runtime_assembly_manifest_hash": "sha256:3a7b926de7e6420de31d942508662061c5e5717fa0df9de86743010374614355",
+    "semantic_regression_hash": "sha256:d786b5911e0f9e9d2c4959cf3aa7f87d92891c1370fbb276cbf7fff3bc2d15c1",
+    "material_review_findings_open": 0
   }
 }
