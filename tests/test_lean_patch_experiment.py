@@ -34,13 +34,16 @@ class LeanPatchExperimentTests(unittest.TestCase):
 
     def test_messaging_patch_is_exact_and_fail_closed(self):
         with tempfile.TemporaryDirectory() as d:
-            p=Path(d)/"x.csproj"
+            lean = Path(d)
+            messaging = lean / "Messaging"
+            messaging.mkdir()
+            p = messaging / "QuantConnect.Messaging.csproj"
             old='<PackageReference Include="NetMQ" Version="4.0.1.6" />'
             new='<PackageReference Include="NetMQ" Version="4.0.4.3" />'
             p.write_text(old+"\n",encoding="utf-8")
-            cfg={"path":p,"old":old,"new":new}
-            with patch.dict(patcher.CANDIDATES,{"messaging-netmq-4.0.4.3":cfg},clear=True):
-                patcher.apply("messaging-netmq-4.0.4.3")
+            with patch.object(patcher, "LEAN", lean):
+                changed = patcher.apply("messaging-netmq-4.0.4.3")
+                self.assertEqual(changed, [p])
                 self.assertEqual(p.read_text(encoding="utf-8").strip(),new)
                 with self.assertRaises(RuntimeError):
                     patcher.apply("messaging-netmq-4.0.4.3")
