@@ -63,6 +63,12 @@ def validate_source_and_provenance():
  e=load("supply-chain/build-environment.json")
  if e.get("paid_compute_allowed") is not False or e.get("product_build_exists") is not False:fail("hard gate drift")
  if e.get("quant_engine",{}).get("revision")!="b692bf4788e8b54fc23bdcb5659666bf055ce89f":fail("LEAN build evidence drift")
+ q=e.get("quant_engine",{})
+ if q.get("status")!="ACCEPTED_PHASE3D_PATCHED_LOCAL_RESEARCH_RUNTIME" or q.get("runtime_promotion_allowed") is not True:fail("Phase 3D build-environment acceptance drift")
+ if q.get("runtime_promotion_scope")!="LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY_WITH_PHASE3D_PATCH" or q.get("baseline_unpatched_upstream_runtime_allowed") is not False:fail("Phase 3D build-environment scope drift")
+ if q.get("synthetic_backtest",{}).get("status")!="ACCEPTED_LOCAL_RESEARCH_BACKTEST_PHASE3D_PATCH_ONLY":fail("Phase 3D synthetic backtest build evidence drift")
+ c=e.get("phase3_merge_closure",{})
+ if c.get("pr")!=13 or c.get("integration_commit")!="744b53c18ab433346ab01fb26d35c55e5633ba43" or c.get("tree_equivalent") is not True:fail("Phase 3 merge closure evidence drift")
 def validate_phase3d_lean_evidence():
  g=load("supply-chain/lean/launcher-patched-nuget-graph.json");m=load("supply-chain/lean/launcher-patched-nuget-license-metadata.json");d=load("config/lean-nuget-license-dispositions.json");b=load("supply-chain/lean/launcher-patched-bom.cdx.json")
  if g.get("package_count")!=55 or g.get("project_count")!=19:fail("Phase 3D NuGet graph count drift")

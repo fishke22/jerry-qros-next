@@ -1,6 +1,6 @@
 {
-  "manifest_version": 1,
-  "phase": "Phase 3B deterministic synthetic LEAN backtest",
+  "manifest_version": 2,
+  "phase": "Phase 3D accepted local Research/Backtest LEAN runtime overlay",
   "product_build_exists": false,
   "ci": {
     "provider": "GitHub Actions",
@@ -19,7 +19,7 @@
     "status": "DATA_SLICE_SMOKE_TEST_ONLY_NO_PRODUCT_BUILD",
     "exact_toolchain": "CPython 3.14.x x64; canonical target pin 3.14.7"
   },
-  "reproducibility_status": "PHASE_3_PINNED_LEAN_AND_HASH_LOCKED_DATA_RUNTIME",
+  "reproducibility_status": "PHASE_3D_EXACT_HEAD_BIT_REPRODUCIBLE_AND_MERGED_TREE_EQUIVALENT",
   "paid_compute_allowed": false,
   "data_runtime_exists": true,
   "windows_smoke": {
@@ -45,15 +45,15 @@
     "integration_mode": "GIT_SUBMODULE_PROCESS_ADAPTER",
     "target_framework": "net10.0",
     "build_project": "Launcher/QuantConnect.Lean.Launcher.csproj",
-    "status": "CI_SOURCE_BUILD_PASS",
-    "ci_run_id": 33402286561,
-    "ci_job_id": 99521269638,
+    "status": "ACCEPTED_PHASE3D_PATCHED_LOCAL_RESEARCH_RUNTIME",
+    "ci_run_id": 33506996908,
+    "ci_job_id": 99853305836,
     "build_result": "SUCCESS",
-    "build_duration": "1m34s",
+    "build_duration": "NOT_RECORDED_IN_CANONICAL_EVIDENCE",
     "build_warnings": "UPSTREAM_ANALYZER_WARNINGS_NON_BLOCKING",
     "exact_dotnet_verified": "10.0.400",
     "synthetic_backtest": {
-      "status": "FUNCTIONAL_CI_PASS_SECURITY_BLOCKED",
+      "status": "ACCEPTED_LOCAL_RESEARCH_BACKTEST_PHASE3D_PATCH_ONLY",
       "algorithm": "QrosSyntheticBacktestAlgorithm",
       "input": "fixtures_synthetic/lean/qros-synthetic-daily.csv",
       "expected_rows": 5,
@@ -62,16 +62,44 @@
       "expected_orders": 0,
       "repetitions": 2,
       "normalized_result_contract": "lean-backtest-result/v1",
-      "ci_run_id": 33405771315,
-      "ci_job_id": 99532872381,
-      "normalized_hash": "sha256:6da211cffdf7f667b212f9bf083d9f2d78e40b42895e6b6ed0342b76b5d6e5f1",
+      "ci_run_id": 33506996908,
+      "ci_job_id": 99853305836,
+      "normalized_hash": "sha256:832995016f9adaa7171424e509a7004284a13b9d0c85fed5101f29e3623aead2",
       "functional_result": "PASS",
-      "security_result": "BLOCKED_KNOWN_HIGH_CRITICAL_NUGET_VULNERABILITIES",
-      "merge_allowed": false
+      "security_result": "PASS_PHASE3D_PATCHED_GRAPH_NO_HIGH_CRITICAL",
+      "algorithm_assembly_hash": "sha256:e05ef74439000c2d1dd93cc8c5335576bed7a3fdac653172f40ba05c0d6bf399",
+      "semantic_regression_hash": "sha256:d786b5911e0f9e9d2c4959cf3aa7f87d92891c1370fbb276cbf7fff3bc2d15c1",
+      "integration_merge_completed": true,
+      "merge_pr": 13
     },
-    "security_status": "BLOCKED_PENDING_UPSTREAM_DEPENDENCY_REMEDIATION",
-    "runtime_promotion_allowed": false,
-    "lean_transitive_sbom_status": "INCOMPLETE_REQUIRES_FULL_NUGET_GRAPH_BEFORE_PROMOTION"
+    "security_status": "ACCEPTED_PHASE3D_PATCHED_LOCAL_RESEARCH_RUNTIME",
+    "runtime_promotion_allowed": true,
+    "lean_transitive_sbom_status": "PATCHED_LAUNCHER_COMPLETE_55_NUGET_PACKAGES",
+    "runtime_promotion_scope": "LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY_WITH_PHASE3D_PATCH",
+    "baseline_unpatched_upstream_runtime_allowed": false,
+    "runtime_overlay": {
+      "mode": "DETERMINISTIC_CHECKOUT_TIME_NO_FORK_NO_GITLINK_CHANGE",
+      "graph": "supply-chain/lean/launcher-patched-nuget-graph.json",
+      "graph_sha256": "sha256:165ba17fec034b417f4ae91b86544cbe9b2002f1c561f4908b0d43a76875f235",
+      "sbom": "supply-chain/lean/launcher-patched-bom.cdx.json",
+      "license_metadata": "supply-chain/lean/launcher-patched-nuget-license-metadata.json",
+      "license_dispositions": "config/lean-nuget-license-dispositions.json"
+    },
+    "acceptance_evidence": {
+      "final_accepted_head": "7b5f89a1972fd39abb78e0ad998eacf874e42739",
+      "final_pr": 13,
+      "qros_gate_run_id": 33506997060,
+      "lean_security_research_run_id": 33506996973,
+      "lean_integration_run_id": 33506996908,
+      "lean_integration_job_id": 99853305836,
+      "same_head_reproducibility_jobs": [
+        99846751986,
+        99847616213
+      ],
+      "algorithm_assembly_hash": "sha256:e05ef74439000c2d1dd93cc8c5335576bed7a3fdac653172f40ba05c0d6bf399",
+      "normalized_hash": "sha256:832995016f9adaa7171424e509a7004284a13b9d0c85fed5101f29e3623aead2",
+      "semantic_regression_hash": "sha256:d786b5911e0f9e9d2c4959cf3aa7f87d92891c1370fbb276cbf7fff3bc2d15c1"
+    }
   },
   "windows_lean_smoke": {
     "submodule_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
@@ -83,5 +111,19 @@
     ],
     "exact_dotnet_10_0_400_available": false,
     "local_source_build": "NOT_RUN_FAIL_CLOSED_EXACT_SDK_UNAVAILABLE"
+  },
+  "phase3_merge_closure": {
+    "pr": 13,
+    "merge_method": "squash",
+    "integration_commit": "744b53c18ab433346ab01fb26d35c55e5633ba43",
+    "accepted_head": "7b5f89a1972fd39abb78e0ad998eacf874e42739",
+    "accepted_tree": "303e1c043c2e56093641073ab19156f46028acd1",
+    "integration_tree": "303e1c043c2e56093641073ab19156f46028acd1",
+    "tree_equivalent": true,
+    "historical_stacked_prs_closed_unmerged": [
+      6,
+      7,
+      11
+    ]
   }
 }

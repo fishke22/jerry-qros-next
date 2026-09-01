@@ -1,7 +1,7 @@
 {
-  "research_version": 1,
+  "research_version": 2,
   "phase": "Phase 3C — LEAN Dependency Security Remediation Research",
-  "status": "RESEARCH_ACCEPTED_SECURITY_REMEDIATION_UNAVAILABLE",
+  "status": "HISTORICAL_PHASE3C_RESEARCH_ACCEPTED_SECURITY_REMEDIATION_UNAVAILABLE_AT_CHECKPOINT",
   "evidence_date": "2026-09-01",
   "research_only": true,
   "architecture_amendment_approved": false,
@@ -94,7 +94,9 @@
     "required_user_decision_only_if_unblocking_before_upstream": [
       "AUTHORIZE_RESEARCH_ONLY_UPSTREAM_ALIGNED_LEAN_PATCH_EXPERIMENT",
       "OR_KEEP_BLOCKED_AND_WAIT_FOR_OFFICIAL_LEAN_REMEDIATION"
-    ]
+    ],
+    "historical_phase3c_gate": true,
+    "current_runtime_gate": false
   },
   "root_cause_clusters": [
     {
@@ -135,5 +137,10 @@
       "security_compatibility_verified": false,
       "lean_api_compatibility_verified": false
     }
-  }
+  },
+  "record_semantics": "HISTORICAL_PHASE3C_SNAPSHOT",
+  "superseded_by": "docs/adr/0010-phase-3d-lean-security-patch-candidate.md",
+  "current_runtime_authority": "config/lean-security-review.json",
+  "current_runtime_state_encoded_here": false,
+  "superseded_at": "2026-09-01"
 }

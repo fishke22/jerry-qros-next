@@ -1,8 +1,9 @@
 # ADR-0006 — Deterministic QROS-owned synthetic LEAN backtest
 
-- Status: Proposed
+- Status: ACCEPTED AS RESEARCH/BACKTEST CONTRACT; RUNTIME AUTHORITY CONTINUES IN ADR-0010
 - Date: 2026-08-31
 - Phase: 3B
+- Closure: 2026-09-01
 
 ## Decision
 
@@ -19,3 +20,7 @@ Raw LEAN result files are represented by SHA-256 in provenance. Non-deterministi
 ## Gate
 
 ACCEPT only after exact .NET 10.0.400 CI executes both backtests successfully and the normalized result is deterministic. The result remains research-only and cannot open any execution or live-trading gate.
+
+## Closure note
+
+The functional and determinism criteria were subsequently satisfied and independently revalidated during Phase 3D. ADR-0010 is the current authority for whether a LEAN runtime may be promoted. It permits only the deterministic Phase 3D patched local Research/Backtest runtime and keeps the unpatched upstream runtime, packaging, release, Yuanta integration, and live trading denied.
