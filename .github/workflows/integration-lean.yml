@@ -10,6 +10,7 @@ on:
       - 'scripts/apply_lean_security_patch.py'
       - 'scripts/validate_lean_patch_audit.py'
       - 'scripts/run_lean_synthetic_backtest.py'
+      - 'scripts/validate_lean_semantic_regression.py'
       - 'integration/lean/**'
       - 'fixtures_synthetic/lean/**'
       - 'packages/contracts/**'
@@ -62,24 +63,10 @@ jobs:
         env:
           PYTHONPATH: src
         run: python scripts/run_lean_synthetic_backtest.py --output-dir "$RUNNER_TEMP/qros-phase3d"
-      - name: Verify Phase 3B normalized baseline hash
-        shell: bash
-        run: |
-          python - <<'PY'
-          import json
-          import os
-          from pathlib import Path
-
-          expected = "sha256:6da211cffdf7f667b212f9bf083d9f2d78e40b42895e6b6ed0342b76b5d6e5f1"
-          result_path = Path(os.environ["RUNNER_TEMP"]) / "qros-phase3d" / "lean-backtest-result.v1.json"
-          result = json.loads(result_path.read_text(encoding="utf-8"))
-          actual = result.get("normalized_hash")
-          if actual != expected:
-              raise SystemExit(
-                  f"Phase 3B normalized baseline hash mismatch: expected {expected}, got {actual}"
-              )
-          print(f"Phase 3B normalized baseline hash: PASS ({actual})")
-          PY
+      - name: Verify Phase 3B semantic regression baseline
+        env:
+          PYTHONPATH: src
+        run: python scripts/validate_lean_semantic_regression.py "$RUNNER_TEMP/qros-phase3d/lean-backtest-result.v1.json"
       - name: Confirm promotion remains review-gated
         run: |
           echo "Candidate dependency gate passed only if all prior steps succeeded."
