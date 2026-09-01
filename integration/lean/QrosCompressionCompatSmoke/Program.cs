@@ -59,10 +59,29 @@ try
     if (maliciousAccepted || File.Exists(escapedPath))
     {
         throw new InvalidOperationException(
-            "path traversal archive escaped extraction root");
+            "path traversal archive escaped extraction root through Compression.Unzip");
     }
 
-    Console.WriteLine("QROS compression path traversal regression: PASS");
+    var extractRoot2 = Path.Combine(root, "extract-folder");
+    Directory.CreateDirectory(extractRoot2);
+    var threwForFolder = false;
+    try
+    {
+        var maliciousBytes = File.ReadAllBytes(maliciousZip);
+        Compression.UnzipToFolder(maliciousBytes, extractRoot2);
+    }
+    catch (IOException)
+    {
+        threwForFolder = true;
+    }
+
+    if (!threwForFolder || File.Exists(escapedPath))
+    {
+        throw new InvalidOperationException(
+            "path traversal archive escaped extraction root through Compression.UnzipToFolder");
+    }
+
+    Console.WriteLine("QROS compression path traversal regression: PASS (Unzip + UnzipToFolder)");
     Console.WriteLine("QROS compression compatibility smoke: PASS");
 }
 finally

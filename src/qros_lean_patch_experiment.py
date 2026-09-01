@@ -42,6 +42,52 @@ PATH_TRAVERSAL_OLD = """                else
                 }
 """
 
+UNZIP_TO_FOLDER_OLD = """                    // Manipulate the output filename here as desired.
+                    var fullZipToPath = Path.Combine(outFolder, zipEntry.FullName);
+
+                    var targetFile = new FileInfo(fullZipToPath);
+                    if (targetFile.Directory != null && !targetFile.Directory.Exists)
+                    {
+                        targetFile.Directory.Create();
+                    }
+
+                    //Save the file name for later:
+                    files.Add(fullZipToPath);
+
+                    //Copy the data in buffer chunks
+                    using var entryStream = zipEntry.Open();
+                    using var streamWriter = File.Create(fullZipToPath);
+                    entryStream.CopyTo(streamWriter);
+"""
+
+UNZIP_TO_FOLDER_NEW = """                    var extractionRoot = Path.GetFullPath(outFolder);
+                    if (!extractionRoot.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
+                    {
+                        extractionRoot += Path.DirectorySeparatorChar;
+                    }
+
+                    var entryPath = IsLinux ? zipEntry.FullName.Replace(@"\\", "/") : zipEntry.FullName;
+                    var fullZipToPath = Path.GetFullPath(Path.Combine(extractionRoot, entryPath));
+                    if (!fullZipToPath.StartsWith(extractionRoot, StringComparison.Ordinal))
+                    {
+                        throw new IOException($"Archive entry '{zipEntry.FullName}' would extract outside the destination directory.");
+                    }
+
+                    var targetFile = new FileInfo(fullZipToPath);
+                    if (targetFile.Directory != null && !targetFile.Directory.Exists)
+                    {
+                        targetFile.Directory.Create();
+                    }
+
+                    //Save the file name for later:
+                    files.Add(fullZipToPath);
+
+                    //Copy the data in buffer chunks
+                    using var entryStream = zipEntry.Open();
+                    using var streamWriter = File.Create(fullZipToPath);
+                    entryStream.CopyTo(streamWriter);
+"""
+
 PATH_TRAVERSAL_NEW = """                else
                 {
                     var extractionRoot = Path.GetFullPath(directory);
@@ -83,6 +129,7 @@ def apply(candidate: str) -> list[Path]:
     if candidate == "compression-path-traversal-hardening":
         path = LEAN / "Compression" / "Compression.cs"
         _replace_once(path, PATH_TRAVERSAL_OLD, PATH_TRAVERSAL_NEW)
+        _replace_once(path, UNZIP_TO_FOLDER_OLD, UNZIP_TO_FOLDER_NEW)
         return [path]
 
     if candidate == "compression-system-io-bridge":

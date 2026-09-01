@@ -122,8 +122,15 @@ jobs:
       - name: Reject CA5389 path-traversal analyzer finding
         shell: bash
         run: |
-          dotnet build external/lean/Compression/QuantConnect.Compression.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true 2>&1 | tee "$RUNNER_TEMP/compression-build.txt"
+          dotnet clean external/lean/Compression/QuantConnect.Compression.csproj --configuration Release --nologo
+          dotnet build external/lean/Compression/QuantConnect.Compression.csproj --configuration Release --nologo -t:Rebuild -p:ContinuousIntegrationBuild=true 2>&1 | tee "$RUNNER_TEMP/compression-build.txt"
           ! grep -q "CA5389" "$RUNNER_TEMP/compression-build.txt"
+      - name: Reject combined CA5389 path-traversal analyzer finding
+        shell: bash
+        run: |
+          dotnet clean external/lean/Compression/QuantConnect.Compression.csproj --configuration Release --nologo
+          dotnet build external/lean/Compression/QuantConnect.Compression.csproj --configuration Release --nologo -t:Rebuild -p:ContinuousIntegrationBuild=true 2>&1 | tee "$RUNNER_TEMP/combined-compression-build.txt"
+          ! grep -q "CA5389" "$RUNNER_TEMP/combined-compression-build.txt"
       - name: Run QROS Compression compatibility smoke
         run: dotnet run --project integration/lean/QrosCompressionCompatSmoke/QrosCompressionCompatSmoke.csproj --configuration Release
       - name: Build QROS synthetic algorithm

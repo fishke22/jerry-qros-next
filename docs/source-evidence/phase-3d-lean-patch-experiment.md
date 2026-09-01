@@ -66,3 +66,17 @@ This clears the known NuGet advisory blocker **inside the isolated experiment on
 The patched LEAN build emitted CA5389 for the pinned `Compression.Unzip(... overwrite:true)` implementation. Microsoft documents `ZipArchiveEntry.ExtractToFile` as unprotected against path traversal unless the entry path is normalized and validated against the destination root.
 
 The next experiment applies the Microsoft full-path + trailing-separator + ordinal-prefix boundary check and adds a malicious `../escape.txt` ZIP regression. Runtime promotion remains DENY until this source-level gate is verified.
+
+## CA5389 gate correction
+
+Review of run `33453944856` found a false-green analyzer gate. The first hardening patch protected `Compression.Unzip(... overwrite:true)` and the malicious ZIP regression for that path passed, but the pinned source still emitted CA5389 in `Compression.UnzipToFolder(Stream, outFolder)`.
+
+The dedicated analyzer step incorrectly passed because it used an incremental build after the Launcher build and therefore did not necessarily re-run the analyzer. This is a QROS gate defect, not acceptable evidence.
+
+The repaired experiment:
+- applies the destination-root normalization/prefix check to both extraction paths;
+- tests malicious `../escape.txt` through both public APIs;
+- performs `dotnet clean` plus `-t:Rebuild` before checking for CA5389;
+- applies the same forced analyzer gate to the combined candidate.
+
+Until the repaired CI passes, source hardening and the final combined candidate remain PENDING.

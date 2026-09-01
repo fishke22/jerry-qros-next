@@ -1,7 +1,7 @@
 {
   "experiment_version": 1,
   "phase": "Phase 3D — LEAN security patch experiment",
-  "status": "DEPENDENCY_CANDIDATES_PASS_PATH_HARDENING_PENDING_CI",
+  "status": "DEPENDENCY_CANDIDATES_PASS_PATH_HARDENING_REPAIR_PENDING_CI",
   "research_only": true,
   "user_authorization": "Option B",
   "base_lean_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
@@ -125,7 +125,7 @@
   },
   "source_hardening_candidates": {
     "COMPRESSION_PATH_TRAVERSAL": {
-      "status": "PENDING_CI",
+      "status": "REPAIR_PENDING_CI",
       "rule": "CA5389",
       "source_path": "Compression/Compression.cs",
       "modified_paths": [
@@ -144,11 +144,16 @@
         "MALICIOUS_ZIP_REGRESSION_PASS",
         "CA5389_NOT_EMITTED_FOR_COMPRESSION_UNZIP",
         "DETERMINISTIC_BACKTEST_PASS"
+      ],
+      "finding": "INITIAL_GATE_FALSE_GREEN_DUE_TO_INCREMENTAL_BUILD_AND_UNPATCHED_UNZIP_TO_FOLDER",
+      "covered_methods": [
+        "Compression.Unzip(string,string,bool overwrite=true)",
+        "Compression.UnzipToFolder(byte[],string) via Stream overload"
       ]
     }
   },
   "final_combined_candidate": {
-    "status": "PENDING_CI",
+    "status": "REPAIR_PENDING_CI",
     "applies": [
       "MESSAGING_NETMQ_4_0_4_3",
       "COMPRESSION_SYSTEM_IO_MIGRATION",
@@ -158,9 +163,9 @@
     "acceptance": [
       "NO_VULNERABLE_NUGET_PACKAGES_REPORTED",
       "LEAN_LAUNCHER_BUILD_PASS",
+      "FORCED_REBUILD_HAS_NO_CA5389",
       "QROS_COMPRESSION_COMPAT_SMOKE_PASS",
-      "MALICIOUS_ZIP_REGRESSION_PASS",
-      "CA5389_NOT_EMITTED_FOR_COMPRESSION_UNZIP",
+      "MALICIOUS_ZIP_REJECTED_BY_BOTH_EXTRACTION_PATHS",
       "DETERMINISTIC_BACKTEST_PASS"
     ]
   }
