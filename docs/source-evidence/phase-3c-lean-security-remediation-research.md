@@ -68,3 +68,25 @@ A custom Launcher/host, package override, source patch, fork, or toolchain upgra
 **RESEARCH ACCEPTED / SECURITY REMEDIATION UNAVAILABLE / HARD STOP ACTIVE.**
 
 The dependency graph and root causes are now reproducibly mapped. This does not clear ADR-0007 and does not authorize Phase 3B merge or LEAN runtime promotion.
+
+## Official upstream re-verification — 2026-09-01T13:45+08:00
+
+Fresh official GitHub evidence was re-queried; no cached Phase 3C conclusion was assumed.
+
+- `master` HEAD remains `abeb0a0627ec484b92291c45c3f2553726c26199`.
+- Issue #8795 remains `OPEN` (upstream `updated_at`: `2026-08-31T02:39:13Z`).
+- `Compression/QuantConnect.Compression.csproj` at that exact master revision still pins `DotNetZip 1.16.0`.
+- Official code search at that exact master revision still returns active `Ionic.Zip` usages, including `Compression/Compression.cs`, `Common/Data/DiskDataCacheProvider.cs`, and Engine data-feed cache/transport code.
+- PR #9744 is `MERGED` (`2026-08-24T14:50:27Z`) and is still only a partial `System.IO.Compression` migration; it did not remove the DotNetZip package.
+- PR #8820 remains `CLOSED / UNMERGED`; the drop-in DotNetZip-fork path is not an accepted upstream remediation.
+- No newer official merged/open PR was found that removes the remaining DotNetZip package and `Ionic.Zip` dependency surface.
+
+Fail-closed result:
+
+```text
+security_remediation_available = false
+hard_stop_active = true
+official_candidate_revision = DENY
+```
+
+Because condition 2 (DotNetZip blocker removed) already fails, no candidate re-pin is proposed. Conditions 3–9 are therefore not promoted to ALLOW; unproven conditions remain UNKNOWN/DENY. No LEAN source, gitlink, NuGet override, .NET toolchain, Phase 3B merge, Phase 4 work, packaging, release, Yuanta integration, or live-trading work is authorized by this re-verification.
