@@ -37,10 +37,15 @@ class LeanRuntimeOverlayTests(unittest.TestCase):
             "patch_script_hash": "sha256:" + "a" * 64,
             "patched_graph_hash": "sha256:" + "b" * 64,
             "launcher_assembly_hash": "sha256:" + "c" * 64,
+            "runtime_assembly_manifest_hash": "sha256:" + "e" * 64,
+            "runtime_assembly_count": "3",
         }
         changed = dict(base)
         changed["launcher_assembly_hash"] = "sha256:" + "d" * 64
+        changed_manifest = dict(base)
+        changed_manifest["runtime_assembly_manifest_hash"] = "sha256:" + "f" * 64
         self.assertNotEqual(overlay_identity(base), overlay_identity(changed))
+        self.assertNotEqual(overlay_identity(base), overlay_identity(changed_manifest))
 
 
 if __name__ == "__main__":
