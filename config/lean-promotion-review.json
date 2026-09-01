@@ -1,0 +1,66 @@
+{
+  "review_version": 1,
+  "phase": "Phase 3E — LEAN candidate promotion review",
+  "status": "PENDING_CI",
+  "review_only": true,
+  "based_on_phase3d_head": "928846b1ca4b95f50f35c64cc6474c59fefb634a",
+  "base_lean_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+  "option_b_research_authorized": true,
+  "runtime_promotion_allowed": false,
+  "main_merge_allowed": false,
+  "canonical_gitlink_change_allowed": false,
+  "package_release_allowed": false,
+  "yuanta_allowed": false,
+  "live_trading_allowed": false,
+  "candidate": {
+    "messaging_netmq": "4.0.4.3",
+    "netmq_official_tag_revision": "ca87d32d5ca5d8a2675fb7a9925e4b3dc8c35010",
+    "compression_strategy": "QROS_RESEARCH_SYSTEM_IO_COMPRESSION_COMPATIBILITY_BRIDGE",
+    "path_traversal_hardening": "BOTH_TESTED_EXTRACTION_PATHS",
+    "phase3d_combined_normalized_hash": "sha256:2fd54e0cc4096b713473cc820fa7525fdfdc617e77531b766dcc6fd37a9590f8"
+  },
+  "review_criteria": {
+    "patched_transitive_cyclonedx": {
+      "status": "PENDING_CI",
+      "required_spec": "1.7",
+      "promotion_condition": "FULL_GRAPH_GENERATED_AND_EVIDENCE_FROZEN"
+    },
+    "patched_license_review": {
+      "status": "PENDING_CI",
+      "netmq": {
+        "version": "4.0.4.3",
+        "official_tag_revision": "ca87d32d5ca5d8a2675fb7a9925e4b3dc8c35010",
+        "upstream_license_file": "COPYING.LESSER",
+        "upstream_license_git_blob": "afab572debb5c88ab76ecca750c9b549e2fc78f5",
+        "license_observation": "GNU LGPL v3 text plus project-specific special linking exception",
+        "automated_spdx_equivalence": "UNVERIFIED_NONSTANDARD_EXCEPTION",
+        "distribution_compliance_review_required": true
+      },
+      "promotion_condition": "NO_UNKNOWN_OR_UNREVIEWED_RUNTIME_LICENSE_AND_DISTRIBUTION_PLAN_DOCUMENTED"
+    },
+    "upstream_compression_regression": {
+      "status": "PENDING_CI",
+      "project": "external/lean/Tests/QuantConnect.Tests.csproj",
+      "filter": "FullyQualifiedName~QuantConnect.Tests.Compression.CompressionTests",
+      "test_project_netmq_adjustment": "4.0.1.6 -> 4.0.4.3 TEST_HARNESS_ONLY",
+      "promotion_condition": "TARGETED_UPSTREAM_TESTS_PASS"
+    },
+    "resource_model": {
+      "status": "PENDING_CI",
+      "known_source_finding": "QROS compatibility bridge stores each read ZIP entry as retained byte[]",
+      "probe_uncompressed_bytes": 33554432,
+      "promotion_condition": "BOUNDED_OR_STREAMING_RESOURCE_MODEL_REQUIRED"
+    },
+    "windows_11_x64": {
+      "status": "PENDING_CI",
+      "runner": "windows-latest STANDARD_GITHUB_HOSTED",
+      "dotnet_sdk": "10.0.400",
+      "promotion_condition": "PATCHED_BUILD_SMOKE_AND_DETERMINISTIC_BACKTEST_PASS"
+    }
+  },
+  "promotion_decision": "DENY_PENDING_REVIEW",
+  "next_gate": {
+    "accepted": false,
+    "independent_architecture_promotion_authorization_required": true
+  }
+}
