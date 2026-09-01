@@ -18,44 +18,56 @@ class Phase3BContractTests(unittest.TestCase):
         self.assertFalse(props["gate_opened"]["const"])
         self.assertEqual(props["statistics"]["additionalProperties"]["type"], "string")
 
-    def test_v2_backtest_contract_binds_runtime_overlay(self):
+    def test_v2_backtest_contract_remains_immutable_and_compatible(self):
         schema = self.load("packages/schemas/lean-backtest-result.v2.schema.json")
         self.assertEqual(schema["properties"]["contract_version"]["const"], "2")
-        self.assertIn("runtime_overlay", schema["required"])
-        self.assertIn("overlay_identity", schema["required"])
         overlay = schema["properties"]["runtime_overlay"]
-        self.assertFalse(overlay["additionalProperties"])
-        self.assertEqual(set(overlay["required"]), {
-            "mode",
-            "patch_script_hash",
-            "patched_graph_hash",
-            "launcher_assembly_hash",
-            "runtime_assembly_manifest_hash",
-            "runtime_assembly_count",
-        })
+        self.assertNotIn("patch_implementation_hash", overlay["required"])
+        count_pattern = overlay["properties"]["runtime_assembly_count"]["pattern"]
+        self.assertIsNotNone(re.fullmatch(count_pattern, "1"))
+        self.assertIsNotNone(re.fullmatch(count_pattern, "2"))
+
+    def test_v2_provenance_contract_remains_immutable_and_compatible(self):
+        schema = self.load("packages/schemas/provenance-record.v2.schema.json")
+        runtime = schema["properties"]["runtime_identity"]
+        self.assertNotIn("patch_implementation_hash", runtime["required"])
+        count_pattern = runtime["properties"]["runtime_assembly_count"]["pattern"]
+        self.assertIsNotNone(re.fullmatch(count_pattern, "1"))
+        self.assertIsNotNone(re.fullmatch(count_pattern, "2"))
+
+    def test_v3_backtest_contract_binds_hardened_runtime_overlay(self):
+        schema = self.load("packages/schemas/lean-backtest-result.v3.schema.json")
+        self.assertEqual(schema["properties"]["contract_version"]["const"], "3")
+        overlay = schema["properties"]["runtime_overlay"]
+        self.assertIn("patch_implementation_hash", overlay["required"])
         count_pattern = overlay["properties"]["runtime_assembly_count"]["pattern"]
         self.assertIsNone(re.fullmatch(count_pattern, "2"))
         self.assertIsNotNone(re.fullmatch(count_pattern, "3"))
         self.assertIsNotNone(re.fullmatch(count_pattern, "191"))
 
-    def test_v2_provenance_contract_binds_runtime_identity(self):
-        schema = self.load("packages/schemas/provenance-record.v2.schema.json")
-        self.assertIn("runtime_identity", schema["required"])
+    def test_v3_provenance_contract_binds_hardened_runtime_identity(self):
+        schema = self.load("packages/schemas/provenance-record.v3.schema.json")
+        self.assertEqual(schema["properties"]["contract_version"]["const"], "3")
         runtime = schema["properties"]["runtime_identity"]
-        self.assertFalse(runtime["additionalProperties"])
-        self.assertIn("runtime_overlay_identity", runtime["required"])
+        self.assertIn("patch_implementation_hash", runtime["required"])
         count_pattern = runtime["properties"]["runtime_assembly_count"]["pattern"]
-        self.assertIsNone(re.fullmatch(count_pattern, "1"))
+        self.assertIsNone(re.fullmatch(count_pattern, "2"))
         self.assertIsNotNone(re.fullmatch(count_pattern, "3"))
 
-    def test_manifest_registers_v1_and_v2_backtest_contracts(self):
+    def test_manifest_registers_versioned_runtime_contracts(self):
         manifest = self.load("packages/contracts/contract-manifest.json")
-        versions = {
+        backtest_versions = {
             item["version"]
             for item in manifest["contracts"]
             if item["contract_id"] == "lean-backtest-result"
         }
-        self.assertEqual(versions, {"1", "2"})
+        provenance_versions = {
+            item["version"]
+            for item in manifest["contracts"]
+            if item["contract_id"] == "provenance-record"
+        }
+        self.assertEqual(backtest_versions, {"1", "2", "3"})
+        self.assertEqual(provenance_versions, {"1", "2", "3"})
 
 
 if __name__ == "__main__":
