@@ -139,14 +139,52 @@ def apply_patch(root: Path) -> None:
     verify_patched_checkout(root)
 
 
+def runtime_assembly_manifest(launcher: Path) -> list[dict[str, str]]:
+    require(launcher.is_file(), "LEAN Launcher is not built")
+    output_root = launcher.parent
+    assemblies = sorted(
+        (path for path in output_root.rglob("*.dll") if path.is_file()),
+        key=lambda path: path.relative_to(output_root).as_posix(),
+    )
+    require(assemblies, "LEAN runtime assembly closure is empty")
+    names = {path.name for path in assemblies}
+    required_names = {
+        "QuantConnect.Lean.Launcher.dll",
+        "QuantConnect.Compression.dll",
+        "QuantConnect.Messaging.dll",
+    }
+    require(
+        required_names.issubset(names),
+        "LEAN runtime assembly closure missing patched project output(s): "
+        + ", ".join(sorted(required_names - names)),
+    )
+    manifest = [
+        {
+            "path": path.relative_to(output_root).as_posix(),
+            "sha256": sha256_file(path),
+        }
+        for path in assemblies
+    ]
+    require(
+        len({item["path"] for item in manifest}) == len(manifest),
+        "LEAN runtime assembly closure contains duplicate paths",
+    )
+    return manifest
+
+
 def runtime_overlay_fingerprint(root: Path, launcher: Path) -> dict[str, str]:
     verify_patched_checkout(root)
-    require(launcher.is_file(), "LEAN Launcher is not built")
+    manifest = runtime_assembly_manifest(launcher)
+    manifest_hash = "sha256:" + hashlib.sha256(
+        canonical_bytes({"assemblies": manifest})
+    ).hexdigest()
     return {
         "mode": PATCH_MODE,
         "patch_script_hash": sha256_file(root / PATCH_SCRIPT_RELATIVE),
         "patched_graph_hash": sha256_file(root / PATCH_GRAPH_RELATIVE),
         "launcher_assembly_hash": sha256_file(launcher),
+        "runtime_assembly_manifest_hash": manifest_hash,
+        "runtime_assembly_count": str(len(manifest)),
     }
 
 
@@ -156,10 +194,12 @@ def overlay_identity(runtime_overlay: dict[str, str]) -> str:
         "patch_script_hash",
         "patched_graph_hash",
         "launcher_assembly_hash",
+        "runtime_assembly_manifest_hash",
+        "runtime_assembly_count",
     }
     require(set(runtime_overlay) == required, "runtime overlay fingerprint fields drift")
     require(runtime_overlay["mode"] == PATCH_MODE, "runtime overlay mode drift")
-    for key in required - {"mode"}:
+    for key in required - {"mode", "runtime_assembly_count"}:
         value = runtime_overlay[key]
         require(
             isinstance(value, str)
@@ -167,5 +207,10 @@ def overlay_identity(runtime_overlay: dict[str, str]) -> str:
             and len(value) == 71,
             f"invalid runtime overlay hash: {key}",
         )
+    require(
+        runtime_overlay["runtime_assembly_count"].isdigit()
+        and int(runtime_overlay["runtime_assembly_count"]) >= 3,
+        "invalid runtime assembly count",
+    )
     material = {"engine_revision": LEAN_REVISION, "runtime_overlay": runtime_overlay}
     return "sha256:" + hashlib.sha256(canonical_bytes(material)).hexdigest()
