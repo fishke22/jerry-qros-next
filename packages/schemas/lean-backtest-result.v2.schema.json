@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jerry-qros-next.local/contracts/lean-backtest-result/v2",
+  "title": "QROS LEAN Backtest Result v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "contract_version",
+    "engine",
+    "engine_revision",
+    "runtime_overlay",
+    "overlay_identity",
+    "algorithm_id",
+    "algorithm_assembly_hash",
+    "input_hash",
+    "config_hash",
+    "classification",
+    "research_only",
+    "gate_opened",
+    "statistics",
+    "normalized_hash"
+  ],
+  "properties": {
+    "contract_id": {
+      "const": "lean-backtest-result"
+    },
+    "contract_version": {
+      "const": "2"
+    },
+    "engine": {
+      "const": "QuantConnect/Lean"
+    },
+    "engine_revision": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "runtime_overlay": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "patch_script_hash",
+        "patched_graph_hash",
+        "launcher_assembly_hash",
+        "runtime_assembly_manifest_hash",
+        "runtime_assembly_count"
+      ],
+      "properties": {
+        "mode": {
+          "const": "DETERMINISTIC_CHECKOUT_TIME_NO_FORK_NO_GITLINK_CHANGE"
+        },
+        "patch_script_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "patched_graph_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "launcher_assembly_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "runtime_assembly_manifest_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "runtime_assembly_count": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
+      }
+    },
+    "overlay_identity": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "algorithm_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "algorithm_assembly_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "input_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "config_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "classification": {
+      "const": "PASS_REVIEW_ONLY"
+    },
+    "research_only": {
+      "const": true
+    },
+    "gate_opened": {
+      "const": false
+    },
+    "statistics": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "normalized_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

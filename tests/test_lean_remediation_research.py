@@ -11,7 +11,7 @@ class LeanRemediationResearchTests(unittest.TestCase):
  def test_audit_maps_two_root_cause_clusters(self):
   c={x["cluster"]:x for x in self.r["root_cause_clusters"]};self.assertIn("COMPRESSION",c);self.assertIn("MESSAGING",c);self.assertFalse(c["COMPRESSION"]["no_source_change_escape_path"]);self.assertFalse(c["MESSAGING"]["no_source_change_escape_path"])
  def test_historical_gate_is_not_current_runtime_authority(self):
-  g=self.r["next_gate"];self.assertTrue(g["historical_phase3c_gate"]);self.assertFalse(g["current_runtime_gate"]);self.assertTrue(g["research_evidence_accepted"]);self.assertFalse(g["security_remediation_available"]);self.assertTrue(g["hard_stop_active"])
+  g=self.r["next_gate"];self.assertTrue(g["historical_phase3c_gate"]);self.assertFalse(g["current_runtime_gate"]);self.assertTrue(g["research_evidence_accepted"]);self.assertFalse(g["security_remediation_available"]);self.assertTrue(g["hard_stop_active"]);self.assertFalse(g["runtime_promotion_allowed"])
  def test_warning_suppression_and_drop_in_fork_are_rejected(self):
   c={x["candidate"]:x for x in self.r["candidate_paths"]};self.assertEqual(c["DROP_IN_DOTNETZIP_FORK"]["status"],"REJECTED");self.assertEqual(c["SUPPRESS_NUGET_SECURITY_WARNINGS"]["status"],"REJECTED")
 if __name__=="__main__":unittest.main()

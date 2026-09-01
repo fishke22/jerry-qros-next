@@ -51,6 +51,20 @@
       "schema_path": "packages/schemas/lean-backtest-result.v1.schema.json",
       "safety_class": "RESEARCH_RESULT",
       "status": "ACTIVE"
+    },
+    {
+      "contract_id": "provenance-record",
+      "version": "2",
+      "schema_path": "packages/schemas/provenance-record.v2.schema.json",
+      "safety_class": "PROVENANCE",
+      "status": "ACTIVE_PHASE3E_RUNTIME_BOUND"
+    },
+    {
+      "contract_id": "lean-backtest-result",
+      "version": "2",
+      "schema_path": "packages/schemas/lean-backtest-result.v2.schema.json",
+      "safety_class": "RESEARCH_RESULT",
+      "status": "ACTIVE_PHASE3E_RUNTIME_BOUND"
     }
   ]
 }

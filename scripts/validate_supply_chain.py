@@ -4,6 +4,8 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];SHA40=re.compile(r"^[0-9a-f]{40}$");SHA256=re.compile(r"^[0-9a-f]{64}$");EXACT=re.compile(r"^[0-9]+(?:\.[0-9]+)+(?:[A-Za-z0-9._-]*)$")
 def load(p):return json.loads((ROOT/p).read_text(encoding="utf-8"))
 def fail(m):raise AssertionError(m)
+def git_tree(rev):
+ return subprocess.check_output(["git","rev-parse",rev+"^{tree}"],cwd=ROOT,text=True).strip()
 def validate_dependency_registry():
  r=load("config/dependency-registry.json");ids=set()
  if r.get("unknown_is_deny") is not True:fail("registry not fail-closed")
@@ -68,7 +70,13 @@ def validate_source_and_provenance():
  if q.get("runtime_promotion_scope")!="LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY_WITH_PHASE3D_PATCH" or q.get("baseline_unpatched_upstream_runtime_allowed") is not False:fail("Phase 3D build-environment scope drift")
  if q.get("synthetic_backtest",{}).get("status")!="ACCEPTED_LOCAL_RESEARCH_BACKTEST_PHASE3D_PATCH_ONLY":fail("Phase 3D synthetic backtest build evidence drift")
  c=e.get("phase3_merge_closure",{})
- if c.get("pr")!=13 or c.get("integration_commit")!="744b53c18ab433346ab01fb26d35c55e5633ba43" or c.get("tree_equivalent") is not True:fail("Phase 3 merge closure evidence drift")
+ if c.get("pr")!=13 or c.get("integration_commit")!="744b53c18ab433346ab01fb26d35c55e5633ba43" or c.get("accepted_head")!="7b5f89a1972fd39abb78e0ad998eacf874e42739" or c.get("tree_equivalent") is not True:fail("Phase 3 merge closure evidence drift")
+ evidence_ref="refs/remotes/origin/evidence/phase-3d-accepted-head"
+ if c.get("accepted_head_evidence_ref")!="refs/heads/evidence/phase-3d-accepted-head":fail("Phase 3 accepted-head evidence ref drift")
+ evidence_head=subprocess.check_output(["git","rev-parse",evidence_ref],cwd=ROOT,text=True).strip()
+ if evidence_head!=c["accepted_head"]:fail("Phase 3 accepted-head evidence ref target drift")
+ accepted_tree=git_tree(evidence_ref);integration_tree=git_tree(c["integration_commit"])
+ if accepted_tree!=c.get("accepted_tree") or integration_tree!=c.get("integration_tree") or accepted_tree!=integration_tree:fail("Phase 3 merge tree proof drift")
 def validate_phase3d_lean_evidence():
  g=load("supply-chain/lean/launcher-patched-nuget-graph.json");m=load("supply-chain/lean/launcher-patched-nuget-license-metadata.json");d=load("config/lean-nuget-license-dispositions.json");b=load("supply-chain/lean/launcher-patched-bom.cdx.json")
  if g.get("package_count")!=55 or g.get("project_count")!=19:fail("Phase 3D NuGet graph count drift")

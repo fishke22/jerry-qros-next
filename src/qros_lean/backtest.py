@@ -9,7 +9,13 @@ import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
-LEAN_REVISION = "b692bf4788e8b54fc23bdcb5659666bf055ce89f"
+from qros_lean.runtime_overlay import (
+    LEAN_REVISION,
+    overlay_identity,
+    runtime_overlay_fingerprint,
+    sha256_file,
+)
+
 ALGORITHM_ID = "qros-phase3b-synthetic"
 EXPECTED = {
     "QROS Rows": "5",
@@ -19,10 +25,6 @@ EXPECTED = {
 }
 
 
-def sha256_file(path: Path) -> str:
-    return "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
-
-
 def canonical_bytes(value: dict) -> bytes:
     return json.dumps(
         value, sort_keys=True, separators=(",", ":"), ensure_ascii=False
@@ -30,17 +32,16 @@ def canonical_bytes(value: dict) -> bytes:
 
 
 def semantic_regression_projection(result: dict) -> dict:
-    """Return the stable Phase 3 quantitative/contract projection.
-
-    The full normalized hash intentionally includes the built algorithm assembly hash
-    and therefore represents result + provenance identity. A security-remediation
-    rebuild can legitimately change assembly bytes without changing the validated
-    QROS backtest semantics. The semantic projection removes only build identity and
-    the derived normalized hash; all contract, engine, input/config and quantitative
-    fields remain covered.
-    """
-    excluded = {"algorithm_assembly_hash", "normalized_hash"}
-    return {key: value for key, value in result.items() if key not in excluded}
+    excluded = {
+        "algorithm_assembly_hash",
+        "normalized_hash",
+        "runtime_overlay",
+        "overlay_identity",
+    }
+    projection = {key: value for key, value in result.items() if key not in excluded}
+    if projection.get("contract_id") == "lean-backtest-result":
+        projection["contract_version"] = "1"
+    return projection
 
 
 def semantic_regression_hash(result: dict) -> str:
@@ -50,7 +51,12 @@ def semantic_regression_hash(result: dict) -> str:
 
 
 def normalize_result(
-    raw: dict, *, algorithm_hash: str, input_hash: str, config_hash: str
+    raw: dict,
+    *,
+    algorithm_hash: str,
+    input_hash: str,
+    config_hash: str,
+    runtime_overlay: dict[str, str],
 ) -> dict:
     stats = raw.get("statistics")
     if not isinstance(stats, dict):
@@ -62,11 +68,14 @@ def normalize_result(
                 f"LEAN statistic mismatch {key}: expected {expected!r}, got {actual!r}"
             )
 
+    runtime_id = overlay_identity(runtime_overlay)
     result = {
         "contract_id": "lean-backtest-result",
-        "contract_version": "1",
+        "contract_version": "2",
         "engine": "QuantConnect/Lean",
         "engine_revision": LEAN_REVISION,
+        "runtime_overlay": dict(runtime_overlay),
+        "overlay_identity": runtime_id,
         "algorithm_id": ALGORITHM_ID,
         "algorithm_assembly_hash": algorithm_hash,
         "input_hash": input_hash,
@@ -81,9 +90,7 @@ def normalize_result(
             "total_orders": EXPECTED["Total Orders"],
         },
     }
-    result["normalized_hash"] = (
-        "sha256:" + hashlib.sha256(canonical_bytes(result)).hexdigest()
-    )
+    result["normalized_hash"] = "sha256:" + hashlib.sha256(canonical_bytes(result)).hexdigest()
     return result
 
 
@@ -97,12 +104,7 @@ def run_once(
     results = run_root / "results"
     results.mkdir(parents=True)
     launcher = (
-        root
-        / "external"
-        / "lean"
-        / "Launcher"
-        / "bin"
-        / "Release"
+        root / "external" / "lean" / "Launcher" / "bin" / "Release"
         / "QuantConnect.Lean.Launcher.dll"
     )
     if not launcher.is_file():
@@ -110,53 +112,35 @@ def run_once(
     if not algorithm_dll.is_file():
         raise RuntimeError("QROS synthetic algorithm is not built")
 
+    runtime_overlay = runtime_overlay_fingerprint(root, launcher)
+
     env = os.environ.copy()
     env["QROS_SYNTHETIC_DATA_FILE"] = str(fixture.resolve())
     command = [
-        "dotnet",
-        str(launcher),
-        "--config",
-        str(config.resolve()),
-        "--environment",
-        "backtesting",
-        "--algorithm-type-name",
-        "QrosSyntheticBacktestAlgorithm",
-        "--algorithm-language",
-        "CSharp",
-        "--algorithm-location",
-        str(algorithm_dll.resolve()),
-        "--data-folder",
-        str((root / "external" / "lean" / "Data").resolve()),
-        "--results-destination-folder",
-        str(results.resolve()),
-        "--close-automatically",
-        "true",
-        "--algorithm-id",
-        ALGORITHM_ID,
-        "--backtest-name",
-        ALGORITHM_ID,
+        "dotnet", str(launcher),
+        "--config", str(config.resolve()),
+        "--environment", "backtesting",
+        "--algorithm-type-name", "QrosSyntheticBacktestAlgorithm",
+        "--algorithm-language", "CSharp",
+        "--algorithm-location", str(algorithm_dll.resolve()),
+        "--data-folder", str((root / "external" / "lean" / "Data").resolve()),
+        "--results-destination-folder", str(results.resolve()),
+        "--close-automatically", "true",
+        "--algorithm-id", ALGORITHM_ID,
+        "--backtest-name", ALGORITHM_ID,
     ]
     completed = subprocess.run(
-        command,
-        cwd=root,
-        env=env,
-        text=True,
-        capture_output=True,
-        timeout=90,
+        command, cwd=root, env=env, text=True, capture_output=True, timeout=90
     )
     if completed.returncode != 0:
         raise RuntimeError(
-            "LEAN backtest failed\nSTDOUT:\n"
-            + completed.stdout
-            + "\nSTDERR:\n"
-            + completed.stderr
+            "LEAN backtest failed\nSTDOUT:\n" + completed.stdout
+            + "\nSTDERR:\n" + completed.stderr
         )
 
     result_file = results / f"{ALGORITHM_ID}.json"
     if not result_file.is_file():
-        raise RuntimeError(
-            "LEAN result file missing\nSTDOUT:\n" + completed.stdout
-        )
+        raise RuntimeError("LEAN result file missing\nSTDOUT:\n" + completed.stdout)
 
     raw = json.loads(result_file.read_text(encoding="utf-8"))
     normalized = normalize_result(
@@ -164,6 +148,7 @@ def run_once(
         algorithm_hash=sha256_file(algorithm_dll),
         input_hash=sha256_file(fixture),
         config_hash=sha256_file(config),
+        runtime_overlay=runtime_overlay,
     )
     return normalized, sha256_file(result_file)
 
@@ -177,46 +162,50 @@ def main() -> int:
     fixture = root / "fixtures_synthetic" / "lean" / "qros-synthetic-daily.csv"
     config = root / "integration" / "lean" / "backtest-config.json"
     algorithm_dll = (
-        root
-        / "integration"
-        / "lean"
-        / "QrosSyntheticAlgorithm"
-        / "bin"
-        / "Release"
-        / "net10.0"
-        / "Qros.Lean.SyntheticAlgorithm.dll"
+        root / "integration" / "lean" / "QrosSyntheticAlgorithm" / "bin"
+        / "Release" / "net10.0" / "Qros.Lean.SyntheticAlgorithm.dll"
     )
-    args.output_dir.mkdir(parents=True, exist_ok=True)
+    if args.output_dir.exists():
+        raise RuntimeError(
+            f"refusing to overwrite existing LEAN evidence directory: {args.output_dir}"
+        )
+    args.output_dir.mkdir(parents=True)
 
     with tempfile.TemporaryDirectory(prefix="qros-lean-a-") as a:
-        first, raw_a = run_once(
-            root, algorithm_dll, fixture, config, Path(a)
-        )
+        first, raw_a = run_once(root, algorithm_dll, fixture, config, Path(a))
     with tempfile.TemporaryDirectory(prefix="qros-lean-b-") as b:
-        second, raw_b = run_once(
-            root, algorithm_dll, fixture, config, Path(b)
-        )
+        second, raw_b = run_once(root, algorithm_dll, fixture, config, Path(b))
 
     if first != second:
         raise RuntimeError("normalized LEAN result is not deterministic")
 
-    result_path = args.output_dir / "lean-backtest-result.v1.json"
+    result_path = args.output_dir / "lean-backtest-result.v2.json"
     result_path.write_bytes(canonical_bytes(first) + b"\n")
 
     provenance = {
         "contract_id": "provenance-record",
-        "contract_version": "1",
+        "contract_version": "2",
         "artifact_id": first["normalized_hash"],
-        "artifact_type": "lean-backtest-result/v1",
+        "artifact_type": "lean-backtest-result/v2",
         "source_artifacts": [
             first["input_hash"],
             first["algorithm_assembly_hash"],
+            first["overlay_identity"],
         ],
         "source_hashes": {
             "synthetic_input": first["input_hash"],
             "algorithm_assembly": first["algorithm_assembly_hash"],
+            "patch_script": first["runtime_overlay"]["patch_script_hash"],
+            "patched_graph": first["runtime_overlay"]["patched_graph_hash"],
+            "launcher_assembly": first["runtime_overlay"]["launcher_assembly_hash"],
+            "runtime_assembly_manifest": first["runtime_overlay"]["runtime_assembly_manifest_hash"],
             "lean_raw_result_run_a": raw_a,
             "lean_raw_result_run_b": raw_b,
+        },
+        "runtime_identity": {
+            "engine_revision": first["engine_revision"],
+            "runtime_overlay_identity": first["overlay_identity"],
+            **first["runtime_overlay"],
         },
         "output_hash": sha256_file(result_path),
         "code_revision": subprocess.check_output(
@@ -227,7 +216,7 @@ def main() -> int:
         "research_only": True,
         "validation_status": "PASS_REVIEW_ONLY",
     }
-    provenance_path = args.output_dir / "lean-backtest-provenance.json"
+    provenance_path = args.output_dir / "lean-backtest-provenance.v2.json"
     provenance_path.write_bytes(canonical_bytes(provenance) + b"\n")
 
     validation = {
@@ -243,7 +232,7 @@ def main() -> int:
     validation_path.write_bytes(canonical_bytes(validation) + b"\n")
 
     print(json.dumps(first, sort_keys=True))
-    print("QROS Phase 3B deterministic LEAN backtest: PASS")
+    print("QROS Phase 3E deterministic LEAN backtest: PASS")
     return 0
 
 

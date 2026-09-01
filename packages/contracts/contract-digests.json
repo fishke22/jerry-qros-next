@@ -30,6 +30,14 @@
     {
       "path": "packages/schemas/lean-backtest-result.v1.schema.json",
       "git_blob_sha": "53c31f26ed369cf822256d2d3995fcbcf06d5b03"
+    },
+    {
+      "path": "packages/schemas/provenance-record.v2.schema.json",
+      "git_blob_sha": "96a5799c80fc4f238d4f5f531ac172d203527ed6"
+    },
+    {
+      "path": "packages/schemas/lean-backtest-result.v2.schema.json",
+      "git_blob_sha": "f5d4b469f67e7e43683cc138de8903c5ed10693e"
     }
   ]
 }
