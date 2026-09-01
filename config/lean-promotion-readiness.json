@@ -1,0 +1,23 @@
+{
+  "phase": "Phase 3E — LEAN promotion-readiness evidence",
+  "status": "PENDING_CI",
+  "research_only": true,
+  "parent_phase3d_head": "928846b1ca4b95f50f35c64cc6474c59fefb634a",
+  "option_b_authorization_inherited": true,
+  "runtime_promotion_allowed": false,
+  "gitlink_change_allowed": false,
+  "fork_promotion_allowed": false,
+  "package_release_allowed": false,
+  "goals": {
+    "stream_backed_bridge": true,
+    "patched_launcher_high_critical_vulnerabilities": "MUST_BE_ZERO",
+    "targeted_compression_regression": "REQUIRED",
+    "patched_transitive_sbom": "REQUIRED",
+    "patched_transitive_license_review": "REQUIRED",
+    "standard_windows_ci": "REQUIRED",
+    "windows_11_x64_physical_smoke": "REQUIRED_BEFORE_PROMOTION"
+  },
+  "current_hard_stop": true,
+  "windows_11_x64_physical_smoke": "PENDING_DESKTOP_SESSION",
+  "promotion_adr_approved": false
+}
