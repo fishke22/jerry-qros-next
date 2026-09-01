@@ -38,9 +38,11 @@ def package_pairs(doc: dict) -> set[tuple[str, str]]:
 def validated_vulnerabilities(doc: dict) -> list[dict]:
     records: list[dict] = []
     for node in walk(doc):
-        vulnerabilities = node.get("vulnerabilities")
-        if vulnerabilities is None:
+        if "vulnerabilities" not in node:
             continue
+        vulnerabilities = node["vulnerabilities"]
+        if vulnerabilities is None:
+            raise ValueError("NuGet vulnerability evidence may not be null")
         if not isinstance(vulnerabilities, list):
             raise ValueError("NuGet vulnerability evidence must be a list")
         for vulnerability in vulnerabilities:
