@@ -69,6 +69,30 @@ class LeanPatchAuditEvidenceTests(unittest.TestCase):
         )
         self.assertEqual(len(severe), 1)
 
+    def test_unknown_vulnerability_severity_is_rejected(self):
+        vuln_doc = doc([{
+            "id": "Example",
+            "resolvedVersion": "1.0.0",
+            "vulnerabilities": [{"severity": "Unknown"}],
+        }])
+        with self.assertRaises(ValueError):
+            validate_audit_documents(
+                doc([{"id": "ProDotNetZip", "resolvedVersion": "1.20.0"}]),
+                vuln_doc,
+            )
+
+    def test_missing_vulnerability_severity_is_rejected(self):
+        vuln_doc = doc([{
+            "id": "Example",
+            "resolvedVersion": "1.0.0",
+            "vulnerabilities": [{}],
+        }])
+        with self.assertRaises(ValueError):
+            validate_audit_documents(
+                doc([{"id": "ProDotNetZip", "resolvedVersion": "1.20.0"}]),
+                vuln_doc,
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
