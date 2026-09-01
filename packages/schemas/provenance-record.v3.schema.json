@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jerry-qros-next.local/contracts/provenance-record/v3",
+  "title": "QROS Provenance Record v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id",
+    "contract_version",
+    "artifact_id",
+    "artifact_type",
+    "source_artifacts",
+    "source_hashes",
+    "runtime_identity",
+    "output_hash",
+    "code_revision",
+    "config_hash",
+    "generated_at",
+    "research_only",
+    "validation_status"
+  ],
+  "properties": {
+    "contract_id": {
+      "const": "provenance-record"
+    },
+    "contract_version": {
+      "const": "3"
+    },
+    "artifact_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifact_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "source_hashes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^sha256:[0-9a-f]{64}$"
+      }
+    },
+    "runtime_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "engine_revision",
+        "runtime_overlay_identity",
+        "mode",
+        "patch_script_hash",
+        "patch_implementation_hash",
+        "patched_graph_hash",
+        "launcher_assembly_hash",
+        "runtime_assembly_manifest_hash",
+        "runtime_assembly_count"
+      ],
+      "properties": {
+        "engine_revision": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "runtime_overlay_identity": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "mode": {
+          "const": "DETERMINISTIC_CHECKOUT_TIME_NO_FORK_NO_GITLINK_CHANGE"
+        },
+        "patch_script_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "patched_graph_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "launcher_assembly_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "runtime_assembly_manifest_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "runtime_assembly_count": {
+          "type": "string",
+          "pattern": "^(?:[3-9]|[1-9][0-9]+)$"
+        },
+        "patch_implementation_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "output_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "code_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "config_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "generated_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "research_only": {
+      "const": true
+    },
+    "validation_status": {
+      "enum": [
+        "PASS_REVIEW_ONLY",
+        "FAIL_REQUIRES_REPAIR",
+        "BLOCKED_INSUFFICIENT_EVIDENCE",
+        "UNKNOWN"
+      ]
+    }
+  }
+}
