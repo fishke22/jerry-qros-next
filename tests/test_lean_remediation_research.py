@@ -38,7 +38,8 @@ class LeanRemediationResearchTests(unittest.TestCase):
     def test_research_is_accepted_but_security_hard_stop_remains(self):
         gate = self.r["next_gate"]
         self.assertTrue(gate["research_evidence_accepted"])
-        self.assertFalse(gate["security_remediation_available"])
+        self.assertTrue(gate["security_remediation_available"])
+        self.assertEqual(gate["security_remediation_scope"], "RESEARCH_PATCH_CANDIDATE_ONLY")
         self.assertTrue(gate["hard_stop_active"])
         self.assertFalse(gate["runtime_promotion_allowed"])
 
