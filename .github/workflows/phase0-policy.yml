@@ -42,6 +42,26 @@ jobs:
         run: python scripts/validate_lean_security.py
       - name: Validate Phase 3C remediation research boundary
         run: python scripts/validate_lean_remediation_research.py
+      - name: Print post-merge review sealing SHA256
+        run: |
+          sha256sum \
+            .github/workflows/phase0-policy.yml \
+            packages/contracts/contract-digests.json \
+            packages/contracts/contract-manifest.json \
+            packages/schemas/lean-backtest-result.v2.schema.json \
+            packages/schemas/lean-backtest-result.v3.schema.json \
+            packages/schemas/provenance-record.v2.schema.json \
+            packages/schemas/provenance-record.v3.schema.json \
+            scripts/validate_lean_patch_audit.py \
+            src/qros_lean/backtest.py \
+            src/qros_lean/runtime_overlay.py \
+            tests/test_lean_backtest_normalizer.py \
+            tests/test_lean_patch_audit.py \
+            tests/test_lean_runtime_overlay.py \
+            tests/test_phase3b_contract.py \
+            .github/workflows/integration-lean.yml \
+            docs/adr/0011-phase-3e-post-merge-hardening.md \
+            CHANGELOG.md
       - name: Validate SHA256SUMS
         run: python scripts/validate_sha256sums.py
       - name: Run tests

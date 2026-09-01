@@ -8,6 +8,7 @@ from pathlib import Path
 LEAN_REVISION = "b692bf4788e8b54fc23bdcb5659666bf055ce89f"
 PATCH_MODE = "DETERMINISTIC_CHECKOUT_TIME_NO_FORK_NO_GITLINK_CHANGE"
 PATCH_SCRIPT_RELATIVE = "scripts/apply_lean_security_patch.py"
+PATCH_IMPLEMENTATION_RELATIVE = "src/qros_lean/runtime_overlay.py"
 PATCH_GRAPH_RELATIVE = "supply-chain/lean/launcher-patched-nuget-graph.json"
 COMPRESSION_RELATIVE = "Compression/QuantConnect.Compression.csproj"
 MESSAGING_RELATIVE = "Messaging/QuantConnect.Messaging.csproj"
@@ -48,6 +49,10 @@ def canonical_bytes(value: dict) -> bytes:
     ).encode("utf-8")
 
 
+def patch_implementation_hash(root: Path) -> str:
+    return sha256_file(root / PATCH_IMPLEMENTATION_RELATIVE)
+
+
 def replace_exact_text(text: str, old: str, new: str, label: str) -> str:
     require(old in text, f"expected patch anchor missing: {label}")
     require(text.count(old) == 1, f"patch anchor is not unique: {label}")
@@ -68,16 +73,11 @@ def expected_patched_texts(compression_text: str, messaging_text: str) -> tuple[
 
 
 def _git(lean: Path, *args: str) -> str:
-    return subprocess.check_output(
-        ["git", "-C", str(lean), *args], text=True
-    ).strip()
+    return subprocess.check_output(["git", "-C", str(lean), *args], text=True).strip()
 
 
 def _base_text(lean: Path, relative: str) -> str:
-    return subprocess.check_output(
-        ["git", "-C", str(lean), "show", f"{LEAN_REVISION}:{relative}"],
-        text=True,
-    )
+    return subprocess.check_output(["git", "-C", str(lean), "show", f"{LEAN_REVISION}:{relative}"], text=True)
 
 
 def expected_patched_files(root: Path) -> dict[str, str]:
@@ -86,10 +86,7 @@ def expected_patched_files(root: Path) -> dict[str, str]:
         _base_text(lean, COMPRESSION_RELATIVE),
         _base_text(lean, MESSAGING_RELATIVE),
     )
-    return {
-        COMPRESSION_RELATIVE: compression,
-        MESSAGING_RELATIVE: messaging,
-    }
+    return {COMPRESSION_RELATIVE: compression, MESSAGING_RELATIVE: messaging}
 
 
 def verify_clean_base(root: Path) -> None:
@@ -104,37 +101,23 @@ def verify_patched_checkout(root: Path) -> None:
     lean = root / "external" / "lean"
     head = _git(lean, "rev-parse", "HEAD")
     require(head == LEAN_REVISION, f"LEAN revision drift: {head}")
-
     staged = _git(lean, "diff", "--cached", "--name-only")
     untracked = _git(lean, "ls-files", "--others", "--exclude-standard")
-    changed = {
-        line for line in _git(lean, "diff", "--name-only").splitlines() if line
-    }
+    changed = {line for line in _git(lean, "diff", "--name-only").splitlines() if line}
     require(staged == "", "LEAN checkout contains staged changes")
     require(untracked == "", "LEAN checkout contains unexpected untracked files")
-    require(
-        changed == EXPECTED_MODIFIED_PATHS,
-        f"LEAN patched file set drift: {sorted(changed)}",
-    )
-
+    require(changed == EXPECTED_MODIFIED_PATHS, f"LEAN patched file set drift: {sorted(changed)}")
     expected = expected_patched_files(root)
     for relative, expected_text in expected.items():
         actual = (lean / relative).read_text(encoding="utf-8")
         require(actual == expected_text, f"LEAN post-patch content drift: {relative}")
-
-    subprocess.run(
-        ["git", "-C", str(lean), "diff", "--check"],
-        check=True,
-        text=True,
-        capture_output=True,
-    )
+    subprocess.run(["git", "-C", str(lean), "diff", "--check"], check=True, text=True, capture_output=True)
 
 
 def apply_patch(root: Path) -> None:
     verify_clean_base(root)
     lean = root / "external" / "lean"
-    expected = expected_patched_files(root)
-    for relative, content in expected.items():
+    for relative, content in expected_patched_files(root).items():
         (lean / relative).write_text(content, encoding="utf-8")
     verify_patched_checkout(root)
 
@@ -142,45 +125,24 @@ def apply_patch(root: Path) -> None:
 def runtime_assembly_manifest(launcher: Path) -> list[dict[str, str]]:
     require(launcher.is_file(), "LEAN Launcher is not built")
     output_root = launcher.parent
-    assemblies = sorted(
-        (path for path in output_root.rglob("*.dll") if path.is_file()),
-        key=lambda path: path.relative_to(output_root).as_posix(),
-    )
+    assemblies = sorted((path for path in output_root.rglob("*.dll") if path.is_file()), key=lambda path: path.relative_to(output_root).as_posix())
     require(assemblies, "LEAN runtime assembly closure is empty")
     names = {path.name for path in assemblies}
-    required_names = {
-        "QuantConnect.Lean.Launcher.dll",
-        "QuantConnect.Compression.dll",
-        "QuantConnect.Messaging.dll",
-    }
-    require(
-        required_names.issubset(names),
-        "LEAN runtime assembly closure missing patched project output(s): "
-        + ", ".join(sorted(required_names - names)),
-    )
-    manifest = [
-        {
-            "path": path.relative_to(output_root).as_posix(),
-            "sha256": sha256_file(path),
-        }
-        for path in assemblies
-    ]
-    require(
-        len({item["path"] for item in manifest}) == len(manifest),
-        "LEAN runtime assembly closure contains duplicate paths",
-    )
+    required_names = {"QuantConnect.Lean.Launcher.dll", "QuantConnect.Compression.dll", "QuantConnect.Messaging.dll"}
+    require(required_names.issubset(names), "LEAN runtime assembly closure missing patched project output(s): " + ", ".join(sorted(required_names - names)))
+    manifest = [{"path": path.relative_to(output_root).as_posix(), "sha256": sha256_file(path)} for path in assemblies]
+    require(len({item["path"] for item in manifest}) == len(manifest), "LEAN runtime assembly closure contains duplicate paths")
     return manifest
 
 
 def runtime_overlay_fingerprint(root: Path, launcher: Path) -> dict[str, str]:
     verify_patched_checkout(root)
     manifest = runtime_assembly_manifest(launcher)
-    manifest_hash = "sha256:" + hashlib.sha256(
-        canonical_bytes({"assemblies": manifest})
-    ).hexdigest()
+    manifest_hash = "sha256:" + hashlib.sha256(canonical_bytes({"assemblies": manifest})).hexdigest()
     return {
         "mode": PATCH_MODE,
         "patch_script_hash": sha256_file(root / PATCH_SCRIPT_RELATIVE),
+        "patch_implementation_hash": patch_implementation_hash(root),
         "patched_graph_hash": sha256_file(root / PATCH_GRAPH_RELATIVE),
         "launcher_assembly_hash": sha256_file(launcher),
         "runtime_assembly_manifest_hash": manifest_hash,
@@ -189,28 +151,12 @@ def runtime_overlay_fingerprint(root: Path, launcher: Path) -> dict[str, str]:
 
 
 def overlay_identity(runtime_overlay: dict[str, str]) -> str:
-    required = {
-        "mode",
-        "patch_script_hash",
-        "patched_graph_hash",
-        "launcher_assembly_hash",
-        "runtime_assembly_manifest_hash",
-        "runtime_assembly_count",
-    }
+    required = {"mode", "patch_script_hash", "patch_implementation_hash", "patched_graph_hash", "launcher_assembly_hash", "runtime_assembly_manifest_hash", "runtime_assembly_count"}
     require(set(runtime_overlay) == required, "runtime overlay fingerprint fields drift")
     require(runtime_overlay["mode"] == PATCH_MODE, "runtime overlay mode drift")
     for key in required - {"mode", "runtime_assembly_count"}:
         value = runtime_overlay[key]
-        require(
-            isinstance(value, str)
-            and value.startswith("sha256:")
-            and len(value) == 71,
-            f"invalid runtime overlay hash: {key}",
-        )
-    require(
-        runtime_overlay["runtime_assembly_count"].isdigit()
-        and int(runtime_overlay["runtime_assembly_count"]) >= 3,
-        "invalid runtime assembly count",
-    )
+        require(isinstance(value, str) and value.startswith("sha256:") and len(value) == 71, f"invalid runtime overlay hash: {key}")
+    require(runtime_overlay["runtime_assembly_count"].isdigit() and int(runtime_overlay["runtime_assembly_count"]) >= 3, "invalid runtime assembly count")
     material = {"engine_revision": LEAN_REVISION, "runtime_overlay": runtime_overlay}
     return "sha256:" + hashlib.sha256(canonical_bytes(material)).hexdigest()

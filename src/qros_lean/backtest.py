@@ -71,7 +71,7 @@ def normalize_result(
     runtime_id = overlay_identity(runtime_overlay)
     result = {
         "contract_id": "lean-backtest-result",
-        "contract_version": "2",
+        "contract_version": "3",
         "engine": "QuantConnect/Lean",
         "engine_revision": LEAN_REVISION,
         "runtime_overlay": dict(runtime_overlay),
@@ -179,14 +179,14 @@ def main() -> int:
     if first != second:
         raise RuntimeError("normalized LEAN result is not deterministic")
 
-    result_path = args.output_dir / "lean-backtest-result.v2.json"
+    result_path = args.output_dir / "lean-backtest-result.v3.json"
     result_path.write_bytes(canonical_bytes(first) + b"\n")
 
     provenance = {
         "contract_id": "provenance-record",
-        "contract_version": "2",
+        "contract_version": "3",
         "artifact_id": first["normalized_hash"],
-        "artifact_type": "lean-backtest-result/v2",
+        "artifact_type": "lean-backtest-result/v3",
         "source_artifacts": [
             first["input_hash"],
             first["algorithm_assembly_hash"],
@@ -196,6 +196,7 @@ def main() -> int:
             "synthetic_input": first["input_hash"],
             "algorithm_assembly": first["algorithm_assembly_hash"],
             "patch_script": first["runtime_overlay"]["patch_script_hash"],
+            "patch_implementation": first["runtime_overlay"]["patch_implementation_hash"],
             "patched_graph": first["runtime_overlay"]["patched_graph_hash"],
             "launcher_assembly": first["runtime_overlay"]["launcher_assembly_hash"],
             "runtime_assembly_manifest": first["runtime_overlay"]["runtime_assembly_manifest_hash"],
@@ -216,7 +217,7 @@ def main() -> int:
         "research_only": True,
         "validation_status": "PASS_REVIEW_ONLY",
     }
-    provenance_path = args.output_dir / "lean-backtest-provenance.v2.json"
+    provenance_path = args.output_dir / "lean-backtest-provenance.v3.json"
     provenance_path.write_bytes(canonical_bytes(provenance) + b"\n")
 
     validation = {
