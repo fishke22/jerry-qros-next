@@ -4,9 +4,12 @@ All notable QROS Next engineering milestones are recorded here.
 
 ## Unreleased
 
-### Phase 3E (candidate)
-- Started post-merge fail-closed hardening for exact LEAN patched-worktree verification, runtime-bound v2 backtest/provenance identity, complete NuGet audit evidence, actual Git tree verification, and historical Phase 3C denial enforcement.
-- Kept the exact LEAN gitlink unchanged and introduced no paid dependency, packaging, release, Yuanta integration, or live trading capability.
+### Phase 3E
+- Accepted and merged PR #15 for post-merge fail-closed hardening at exact head `968255313ff0bff9051d50d17da335bd9da10207`; integration commit `791d99363228126e199d6cdac89857612743a2c9` has the identical Git tree `f49978fe60d85c642505e636e72d407ddb9745b5`.
+- Added exact clean-base/post-patch LEAN verification, runtime-bound v2 backtest/provenance contracts, complete Launcher-output DLL closure hashing, NuGet audit completeness validation, durable Phase 3D accepted-head evidence, historical gate enforcement, and evidence overwrite protection.
+- Fresh qros/security/LEAN gates passed; same-head LEAN jobs `99900913880` and `99901744740` reproduced the 191-DLL runtime manifest `sha256:3a7b926de7e6420de31d942508662061c5e5717fa0df9de86743010374614355`, overlay identity, normalized result, algorithm assembly, and Phase 3B semantic regression.
+- Post-merge main qros-gate `33522024604` passed; exact LEAN gitlink and all packaging, release, Yuanta, and live-trading hard gates remained unchanged.
+- Introduced no paid dependency or service; incremental monetary cost remains zero.
 
 ### Phase 3D
 - Merge closure: final accepted head `7b5f89a1972fd39abb78e0ad998eacf874e42739` passed independent same-head bit reproducibility and fresh PR #13 qros/security/LEAN workflows.
