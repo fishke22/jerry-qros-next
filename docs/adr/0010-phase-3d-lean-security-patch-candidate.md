@@ -1,71 +1,75 @@
-# ADR-0010: Phase 3D LEAN Security Patch Candidate
+# ADR-0010: Phase 3D LEAN Security Patch Runtime Overlay
 
-Status: PROPOSED / REVIEW-GATED / RUNTIME PROMOTION DENY
+Status: ACCEPTED / LOCAL RESEARCH-BACKTEST RUNTIME ONLY
 
 Date: 2026-09-01
 
 ## Context
 
-Phase 3B proved the QROS-owned deterministic synthetic backtest path against the exact pinned QuantConnect LEAN revision `b692bf4788e8b54fc23bdcb5659666bf055ce89f`, but runtime promotion remained blocked by known HIGH/CRITICAL dependency findings in the pinned upstream graph.
+The exact pinned QuantConnect LEAN revision `b692bf4788e8b54fc23bdcb5659666bf055ce89f` remains the sole canonical quant-engine source revision. Its unmodified upstream dependency graph contains the Phase 3B HIGH/CRITICAL blockers recorded in `config/lean-security-review.json`, so the unpatched runtime remains denied.
 
-Phase 3C accepted Option A (wait for official remediation) as the default disposition. A separate, explicitly authorized Phase 3D research branch now evaluates whether a deterministic local patch can remove the known blockers without changing the LEAN gitlink, forking LEAN, introducing a paid service, enabling brokerage, or altering the QROS deterministic result contract.
+Phase 3D evaluated a deterministic checkout-time QROS patch without changing the LEAN gitlink, maintaining a LEAN fork, suppressing NuGet advisories, introducing a paid service, enabling brokerage, or changing the QROS quantitative result contract.
 
-## Candidate
+## Accepted runtime overlay
 
-The candidate is applied only after checkout of the unchanged exact LEAN gitlink:
+The accepted overlay is applied only after validating the exact unchanged LEAN gitlink and exact source anchors:
 
-1. `QuantConnect.Compression`: replace `DotNetZip 1.16.0` with `ProDotNetZip 1.20.0` while preserving the existing `Ionic.Zip` namespace used by LEAN.
-2. `QuantConnect.Messaging`: remove `NetMQ 4.0.1.6` and exclude `StreamingMessageHandler.cs` from this QROS local-backtest build scope.
-3. Build the standard LEAN Launcher source project with the already pinned .NET SDK.
-4. Resolve the full Launcher NuGet graph and fail closed if any banned legacy blocker remains or NuGet reports any HIGH/CRITICAL vulnerability record.
-5. Build the QROS synthetic algorithm and run the deterministic backtest twice.
+1. `QuantConnect.Compression`: replace `DotNetZip 1.16.0` with `ProDotNetZip 1.20.0` while preserving the `Ionic.Zip` API surface used by the pinned LEAN source.
+2. `QuantConnect.Messaging`: remove `NetMQ 4.0.1.6` and exclude `StreamingMessageHandler.cs` from the QROS local Research/Backtest Launcher scope.
+3. Restore the standard patched Launcher once, freeze and verify the resolved NuGet graph, and use `--no-restore` for subsequent package-list/build steps.
+4. Fail closed if the frozen graph, license evidence, CycloneDX SBOM, banned-package set, HIGH/CRITICAL audit, source anchors, or deterministic regression evidence drifts.
 
-The patch script verifies the exact LEAN revision and exact unique source anchors before modification. Any drift causes failure rather than a best-effort patch.
+`runtime_promotion_scope = LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY_WITH_PHASE3D_PATCH`
 
-## Evidence required before any promotion recommendation
+`baseline_unpatched_upstream_runtime_allowed = false`
 
-All of the following must be proven on the exact PR head:
+## Acceptance evidence
 
-- deterministic patch application PASS;
-- patched standard Launcher build PASS;
-- resolved graph contains `ProDotNetZip 1.20.0`;
-- `DotNetZip` and `NetMQ` absent from the resolved Launcher graph;
-- the known legacy `System.Drawing.Common 4.7.0` and ServiceModel/WinHttpHandler versions covered by the Phase 3 blocker are absent;
-- NuGet vulnerability audit reports no HIGH/CRITICAL records;
-- QROS synthetic algorithm build PASS;
-- two-run deterministic backtest PASS;
-- QROS normalized result remains compatible with the established Phase 3B baseline contract;
-- QROS governance/contracts/supply-chain/SHA256/tests PASS;
-- ProDotNetZip license and zero-cost status are verified from upstream package/source evidence;
-- no Yuanta, broker credential, live trading, packaging, release, paid service, LEAN fork, or gitlink change is introduced.
+Exact acceptance prerequisite head: `4050b640f54fab9b0fda28c7d73145a0e44a4294`.
 
-UNKNOWN on any required item means DENY.
+- `qros-gate` run `33503647209`, job `99842494385`: SUCCESS, including canonical SHA256SUMS and full tests.
+- `lean-integration` run `33503647152`, job `99842494995`: SUCCESS.
+- Patched Launcher build: 0 errors.
+- Patched dependency audit: PASS.
+- Frozen NuGet graph: 55 packages, 19 project nodes, graph SHA-256 `165ba17fec034b417f4ae91b86544cbe9b2002f1c561f4908b0d43a76875f235`.
+- License gate: PASS, 44 NuGet SPDX metadata dispositions plus 11 manual reviews; no UNKNOWN remains.
+- Patched Launcher CycloneDX SBOM gate: PASS, 55 packages.
+- QROS synthetic algorithm build: 0 errors.
+- Two-run deterministic backtest: PASS.
+- Phase 3B semantic regression hash: `sha256:d786b5911e0f9e9d2c4959cf3aa7f87d92891c1370fbb276cbf7fff3bc2d15c1`.
+- Quantitative fingerprint: `qros_rows=5`, `qros_sum=510.0000`, `qros_last=104.0000`, `total_orders=0`.
+
+An independent same-revision rerun on an earlier Phase 3D head reproduced the algorithm assembly bit-for-bit. Cross-commit assembly hashes remain provenance-sensitive by design; cross-revision quantitative stability is enforced by the semantic regression projection.
 
 ## License and cost disposition
 
-`ProDotNetZip 1.20.0` is a NuGet package published by the upstream project. The upstream repository states that the software is released under the Microsoft Public License (Ms-PL). NuGet and the upstream repository are publicly accessible and no paid API/service/runtime is introduced by this candidate.
+The canonical transitive license inventory is stored in `supply-chain/lean/launcher-patched-nuget-license-metadata.json` and `config/lean-nuget-license-dispositions.json`.
 
-This is a candidate dependency used by a deterministic patch to an already-pinned open-source LEAN source tree. It is not yet recorded as an accepted QROS runtime dependency because runtime promotion remains review-gated.
+`ProDotNetZip 1.20.0` is treated as a multi-origin package whose applicable upstream portions include MS-PL, BSD-3-Clause, Zlib, Apache-2.0, MIT, and an LZMA SDK public-domain notice. It is not represented as a single-license package.
 
-## Security boundaries
+The runtime overlay introduces no paid SaaS, API, LLM, market data, cloud database, GPU/larger runner, storage, code-signing service, brokerage service, or other paid dependency.
 
-This ADR does not authorize:
+`candidate_incremental_cost = 0`
 
-- changing `external/lean` gitlink;
-- maintaining a QROS LEAN fork;
-- silently overriding arbitrary NuGet packages;
-- suppressing `NU1903` or `NU1904`;
-- Yuanta integration;
-- broker login or credentials;
-- live trading;
-- production packaging;
-- GitHub Release;
-- paid infrastructure or code signing.
+## Distribution boundary
+
+Acceptance of this local runtime does not authorize distribution or production release. Some transitive packages, including Accord 3.6.0 under LGPL-2.1-or-later, carry distribution obligations that require a separate review if packaging is ever authorized.
+
+The following gates remain closed:
+
+- `PACKAGE_AUTHORIZED = false`
+- `RELEASE_AUTHORIZED = false`
+- `YUANTA_INTEGRATION_AUTHORIZED = false`
+- `LIVE_TRADING_AUTHORIZED = false`
+
+No installer, MSI, NSIS, MSIX, production EXE package, GitHub Release, auto-update channel, code signing, broker credential, broker login, or real order is authorized by this ADR.
 
 ## Decision
 
-Phase 3D may validate this candidate as a reversible research patch. Successful CI is necessary but not sufficient for architecture acceptance.
+Accept the deterministic Phase 3D checkout-time security patch as the QROS LEAN runtime overlay for local Research/Backtest only.
 
-`runtime_promotion_allowed = false`
+`runtime_promotion_allowed = true`
 
-PR #11 remains Draft until exact-head governance, security, regression, license, cost, and reproducibility evidence are reviewed. A later explicit acceptance decision is required before this ADR can move from PROPOSED to ACCEPTED and before any merge/promotion action is considered.
+This boolean is valid only together with the restricted runtime scope above. The unpatched upstream LEAN runtime remains denied. Any drift in the exact LEAN gitlink, patch anchors, resolved graph, license disposition, SBOM, vulnerability audit, quantitative regression, or hard-gate state returns the runtime to DENY.
+
+This acceptance is not a production-readiness claim.

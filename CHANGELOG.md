@@ -4,6 +4,13 @@ All notable QROS Next engineering milestones are recorded here.
 
 ## Unreleased
 
+### Phase 3D
+- Accepted the deterministic checkout-time LEAN security patch as the local Research/Backtest runtime overlay only.
+- Kept the exact upstream LEAN gitlink unchanged and kept the unpatched upstream runtime denied.
+- Frozen and validated the patched Launcher NuGet graph (55 packages / 19 projects), license evidence, and dedicated CycloneDX SBOM.
+- Passed exact-head governance/SHA/tests, patched Launcher build, HIGH/CRITICAL dependency audit, deterministic backtest, and Phase 3B semantic regression.
+- Kept packaging, release, Yuanta integration, and live trading hard-disabled.
+
 ### Phase 3C
 - Started fail-closed LEAN dependency-remediation research on a stacked branch.
 - Recorded current official upstream master/issue/PR evidence without changing the LEAN pin.

@@ -21,6 +21,9 @@ def validate_dependency_registry():
    if str(d["license_spdx"]).startswith("UNKNOWN") or not d["license_verified_at"]:fail("license unverified")
    if not d["cost_class"].startswith(("FREE_","OSS_")):fail("cost unverified")
   if d["status"].startswith("PLANNED_") and d["introduction_authorized"] is not False:fail("planned dependency authorized")
+ lean=next(x for x in r["dependencies"] if x["dependency_id"]=="quantconnect-lean")
+ if lean.get("security_status")!="ACCEPTED_PHASE3D_PATCHED_LOCAL_RESEARCH_RUNTIME" or lean.get("runtime_promotion_allowed") is not True:fail("Phase 3D LEAN registry acceptance drift")
+ if lean.get("runtime_promotion_scope")!="LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY_WITH_PHASE3D_PATCH" or lean.get("unpatched_upstream_runtime_allowed") is not False:fail("Phase 3D LEAN runtime scope drift")
 def validate_lockfile():
  lock=(ROOT/"requirements"/"phase2.lock").read_text(encoding="utf-8")
  for d in [x for x in load("config/dependency-registry.json")["dependencies"] if x["runtime_scope"]=="RUNTIME" and x["status"]=="ADOPTED"]:
@@ -39,14 +42,24 @@ def validate_sbom():
  if len(b["components"])!=len(introduced):fail("SBOM component count drift")
  purls={c.get("purl") for c in b["components"]}
  if "pkg:github/QuantConnect/Lean@b692bf4788e8b54fc23bdcb5659666bf055ce89f" not in purls:fail("LEAN missing from SBOM")
+ lc=next(c for c in b["components"] if c.get("purl")=="pkg:github/QuantConnect/Lean@b692bf4788e8b54fc23bdcb5659666bf055ce89f");props={x["name"]:x["value"] for x in lc.get("properties",[])}
+ if props.get("qros:runtime-overlay")!="PHASE3D_DETERMINISTIC_CHECKOUT_TIME_PATCH" or props.get("qros:runtime-overlay-scope")!="LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY" or props.get("qros:unpatched-upstream-runtime-allowed")!="false":fail("main SBOM Phase 3D overlay drift")
 def validate_license_manifest():
  m=load("supply-chain/dependency-license-manifest.json");q=m.get("quant_engine_dependencies",[])
  if len(q)!=1 or q[0].get("license_spdx")!="Apache-2.0":fail("LEAN license drift")
+ if q[0].get("runtime_overlay_license_status")!="PASS_55_PACKAGES" or q[0].get("package_authorized") is not False or q[0].get("release_authorized") is not False:fail("Phase 3D LEAN license overlay drift")
+ o=m.get("phase3d_quant_engine_overlay",{})
+ if o.get("status")!="ACCEPTED_LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY" or o.get("resolved_package_count")!=55 or o.get("distribution_status")!="DENY_UNTIL_SEPARATE_PACKAGE_RELEASE_AUTHORIZATION":fail("Phase 3D license manifest closure drift")
  t={x["dependency_id"]:x for x in m.get("toolchain_dependencies",[])}
  if t.get("cpython",{}).get("version")!="3.14.7" or t.get("dotnet-sdk",{}).get("version")!="10.0.400":fail("toolchain evidence drift")
 def validate_source_and_provenance():
  s=load("supply-chain/source-revisions.json")
  if s.get("dotnet_sdk",{}).get("version")!="10.0.400":fail(".NET source evidence drift")
+ o=s.get("quant_engine_runtime_overlay",{})
+ if o.get("base_revision")!="b692bf4788e8b54fc23bdcb5659666bf055ce89f" or o.get("gitlink_changed") is not False or o.get("fork_created") is not False:fail("Phase 3D source overlay drift")
+ if o.get("runtime_scope")!="LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY" or o.get("package_authorized") is not False or o.get("release_authorized") is not False:fail("Phase 3D source overlay scope drift")
+ p=load("supply-chain/provenance-manifest.json").get("quant_engine_runtime_overlay",{})
+ if p.get("status")!="ACCEPTED_PHASE3D_LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY" or p.get("unpatched_upstream_runtime_allowed") is not False:fail("Phase 3D provenance overlay drift")
  e=load("supply-chain/build-environment.json")
  if e.get("paid_compute_allowed") is not False or e.get("product_build_exists") is not False:fail("hard gate drift")
  if e.get("quant_engine",{}).get("revision")!="b692bf4788e8b54fc23bdcb5659666bf055ce89f":fail("LEAN build evidence drift")

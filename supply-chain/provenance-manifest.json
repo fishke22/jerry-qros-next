@@ -13,5 +13,20 @@
   "cost_policy": "config/cost-policy.json",
   "local_source_promotion_policy": "config/local-source-promotion-policy.json",
   "generated_evidence_policy": "FAIL_CLOSED",
-  "unknown_is_deny": true
+  "unknown_is_deny": true,
+  "quant_engine_runtime_overlay": {
+    "status": "ACCEPTED_PHASE3D_LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+    "base_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+    "patch_script": "scripts/apply_lean_security_patch.py",
+    "graph": "supply-chain/lean/launcher-patched-nuget-graph.json",
+    "graph_sha256": "sha256:165ba17fec034b417f4ae91b86544cbe9b2002f1c561f4908b0d43a76875f235",
+    "sbom": "supply-chain/lean/launcher-patched-bom.cdx.json",
+    "license_metadata": "supply-chain/lean/launcher-patched-nuget-license-metadata.json",
+    "manual_license_dispositions": "config/lean-nuget-license-dispositions.json",
+    "exact_head_acceptance_evidence": "4050b640f54fab9b0fda28c7d73145a0e44a4294",
+    "unknown_is_deny": true,
+    "unpatched_upstream_runtime_allowed": false,
+    "package_authorized": false,
+    "release_authorized": false
+  }
 }

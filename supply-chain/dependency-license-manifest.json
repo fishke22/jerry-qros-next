@@ -191,7 +191,25 @@
       "license_spdx": "Apache-2.0",
       "verified_at": "2026-08-31",
       "scope": "CANONICAL_QUANT_ENGINE",
-      "verification_source": "https://github.com/QuantConnect/Lean/blob/b692bf4788e8b54fc23bdcb5659666bf055ce89f/LICENSE"
+      "verification_source": "https://github.com/QuantConnect/Lean/blob/b692bf4788e8b54fc23bdcb5659666bf055ce89f/LICENSE",
+      "runtime_overlay_scope": "LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY_WITH_PHASE3D_PATCH",
+      "runtime_overlay_license_status": "PASS_55_PACKAGES",
+      "runtime_overlay_license_metadata": "supply-chain/lean/launcher-patched-nuget-license-metadata.json",
+      "runtime_overlay_manual_dispositions": "config/lean-nuget-license-dispositions.json",
+      "runtime_overlay_sbom": "supply-chain/lean/launcher-patched-bom.cdx.json",
+      "runtime_overlay_graph": "supply-chain/lean/launcher-patched-nuget-graph.json",
+      "package_authorized": false,
+      "release_authorized": false,
+      "distribution_review_required": true
     }
-  ]
+  ],
+  "phase3d_quant_engine_overlay": {
+    "status": "ACCEPTED_LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+    "unknown_is_deny": true,
+    "resolved_package_count": 55,
+    "spdx_metadata_count": 44,
+    "manual_reviewed_count": 11,
+    "zero_cost_status": "PASS",
+    "distribution_status": "DENY_UNTIL_SEPARATE_PACKAGE_RELEASE_AUTHORIZATION"
+  }
 }

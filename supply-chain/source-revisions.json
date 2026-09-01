@@ -179,5 +179,23 @@
     "source": "dotnet.microsoft.com",
     "license": "MIT",
     "status": "ADOPTED_PHASE_3_TOOLCHAIN"
+  },
+  "quant_engine_runtime_overlay": {
+    "status": "ACCEPTED_PHASE3D_LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+    "base_component": "QuantConnect/Lean",
+    "base_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+    "gitlink_changed": false,
+    "fork_created": false,
+    "mode": "DETERMINISTIC_CHECKOUT_TIME_PATCH",
+    "patch_script": "scripts/apply_lean_security_patch.py",
+    "patched_nuget_graph": "supply-chain/lean/launcher-patched-nuget-graph.json",
+    "patched_nuget_graph_sha256": "sha256:165ba17fec034b417f4ae91b86544cbe9b2002f1c561f4908b0d43a76875f235",
+    "patched_sbom": "supply-chain/lean/launcher-patched-bom.cdx.json",
+    "license_metadata": "supply-chain/lean/launcher-patched-nuget-license-metadata.json",
+    "license_dispositions": "config/lean-nuget-license-dispositions.json",
+    "acceptance_exact_head": "4050b640f54fab9b0fda28c7d73145a0e44a4294",
+    "runtime_scope": "LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+    "package_authorized": false,
+    "release_authorized": false
   }
 }

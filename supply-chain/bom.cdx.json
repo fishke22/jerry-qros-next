@@ -2,14 +2,14 @@
   "bomFormat": "CycloneDX",
   "specVersion": "1.7",
   "serialNumber": "urn:uuid:6d1c1155-5a77-4c3e-b2a1-4acb7d4f1b10",
-  "version": 3,
+  "version": 4,
   "metadata": {
     "timestamp": "2026-08-31T14:20:00Z",
     "component": {
       "type": "application",
-      "bom-ref": "pkg:generic/jerry-qros-next@phase3a-lean-pin",
+      "bom-ref": "pkg:generic/jerry-qros-next@phase3d-lean-security-overlay",
       "name": "Jerry QROS Next",
-      "version": "phase3a-lean-pin",
+      "version": "phase3d-lean-security-overlay",
       "properties": [
         {
           "name": "qros:runtime-component-count",
@@ -30,6 +30,14 @@
         {
           "name": "qros:live-trading-authorized",
           "value": "false"
+        },
+        {
+          "name": "qros:phase3d-lean-runtime-overlay",
+          "value": "accepted-local-research-backtest-only"
+        },
+        {
+          "name": "qros:phase3d-lean-graph-sha256",
+          "value": "sha256:165ba17fec034b417f4ae91b86544cbe9b2002f1c561f4908b0d43a76875f235"
         }
       ]
     }
@@ -388,13 +396,49 @@
         {
           "name": "qros:target-framework",
           "value": "net10.0"
+        },
+        {
+          "name": "qros:runtime-overlay",
+          "value": "PHASE3D_DETERMINISTIC_CHECKOUT_TIME_PATCH"
+        },
+        {
+          "name": "qros:runtime-overlay-scope",
+          "value": "LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY"
+        },
+        {
+          "name": "qros:runtime-overlay-graph",
+          "value": "supply-chain/lean/launcher-patched-nuget-graph.json"
+        },
+        {
+          "name": "qros:runtime-overlay-graph-sha256",
+          "value": "sha256:165ba17fec034b417f4ae91b86544cbe9b2002f1c561f4908b0d43a76875f235"
+        },
+        {
+          "name": "qros:runtime-overlay-sbom",
+          "value": "supply-chain/lean/launcher-patched-bom.cdx.json"
+        },
+        {
+          "name": "qros:runtime-overlay-license-metadata",
+          "value": "supply-chain/lean/launcher-patched-nuget-license-metadata.json"
+        },
+        {
+          "name": "qros:unpatched-upstream-runtime-allowed",
+          "value": "false"
+        },
+        {
+          "name": "qros:package-authorized",
+          "value": "false"
+        },
+        {
+          "name": "qros:release-authorized",
+          "value": "false"
         }
       ]
     }
   ],
   "dependencies": [
     {
-      "ref": "pkg:generic/jerry-qros-next@phase3a-lean-pin",
+      "ref": "pkg:generic/jerry-qros-next@phase3d-lean-security-overlay",
       "dependsOn": [
         "pkg:pypi/duckdb@1.5.5",
         "pkg:pypi/pyarrow@25.0.1",

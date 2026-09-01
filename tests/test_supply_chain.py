@@ -17,6 +17,9 @@ class SupplyChainFoundationTests(unittest.TestCase):
   b=self.load("supply-chain/lean/launcher-patched-bom.cdx.json");self.assertEqual(len(b["components"]),55)
   p={x["purl"] for x in b["components"]};self.assertIn("pkg:nuget/ProDotNetZip@1.20.0",p);self.assertNotIn("pkg:nuget/DotNetZip@1.16.0",p);self.assertFalse(any(x.startswith("pkg:nuget/NetMQ@") for x in p))
   d=self.load("config/lean-nuget-license-dispositions.json");self.assertEqual(len(d["dispositions"]),11);self.assertTrue(all(x["review_status"]=="ACCEPTED" for x in d["dispositions"]))
+ def test_phase3d_runtime_overlay_is_accepted_but_release_closed(self):
+  d=next(x for x in self.load("config/dependency-registry.json")["dependencies"] if x["dependency_id"]=="quantconnect-lean");self.assertTrue(d["runtime_promotion_allowed"]);self.assertEqual(d["runtime_promotion_scope"],"LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY_WITH_PHASE3D_PATCH");self.assertFalse(d["unpatched_upstream_runtime_allowed"])
+  p=self.load("supply-chain/provenance-manifest.json")["quant_engine_runtime_overlay"];self.assertEqual(p["status"],"ACCEPTED_PHASE3D_LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY");self.assertFalse(p["package_authorized"]);self.assertFalse(p["release_authorized"])
  def test_future_planned_denied(self):
   for d in [x for x in self.load("config/dependency-registry.json")["dependencies"] if x["status"].startswith("PLANNED_")]:self.assertFalse(d["introduction_authorized"])
  def test_project_license_not_assumed(self):self.assertEqual(self.load("supply-chain/dependency-license-manifest.json")["project_source"]["license_status"],"NO_LICENSE_FILE")

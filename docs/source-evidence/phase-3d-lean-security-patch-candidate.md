@@ -52,7 +52,7 @@ Upstream source repository:
 - README states the namespace remains `Ionic.Zip`, which is required for compatibility with LEAN's existing source usage.
 - README documents dependencies on `System.Security.Permissions` and `System.Text.Encoding.CodePages` and states the package is AS IS; therefore QROS does not infer safety solely from the package name/version and instead audits the actual resolved Launcher graph in CI.
 
-License disposition for candidate research use: `Ms-PL`, permissive/open-source, zero purchase cost. This evidence does not by itself authorize runtime promotion.
+License disposition for candidate research use is multi-origin rather than single-license. The canonical Phase 3D manual disposition records the applicable MS-PL, BSD-3-Clause, Zlib, Apache-2.0, MIT, and LZMA SDK public-domain notice portions for ProDotNetZip 1.20.0. Zero purchase cost is confirmed; distribution remains separately gated.
 
 ## Cost evidence
 
@@ -106,3 +106,32 @@ Closure review found that the checksum manifest had not yet been synchronized fo
 Official NuGet and upstream source evidence for `ProDotNetZip 1.20.0` was re-verified on 2026-09-01 during this closure review: the NuGet package remains version 1.20.0 targeting .NET Standard 2.0 and links to the upstream `mihula/ProDotNetZip` repository; the upstream repository states Microsoft Public License (Ms-PL) and shows release 1.20.0 dated 2024-12-05. This supports zero-license-cost research use only; runtime promotion remains review-gated.
 
 A new exact-head CI run is still required after checksum synchronization. Until that run passes both `qros-gate` and `lean-integration`, this document does not claim final Phase 3D closure.
+
+
+## Final Phase 3D exact-head acceptance evidence
+
+Acceptance prerequisite head: `4050b640f54fab9b0fda28c7d73145a0e44a4294`.
+
+- `qros-gate` run `33503647209`, job `99842494385`: SUCCESS, including SHA256SUMS and full tests.
+- `lean-integration` run `33503647152`, job `99842494995`: SUCCESS.
+- Patched NuGet graph: PASS, 55 packages / 19 project nodes, graph SHA-256 `165ba17fec034b417f4ae91b86544cbe9b2002f1c561f4908b0d43a76875f235`.
+- NuGet license gate: PASS, 44 direct SPDX metadata dispositions + 11 manually reviewed dispositions.
+- Patched Launcher CycloneDX SBOM gate: PASS, 55 packages.
+- Standard patched Launcher build: 0 errors.
+- Patched dependency HIGH/CRITICAL audit: PASS.
+- QROS synthetic algorithm build: 0 errors.
+- Two-run deterministic backtest: PASS.
+- Stable Phase 3B semantic regression hash: `sha256:d786b5911e0f9e9d2c4959cf3aa7f87d92891c1370fbb276cbf7fff3bc2d15c1`.
+- Quantitative fingerprint: `qros_rows=5`, `qros_sum=510.0000`, `qros_last=104.0000`, `total_orders=0`.
+
+Architecture disposition after review:
+
+- `runtime_promotion_allowed = true`
+- `runtime_promotion_scope = LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY_WITH_PHASE3D_PATCH`
+- `baseline_unpatched_upstream_runtime_allowed = false`
+- `package_authorized = false`
+- `release_authorized = false`
+- `yuanta_enabled = false`
+- `live_trading_enabled = false`
+
+This is architecture/runtime acceptance for local Research/Backtest only, not a production-readiness claim.

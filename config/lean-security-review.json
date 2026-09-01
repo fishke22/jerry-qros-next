@@ -1,17 +1,52 @@
 {
-  "review_version": 1,
-  "reviewed_at": "2026-08-31",
+  "review_version": 2,
+  "reviewed_at": "2026-09-01",
   "engine": "QuantConnect/Lean",
   "engine_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
-  "source_build_ci": {
-    "run_id": 33405771315,
-    "job_id": 99532872381
-  },
   "unknown_is_deny": true,
-  "runtime_promotion_allowed": false,
+  "baseline_unpatched_upstream_runtime_allowed": false,
+  "runtime_promotion_allowed": true,
+  "runtime_promotion_scope": "LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY_WITH_PHASE3D_PATCH",
   "phase3b_merge_allowed": false,
-  "disposition": "BLOCKED_PENDING_UPSTREAM_OR_INDEPENDENTLY_REVIEWED_REMEDIATION",
-  "lean_transitive_sbom_status": "INCOMPLETE_REQUIRES_FULL_NUGET_GRAPH",
+  "disposition": "ACCEPTED_PHASE3D_PATCHED_LOCAL_RESEARCH_RUNTIME",
+  "lean_transitive_sbom_status": "PATCHED_LAUNCHER_COMPLETE_55_NUGET_PACKAGES",
+  "acceptance_evidence": {
+    "exact_head": "4050b640f54fab9b0fda28c7d73145a0e44a4294",
+    "qros_gate": {
+      "run_id": 33503647209,
+      "job_id": 99842494385,
+      "conclusion": "SUCCESS"
+    },
+    "lean_integration": {
+      "run_id": 33503647152,
+      "job_id": 99842494995,
+      "conclusion": "SUCCESS"
+    },
+    "patched_graph_sha256": "sha256:165ba17fec034b417f4ae91b86544cbe9b2002f1c561f4908b0d43a76875f235",
+    "package_count": 55,
+    "project_count": 19,
+    "spdx_metadata_count": 44,
+    "manual_license_review_count": 11,
+    "semantic_regression_hash": "sha256:d786b5911e0f9e9d2c4959cf3aa7f87d92891c1370fbb276cbf7fff3bc2d15c1",
+    "statistics": {
+      "qros_rows": "5",
+      "qros_sum": "510.0000",
+      "qros_last": "104.0000",
+      "total_orders": "0"
+    }
+  },
+  "runtime_overlay": {
+    "mode": "DETERMINISTIC_CHECKOUT_TIME_NO_FORK_NO_GITLINK_CHANGE",
+    "patch_script": "scripts/apply_lean_security_patch.py",
+    "graph": "supply-chain/lean/launcher-patched-nuget-graph.json",
+    "sbom": "supply-chain/lean/launcher-patched-bom.cdx.json",
+    "license_metadata": "supply-chain/lean/launcher-patched-nuget-license-metadata.json",
+    "license_dispositions": "config/lean-nuget-license-dispositions.json",
+    "package_authorized": false,
+    "release_authorized": false,
+    "yuanta_integration_authorized": false,
+    "live_trading_authorized": false
+  },
   "blockers": [
     {
       "package": "DotNetZip",
@@ -21,10 +56,11 @@
       "cve": "CVE-2024-48510",
       "affected": ">=1.10.1, <=1.16.0",
       "patched_versions": "NONE_FOR_DOTNETZIP",
-      "observed_scope": "QuantConnect.Compression direct PackageReference; propagated through LEAN build",
+      "observed_scope": "Unpatched QuantConnect.Compression direct PackageReference; baseline upstream graph only",
       "platform_scope": "ALL",
       "reason": "Directory traversal / arbitrary code execution risk when extracting attacker-controlled ZIP entries",
-      "upstream_issue": "https://github.com/QuantConnect/Lean/issues/8795"
+      "upstream_issue": "https://github.com/QuantConnect/Lean/issues/8795",
+      "phase3d_patched_runtime_status": "ABSENT_FROM_RESOLVED_GRAPH"
     },
     {
       "package": "System.Drawing.Common",
@@ -34,9 +70,10 @@
       "cve": "CVE-2021-24112",
       "affected": ">=4.0.0,<4.7.2",
       "patched_versions": "4.7.2",
-      "observed_scope": "Transitive package observed by NuGet during pinned LEAN and QROS algorithm builds",
+      "observed_scope": "Baseline upstream transitive package observed before Phase 3D remediation",
       "platform_scope": "MACOS_LINUX",
-      "reason": "Remote code execution when parsing certain graphics files; Linux CI is in affected platform scope"
+      "reason": "Remote code execution when parsing certain graphics files; Linux CI is in affected platform scope",
+      "phase3d_patched_runtime_status": "ABSENT_FROM_RESOLVED_GRAPH"
     },
     {
       "package": "System.Net.Http.WinHttpHandler",
@@ -46,9 +83,10 @@
       "cve": "CVE-2017-0247",
       "affected": ">=4.3.0,<4.5.4",
       "patched_versions": "4.5.4",
-      "observed_scope": "Transitive package observed in QuantConnect.Messaging build",
+      "observed_scope": "Baseline upstream QuantConnect.Messaging transitive package before Phase 3D remediation",
       "platform_scope": "PACKAGE_ADVISORY",
-      "reason": "Known high-severity advisory reported by NuGet restore/build"
+      "reason": "Known high-severity advisory reported by NuGet restore/build",
+      "phase3d_patched_runtime_status": "ABSENT_FROM_RESOLVED_GRAPH"
     },
     {
       "package": "System.Private.ServiceModel",
@@ -58,9 +96,10 @@
       "cve": "CVE-2018-0786",
       "affected": "=4.4.0",
       "patched_versions": "4.4.1",
-      "observed_scope": "Transitive package observed in QuantConnect.Messaging build",
+      "observed_scope": "Baseline upstream QuantConnect.Messaging transitive package before Phase 3D remediation",
       "platform_scope": "PACKAGE_ADVISORY",
-      "reason": "Improper certificate validation / security feature bypass"
+      "reason": "Improper certificate validation / security feature bypass",
+      "phase3d_patched_runtime_status": "ABSENT_FROM_RESOLVED_GRAPH"
     },
     {
       "package": "System.ServiceModel.Primitives",
@@ -70,9 +109,10 @@
       "cve": "CVE-2018-0786",
       "affected": "=4.4.0",
       "patched_versions": "4.4.1",
-      "observed_scope": "Transitive package observed in QuantConnect.Messaging build",
+      "observed_scope": "Baseline upstream QuantConnect.Messaging transitive package before Phase 3D remediation",
       "platform_scope": "PACKAGE_ADVISORY",
-      "reason": "Improper certificate validation / security feature bypass"
+      "reason": "Improper certificate validation / security feature bypass",
+      "phase3d_patched_runtime_status": "ABSENT_FROM_RESOLVED_GRAPH"
     }
   ],
   "remediation_gate": {
@@ -81,6 +121,8 @@
       "AN_INDEPENDENTLY_REVIEWED_QROS_PATCH_OR_FORK_IS_EXPLICITLY_AUTHORIZED_BY_ARCHITECTURE_AMENDMENT_AND_PASSES_FULL_QUANT_REGRESSION",
       "A_PROVEN_MINIMAL_BUILD_EXCLUDES_VULNERABLE_COMPONENTS_FROM_RUNTIME_AND_FULL_TRANSITIVE_SBOM_CONFIRMS_NO_BLOCKING_ADVISORY"
     ],
-    "currently_satisfied": false
+    "currently_satisfied": true,
+    "satisfied_by": "INDEPENDENTLY_REVIEWED_QROS_PHASE3D_DETERMINISTIC_PATCH",
+    "accepted_scope": "LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY"
   }
 }

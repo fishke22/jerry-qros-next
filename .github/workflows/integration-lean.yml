@@ -55,21 +55,31 @@ jobs:
         run: |
           sha256sum \
             .github/workflows/integration-lean.yml \
+            CHANGELOG.md \
+            config/dependency-registry.json \
             config/lean-nuget-license-dispositions.json \
+            config/lean-security-review.json \
             docs/adr/0010-phase-3d-lean-security-patch-candidate.md \
+            docs/security/LEAN_DEPENDENCY_SECURITY_REVIEW.md \
             docs/source-evidence/phase-3d-lean-security-patch-candidate.md \
             scripts/apply_lean_security_patch.py \
             scripts/validate_lean_nuget_graph.py \
             scripts/validate_lean_nuget_licenses.py \
             scripts/validate_lean_nuget_sbom.py \
             scripts/validate_lean_patch_audit.py \
+            scripts/validate_lean_security.py \
             scripts/validate_lean_semantic_regression.py \
             scripts/validate_supply_chain.py \
             src/qros_lean/backtest.py \
+            supply-chain/bom.cdx.json \
+            supply-chain/dependency-license-manifest.json \
+            supply-chain/provenance-manifest.json \
+            supply-chain/source-revisions.json \
             supply-chain/lean/launcher-patched-bom.cdx.json \
             supply-chain/lean/launcher-patched-nuget-graph.json \
             supply-chain/lean/launcher-patched-nuget-license-metadata.json \
             tests/test_lean_backtest_normalizer.py \
+            tests/test_lean_security_policy.py \
             tests/test_supply_chain.py
       - name: Apply deterministic LEAN security patch candidate
         run: python scripts/apply_lean_security_patch.py
@@ -101,7 +111,8 @@ jobs:
         env:
           PYTHONPATH: src
         run: python scripts/validate_lean_semantic_regression.py "$RUNNER_TEMP/qros-phase3d/lean-backtest-result.v1.json"
-      - name: Confirm promotion remains review-gated
+      - name: Confirm accepted runtime scope remains restricted
         run: |
-          echo "Candidate dependency gate passed only if all prior steps succeeded."
-          echo "Runtime promotion remains DENY until ADR/security review is accepted."
+          python scripts/validate_lean_security.py --enforce-runtime-promotion
+          echo "ALLOW applies only to the Phase 3D patched local Research/Backtest runtime."
+          echo "Packaging, release, Yuanta integration, and live trading remain DENY."
