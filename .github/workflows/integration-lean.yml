@@ -10,6 +10,7 @@ on:
       - 'scripts/apply_lean_security_patch.py'
       - 'scripts/validate_lean_patch_audit.py'
       - 'scripts/validate_lean_nuget_graph.py'
+      - 'scripts/validate_lean_nuget_licenses.py'
       - 'scripts/run_lean_synthetic_backtest.py'
       - 'scripts/validate_lean_semantic_regression.py'
       - 'integration/lean/**'
@@ -48,12 +49,19 @@ jobs:
           test "$(dotnet --version)" = "10.0.400"
           test "$(python --version)" = "Python 3.14.7"
           python scripts/validate_lean_pin.py --require-populated
+      - name: Print Phase 3D supply-chain evidence SHA256
+        run: |
+          sha256sum             .github/workflows/integration-lean.yml             scripts/validate_lean_nuget_licenses.py             supply-chain/lean/launcher-patched-nuget-graph.json
       - name: Apply deterministic LEAN security patch candidate
         run: python scripts/apply_lean_security_patch.py
       - name: Restore patched LEAN Launcher
         run: dotnet restore external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --nologo
-      - name: Capture patched Launcher NuGet graph
-        run: python scripts/validate_lean_nuget_graph.py --assets external/lean/Launcher/obj/project.assets.json --print-canonical
+      - name: Restore QROS synthetic algorithm
+        run: dotnet restore integration/lean/QrosSyntheticAlgorithm/QrosSyntheticAlgorithm.csproj --nologo
+      - name: Verify canonical patched Launcher NuGet graph
+        run: python scripts/validate_lean_nuget_graph.py --assets external/lean/Launcher/obj/project.assets.json --expected supply-chain/lean/launcher-patched-nuget-graph.json
+      - name: Capture patched Launcher NuGet license metadata
+        run: python scripts/validate_lean_nuget_licenses.py --assets external/lean/Launcher/obj/project.assets.json --print-canonical --allow-unreviewed
       - name: Build patched LEAN Launcher
         run: dotnet build external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --configuration Release --nologo --no-restore -p:ContinuousIntegrationBuild=true
       - name: Audit patched LEAN dependency graph
@@ -63,7 +71,7 @@ jobs:
           dotnet package list --project external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --include-transitive --vulnerable --no-restore --format json --output-version 1 > "$RUNNER_TEMP/lean-vulnerable.json"
           python scripts/validate_lean_patch_audit.py --all "$RUNNER_TEMP/lean-all.json" --vulnerable "$RUNNER_TEMP/lean-vulnerable.json"
       - name: Build QROS synthetic algorithm
-        run: dotnet build integration/lean/QrosSyntheticAlgorithm/QrosSyntheticAlgorithm.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
+        run: dotnet build integration/lean/QrosSyntheticAlgorithm/QrosSyntheticAlgorithm.csproj --configuration Release --nologo --no-restore -p:ContinuousIntegrationBuild=true
       - name: Run deterministic QROS to LEAN backtest twice
         env:
           PYTHONPATH: src
