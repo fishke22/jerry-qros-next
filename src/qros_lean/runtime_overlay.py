@@ -50,11 +50,7 @@ def canonical_bytes(value: dict) -> bytes:
 
 
 def patch_implementation_hash(root: Path) -> str:
-    manifest = {
-        "wrapper": sha256_file(root / PATCH_SCRIPT_RELATIVE),
-        "implementation": sha256_file(root / PATCH_IMPLEMENTATION_RELATIVE),
-    }
-    return "sha256:" + hashlib.sha256(canonical_bytes(manifest)).hexdigest()
+    return sha256_file(root / PATCH_IMPLEMENTATION_RELATIVE)
 
 
 def replace_exact_text(text: str, old: str, new: str, label: str) -> str:
@@ -145,7 +141,8 @@ def runtime_overlay_fingerprint(root: Path, launcher: Path) -> dict[str, str]:
     manifest_hash = "sha256:" + hashlib.sha256(canonical_bytes({"assemblies": manifest})).hexdigest()
     return {
         "mode": PATCH_MODE,
-        "patch_script_hash": patch_implementation_hash(root),
+        "patch_script_hash": sha256_file(root / PATCH_SCRIPT_RELATIVE),
+        "patch_implementation_hash": patch_implementation_hash(root),
         "patched_graph_hash": sha256_file(root / PATCH_GRAPH_RELATIVE),
         "launcher_assembly_hash": sha256_file(launcher),
         "runtime_assembly_manifest_hash": manifest_hash,
@@ -154,7 +151,7 @@ def runtime_overlay_fingerprint(root: Path, launcher: Path) -> dict[str, str]:
 
 
 def overlay_identity(runtime_overlay: dict[str, str]) -> str:
-    required = {"mode", "patch_script_hash", "patched_graph_hash", "launcher_assembly_hash", "runtime_assembly_manifest_hash", "runtime_assembly_count"}
+    required = {"mode", "patch_script_hash", "patch_implementation_hash", "patched_graph_hash", "launcher_assembly_hash", "runtime_assembly_manifest_hash", "runtime_assembly_count"}
     require(set(runtime_overlay) == required, "runtime overlay fingerprint fields drift")
     require(runtime_overlay["mode"] == PATCH_MODE, "runtime overlay mode drift")
     for key in required - {"mode", "runtime_assembly_count"}:
