@@ -12,6 +12,7 @@ BANNED = {
     "System.Private.ServiceModel": "4.4.0",
     "System.ServiceModel.Primitives": "4.4.0",
 }
+RECOGNIZED_SEVERITIES = {"low", "moderate", "high", "critical"}
 
 
 def walk(obj):
@@ -34,13 +35,33 @@ def package_pairs(doc: dict) -> set[tuple[str, str]]:
     return pairs
 
 
-def high_or_critical(doc: dict) -> list[dict]:
-    hits = []
+def validated_vulnerabilities(doc: dict) -> list[dict]:
+    records: list[dict] = []
     for node in walk(doc):
-        severity = node.get("severity")
-        if isinstance(severity, str) and severity.lower() in {"high", "critical"}:
-            hits.append(node)
-    return hits
+        vulnerabilities = node.get("vulnerabilities")
+        if vulnerabilities is None:
+            continue
+        if not isinstance(vulnerabilities, list):
+            raise ValueError("NuGet vulnerability evidence must be a list")
+        for vulnerability in vulnerabilities:
+            if not isinstance(vulnerability, dict):
+                raise ValueError("NuGet vulnerability record must be an object")
+            severity = vulnerability.get("severity")
+            if not isinstance(severity, str) or severity.lower() not in RECOGNIZED_SEVERITIES:
+                raise ValueError(
+                    "NuGet vulnerability severity is missing or unknown: "
+                    + repr(severity)
+                )
+            records.append(vulnerability)
+    return records
+
+
+def high_or_critical(vulnerabilities: list[dict]) -> list[dict]:
+    return [
+        item
+        for item in vulnerabilities
+        if item["severity"].lower() in {"high", "critical"}
+    ]
 
 
 def _nonempty_problem_fields(doc: dict) -> list[str]:
@@ -126,7 +147,8 @@ def validate_audit_documents(
     pairs = package_pairs(all_doc)
     if not pairs:
         raise ValueError("NuGet all-packages audit contains no resolved package evidence")
-    return pairs, high_or_critical(vuln_doc)
+    vulnerabilities = validated_vulnerabilities(vuln_doc)
+    return pairs, high_or_critical(vulnerabilities)
 
 
 def main() -> int:
