@@ -4,6 +4,11 @@ All notable QROS Next engineering milestones are recorded here.
 
 ## Unreleased
 
+### Phase 3D
+- Phase 3D research candidate passed repaired dependency, CA5389, compression-smoke and deterministic-backtest gates; promotion remains denied pending resource/coverage/SBOM/Windows review.
+- User explicitly selected Option B: research-only upstream-aligned LEAN security patch experiment.
+- Added isolated Messaging/NetMQ 4.0.4.3 candidate with dependency-audit and deterministic-backtest regression gates.
+
 ### Phase 3C
 - Started fail-closed LEAN dependency-remediation research on a stacked branch.
 - Recorded current official upstream master/issue/PR evidence without changing the LEAN pin.

@@ -15,7 +15,8 @@ class LeanRemediationResearchTests(unittest.TestCase):
 
     def test_no_remediation_action_is_authorized(self):
         self.assertTrue(self.r["research_only"])
-        self.assertFalse(self.r["architecture_amendment_approved"])
+        self.assertTrue(self.r["architecture_amendment_approved"])
+        self.assertTrue(self.r["lean_source_patch_experiment_authorized"])
         self.assertFalse(self.r["lean_source_patch_authorized"])
         self.assertFalse(self.r["lean_fork_authorized"])
         self.assertFalse(self.r["lean_gitlink_change_authorized"])
@@ -37,7 +38,8 @@ class LeanRemediationResearchTests(unittest.TestCase):
     def test_research_is_accepted_but_security_hard_stop_remains(self):
         gate = self.r["next_gate"]
         self.assertTrue(gate["research_evidence_accepted"])
-        self.assertFalse(gate["security_remediation_available"])
+        self.assertTrue(gate["security_remediation_available"])
+        self.assertEqual(gate["security_remediation_scope"], "RESEARCH_PATCH_CANDIDATE_ONLY")
         self.assertTrue(gate["hard_stop_active"])
         self.assertFalse(gate["runtime_promotion_allowed"])
 

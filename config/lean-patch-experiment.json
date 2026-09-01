@@ -1,0 +1,216 @@
+{
+  "experiment_version": 1,
+  "phase": "Phase 3D — LEAN security patch experiment",
+  "status": "RESEARCH_CANDIDATE_PASS_PROMOTION_REVIEW_REQUIRED",
+  "research_only": true,
+  "user_authorization": "Option B",
+  "base_lean_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+  "runtime_promotion_allowed": false,
+  "gitlink_change_allowed": false,
+  "fork_promotion_allowed": false,
+  "dependency_override_promotion_allowed": false,
+  "candidate_order": [
+    "MESSAGING_NETMQ_4_0_4_3",
+    "COMPRESSION_SYSTEM_IO_MIGRATION"
+  ],
+  "candidates": {
+    "MESSAGING_NETMQ_4_0_4_3": {
+      "status": "RESEARCH_CANDIDATE_PASS",
+      "modified_paths": [
+        "Messaging/QuantConnect.Messaging.csproj"
+      ],
+      "old_version": "4.0.1.6",
+      "new_version": "4.0.4.3",
+      "source": "NuGet NetMQ / zeromq/netmq official project",
+      "observed_at": "2026-09-01",
+      "target_framework_evidence": ".NET 10 compatible",
+      "license": "LGPL-3.0-family",
+      "license_change_from_existing_dependency": false,
+      "expected_removed_blockers": [
+        "System.ServiceModel.Primitives 4.4.0 / GHSA-jc8g-xhw5-6x46",
+        "System.Private.ServiceModel 4.4.0 / GHSA-jc8g-xhw5-6x46",
+        "System.Net.Http.WinHttpHandler 4.4.0 / GHSA-6xh7-4v2w-36q6"
+      ],
+      "expected_remaining_blockers": [
+        "DotNetZip 1.16.0 / GHSA-xhg6-9j5j-w4vf",
+        "System.Drawing.Common 4.7.0 / GHSA-rxg9-xrhp-64gj"
+      ],
+      "acceptance": [
+        "ONLY_EXPECTED_LEAN_FILE_MODIFIED",
+        "RESTORE_SUCCESS",
+        "MESSAGING_HIGH_BLOCKERS_ABSENT",
+        "COMPRESSION_BLOCKERS_STILL_DETECTED",
+        "LEAN_LAUNCHER_BUILD_PASS",
+        "QROS_SYNTHETIC_ALGORITHM_BUILD_PASS",
+        "DETERMINISTIC_BACKTEST_PASS"
+      ],
+      "promotion_allowed": false,
+      "ci_run_id": 33452583461,
+      "ci_job_id": 99685556630,
+      "observed_service_model_version": "10.0.652802",
+      "observed_remaining_vulnerabilities": [
+        "DotNetZip 1.16.0 / HIGH",
+        "System.Drawing.Common 4.7.0 / CRITICAL"
+      ],
+      "quant_behavior": {
+        "statistics": {
+          "qros_rows": 5,
+          "qros_sum": "510.0000",
+          "qros_last": "104.0000",
+          "total_orders": 0
+        },
+        "deterministic_backtest": "PASS",
+        "note": "Normalized hash changed because assembly evidence changed; quant statistics and zero-order behavior remained identical."
+      }
+    },
+    "COMPRESSION_SYSTEM_IO_MIGRATION": {
+      "status": "RESEARCH_CANDIDATE_PASS",
+      "promotion_allowed": false,
+      "implementation_authorized": true,
+      "technique": "QROS_OWNED_SYSTEM_IO_COMPRESSION_COMPATIBILITY_BRIDGE",
+      "modified_paths": [
+        "Compression/QuantConnect.Compression.csproj",
+        "Compression/QrosRuntimeCompressionCompat.cs"
+      ],
+      "removes_package": "DotNetZip 1.16.0",
+      "adds_third_party_package": false,
+      "runtime_library": "System.IO.Compression",
+      "expected_removed_blockers": [
+        "DotNetZip 1.16.0 / GHSA-xhg6-9j5j-w4vf",
+        "System.Drawing.Common 4.7.0 / GHSA-rxg9-xrhp-64gj"
+      ],
+      "expected_remaining_blockers": [
+        "System.ServiceModel.Primitives 4.4.0 / GHSA-jc8g-xhw5-6x46",
+        "System.Private.ServiceModel 4.4.0 / GHSA-jc8g-xhw5-6x46",
+        "System.Net.Http.WinHttpHandler 4.4.0 / GHSA-6xh7-4v2w-36q6"
+      ],
+      "acceptance": [
+        "ONLY_EXPECTED_LEAN_FILES_MODIFIED",
+        "RESTORE_SUCCESS",
+        "COMPRESSION_HIGH_CRITICAL_BLOCKERS_ABSENT",
+        "MESSAGING_BLOCKERS_STILL_DETECTED",
+        "LEAN_LAUNCHER_BUILD_PASS",
+        "QROS_COMPRESSION_COMPAT_SMOKE_PASS",
+        "QROS_SYNTHETIC_ALGORITHM_BUILD_PASS",
+        "DETERMINISTIC_BACKTEST_PASS"
+      ],
+      "caveat": "Compatibility bridge is not an upstream final design and is not promotable without separate review.",
+      "ci_run_id": 33453600900,
+      "ci_job_id": 99688715164
+    }
+  },
+  "combined_candidate": {
+    "status": "DEPENDENCY_REMEDIATION_PASS",
+    "applies": [
+      "MESSAGING_NETMQ_4_0_4_3",
+      "COMPRESSION_SYSTEM_IO_MIGRATION"
+    ],
+    "acceptance": [
+      "NO_HIGH_OR_CRITICAL_NUGET_VULNERABILITY_IN_LAUNCHER_GRAPH",
+      "LEAN_LAUNCHER_BUILD_PASS",
+      "QROS_COMPRESSION_COMPAT_SMOKE_PASS",
+      "DETERMINISTIC_BACKTEST_PASS"
+    ],
+    "promotion_allowed": false,
+    "ci_run_id": 33453600900,
+    "ci_job_id": 99688714855,
+    "vulnerable_package_audit": "NO_VULNERABLE_PACKAGES_REPORTED",
+    "normalized_backtest_hash": "sha256:fa919ff0cc795da09ea8f7765c61aa5cf34432ad469206abe6bf359f5e3298b2",
+    "quant_statistics": {
+      "qros_rows": 5,
+      "qros_sum": "510.0000",
+      "qros_last": "104.0000",
+      "total_orders": 0
+    }
+  },
+  "source_hardening_candidates": {
+    "COMPRESSION_PATH_TRAVERSAL": {
+      "status": "RESEARCH_CANDIDATE_PASS",
+      "rule": "CA5389",
+      "source_path": "Compression/Compression.cs",
+      "modified_paths": [
+        "Compression/Compression.cs"
+      ],
+      "implementation_authorized": true,
+      "promotion_allowed": false,
+      "official_guidance": "Microsoft CA5389 full-path normalization + destination-prefix validation",
+      "expected_behavior": {
+        "valid_zip_extract": "UNCHANGED",
+        "malicious_parent_traversal": "REJECT_NO_OUTSIDE_WRITE"
+      },
+      "acceptance": [
+        "ONLY_COMPRESSION_CS_MODIFIED",
+        "LEAN_LAUNCHER_BUILD_PASS",
+        "MALICIOUS_ZIP_REGRESSION_PASS",
+        "CA5389_NOT_EMITTED_FOR_COMPRESSION_UNZIP",
+        "DETERMINISTIC_BACKTEST_PASS"
+      ],
+      "finding": "INITIAL_GATE_FALSE_GREEN_DUE_TO_INCREMENTAL_BUILD_AND_UNPATCHED_UNZIP_TO_FOLDER",
+      "covered_methods": [
+        "Compression.Unzip(string,string,bool overwrite=true)",
+        "Compression.UnzipToFolder(byte[],string) via Stream overload"
+      ],
+      "ci_run_id": 33454221962,
+      "ci_job_id": 99690600873,
+      "forced_rebuild_ca5389": "ABSENT",
+      "malicious_zip_regression": "PASS_BOTH_UNZIP_AND_UNZIP_TO_FOLDER"
+    }
+  },
+  "final_combined_candidate": {
+    "status": "RESEARCH_CANDIDATE_PASS_NOT_PROMOTABLE",
+    "applies": [
+      "MESSAGING_NETMQ_4_0_4_3",
+      "COMPRESSION_SYSTEM_IO_MIGRATION",
+      "COMPRESSION_PATH_TRAVERSAL"
+    ],
+    "promotion_allowed": false,
+    "acceptance": [
+      "NO_VULNERABLE_NUGET_PACKAGES_REPORTED",
+      "LEAN_LAUNCHER_BUILD_PASS",
+      "FORCED_REBUILD_HAS_NO_CA5389",
+      "QROS_COMPRESSION_COMPAT_SMOKE_PASS",
+      "MALICIOUS_ZIP_REJECTED_BY_BOTH_EXTRACTION_PATHS",
+      "DETERMINISTIC_BACKTEST_PASS"
+    ],
+    "ci_run_id": 33454221962,
+    "ci_job_id": 99690600933,
+    "vulnerable_package_audit": "NO_VULNERABLE_PACKAGES_REPORTED_BY_CONFIGURED_NUGET_SOURCES",
+    "normalized_backtest_hash": "sha256:2fd54e0cc4096b713473cc820fa7525fdfdc617e77531b766dcc6fd37a9590f8",
+    "quant_statistics": {
+      "qros_rows": "5",
+      "qros_sum": "510.0000",
+      "qros_last": "104.0000",
+      "total_orders": "0"
+    },
+    "path_traversal_regression": "PASS_BOTH_EXTRACTION_APIS",
+    "promotion_blockers": [
+      "COMPATIBILITY_BRIDGE_IS_QROS_OWNED_NOT_UPSTREAM_LEAN",
+      "ZIP_ENTRY_CONTENT_IS_BUFFERED_FULLY_IN_MEMORY_IN_COMPATIBILITY_BRIDGE",
+      "FULL_LEAN_COMPRESSION_REGRESSION_SUITE_NOT_YET_EXECUTED",
+      "WINDOWS_11_X64_PATCHED_ENGINE_SMOKE_NOT_YET_EXECUTED",
+      "TRANSITIVE_LICENSE_AND_SBOM_FOR_PATCHED_GRAPH_NOT_YET_FROZEN",
+      "CANONICAL_GITLINK_REMAINS_UNPATCHED_UPSTREAM_REVISION"
+    ]
+  },
+  "promotion_review": {
+    "status": "NOT_APPROVED",
+    "runtime_promotion_allowed": false,
+    "source_review_findings": [
+      {
+        "id": "ZIP_ENTRY_FULL_MEMORY_BUFFERING",
+        "severity": "REVIEW_REQUIRED",
+        "location": "QROS research compatibility bridge ZipFile.Load",
+        "effect": "Each ZIP entry is copied into a MemoryStream and retained as byte[]; large archives or highly compressed entries can create unbounded memory pressure.",
+        "disposition": "BLOCK_PROMOTION_UNTIL_STREAMING_OR_EXPLICIT_LIMITS_AND_TESTS"
+      }
+    ],
+    "required_next_evidence": [
+      "PATCHED_GRAPH_CYCLONEDX_TRANSITIVE_SBOM",
+      "PATCHED_GRAPH_LICENSE_REVIEW",
+      "LEAN_COMPRESSION_TARGETED_REGRESSION_TESTS",
+      "RESOURCE_LIMIT_ZIP_BOMB_TESTS",
+      "WINDOWS_11_X64_PATCHED_ENGINE_SMOKE",
+      "INDEPENDENT_ARCHITECTURE_PROMOTION_ADR"
+    ]
+  }
+}
