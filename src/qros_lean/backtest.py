@@ -29,6 +29,26 @@ def canonical_bytes(value: dict) -> bytes:
     ).encode("utf-8")
 
 
+def semantic_regression_projection(result: dict) -> dict:
+    """Return the stable Phase 3 quantitative/contract projection.
+
+    The full normalized hash intentionally includes the built algorithm assembly hash
+    and therefore represents result + provenance identity. A security-remediation
+    rebuild can legitimately change assembly bytes without changing the validated
+    QROS backtest semantics. The semantic projection removes only build identity and
+    the derived normalized hash; all contract, engine, input/config and quantitative
+    fields remain covered.
+    """
+    excluded = {"algorithm_assembly_hash", "normalized_hash"}
+    return {key: value for key, value in result.items() if key not in excluded}
+
+
+def semantic_regression_hash(result: dict) -> str:
+    return "sha256:" + hashlib.sha256(
+        canonical_bytes(semantic_regression_projection(result))
+    ).hexdigest()
+
+
 def normalize_result(
     raw: dict, *, algorithm_hash: str, input_hash: str, config_hash: str
 ) -> dict:
