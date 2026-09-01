@@ -80,3 +80,29 @@ At this evidence checkpoint:
 - `runtime_promotion_allowed = false`
 
 The candidate can only advance to an architecture review recommendation after a fresh exact-head CI run proves governance/SHA/tests plus patched build/audit/backtest evidence. Any missing or ambiguous evidence remains DENY.
+
+## Pre-closure exact-head verification
+
+Reviewed candidate head:
+
+`6ba3404187ef7bc76ce81803fd1fc59984cda1d9`
+
+GitHub Actions evidence for that exact head:
+
+- `lean-integration` run `33486826786`, job `99788771678`: SUCCESS.
+- `qros-gate` run `33486826759`, job `99788756824`: FAILURE at `Validate SHA256SUMS`; all preceding governance/contract/supply-chain/security-boundary steps passed and tests were skipped after the fail-closed checksum stop.
+- Patched Launcher build completed with 0 errors.
+- `validate_lean_patch_audit.py` returned `QROS patched LEAN dependency gate: PASS`, which requires resolved `ProDotNetZip 1.20.0`, rejects `DotNetZip` and `NetMQ`, rejects the established legacy blocker versions, and rejects any NuGet HIGH/CRITICAL vulnerability record.
+- QROS synthetic algorithm build completed with 0 errors.
+- Two-run deterministic backtest PASS.
+- Phase 3D normalized result hash: `sha256:ef41d671f01d1423b4554d8aa6cdc5b1ec0a10a54ad26ec70f1267ddab35d8d0`.
+- Rebuilt algorithm assembly hash: `sha256:292e722d6b8026378384bb9569e48a0c73dbcac75fc63a10da6bc326ffa4c8ea`.
+- Phase 3B semantic regression hash: `sha256:d786b5911e0f9e9d2c4959cf3aa7f87d92891c1370fbb276cbf7fff3bc2d15c1`: PASS.
+- Quantitative fingerprint remains `qros_rows=5`, `qros_sum=510.0000`, `qros_last=104.0000`, `total_orders=0`.
+- Historical Phase 3B full normalized hash remains `sha256:6da211cffdf7f667b212f9bf083d9f2d78e40b42895e6b6ed0342b76b5d6e5f1`. The Phase 3D full hash is expected to differ because the normalized provenance identity includes the rebuilt algorithm assembly hash; semantic regression is therefore evaluated with the dedicated stable projection rather than by falsifying the historical full hash.
+
+Closure review found that the checksum manifest had not yet been synchronized for all Phase 3D source changes. The runner stopped at the first mismatch, while complete review identified drift for `.github/workflows/integration-lean.yml`, `src/qros_lean/backtest.py`, and `tests/test_lean_backtest_normalizer.py`, plus the newly introduced `scripts/validate_lean_semantic_regression.py` was not yet listed. These are provenance-manifest issues, not a demonstrated runtime regression.
+
+Official NuGet and upstream source evidence for `ProDotNetZip 1.20.0` was re-verified on 2026-09-01 during this closure review: the NuGet package remains version 1.20.0 targeting .NET Standard 2.0 and links to the upstream `mihula/ProDotNetZip` repository; the upstream repository states Microsoft Public License (Ms-PL) and shows release 1.20.0 dated 2024-12-05. This supports zero-license-cost research use only; runtime promotion remains review-gated.
+
+A new exact-head CI run is still required after checksum synchronization. Until that run passes both `qros-gate` and `lean-integration`, this document does not claim final Phase 3D closure.
