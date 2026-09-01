@@ -96,14 +96,16 @@ jobs:
           python scripts/validate_lean_pin.py --require-populated
           python scripts/validate_lean_patch_experiment.py
       - name: Apply isolated Compression candidate
-        run: python scripts/apply_lean_patch_experiment.py --candidate compression-system-io-bridge
+        run: |
+          python scripts/apply_lean_patch_experiment.py --candidate compression-system-io-bridge
+          python scripts/apply_lean_patch_experiment.py --candidate compression-path-traversal-hardening
       - name: Verify source-change scope
         shell: bash
         run: |
           git -C external/lean status --porcelain
-          test "$(git -C external/lean diff --name-only)" = "Compression/QuantConnect.Compression.csproj"
+          test "$(git -C external/lean diff --name-only | sort)" = "$(printf 'Compression/Compression.cs\nCompression/QuantConnect.Compression.csproj')"
           test -f external/lean/Compression/QrosRuntimeCompressionCompat.cs
-          test "$(git -C external/lean status --porcelain | wc -l)" = "2"
+          test "$(git -C external/lean status --porcelain | wc -l)" = "3"
       - name: Restore patched Launcher graph
         run: dotnet restore external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --nologo
       - name: Audit patched vulnerable graph
@@ -117,6 +119,11 @@ jobs:
           grep -q "System.ServiceModel.Primitives.*4.4.0.*High" "$RUNNER_TEMP/vulnerable.txt"
       - name: Build patched LEAN Launcher
         run: dotnet build external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
+      - name: Reject CA5389 path-traversal analyzer finding
+        shell: bash
+        run: |
+          dotnet build external/lean/Compression/QuantConnect.Compression.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true 2>&1 | tee "$RUNNER_TEMP/compression-build.txt"
+          ! grep -q "CA5389" "$RUNNER_TEMP/compression-build.txt"
       - name: Run QROS Compression compatibility smoke
         run: dotnet run --project integration/lean/QrosCompressionCompatSmoke/QrosCompressionCompatSmoke.csproj --configuration Release
       - name: Build QROS synthetic algorithm
@@ -153,6 +160,7 @@ jobs:
         run: |
           python scripts/apply_lean_patch_experiment.py --candidate messaging-netmq-4.0.4.3
           python scripts/apply_lean_patch_experiment.py --candidate compression-system-io-bridge
+          python scripts/apply_lean_patch_experiment.py --candidate compression-path-traversal-hardening
       - name: Restore combined Launcher graph
         run: dotnet restore external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --nologo
       - name: Require no HIGH or CRITICAL NuGet advisories

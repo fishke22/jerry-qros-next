@@ -43,6 +43,26 @@ try
         }
     }
 
+    var maliciousZip = Path.Combine(root, "malicious.zip");
+    var extractRoot = Path.Combine(root, "extract");
+    var escapedPath = Path.Combine(root, "escape.txt");
+    Directory.CreateDirectory(extractRoot);
+    using (var archive = System.IO.Compression.ZipFile.Open(
+        maliciousZip, System.IO.Compression.ZipArchiveMode.Create))
+    {
+        var entry = archive.CreateEntry("../escape.txt");
+        using var writer = new StreamWriter(entry.Open());
+        writer.Write("must-not-escape");
+    }
+
+    var maliciousAccepted = Compression.Unzip(maliciousZip, extractRoot, true);
+    if (maliciousAccepted || File.Exists(escapedPath))
+    {
+        throw new InvalidOperationException(
+            "path traversal archive escaped extraction root");
+    }
+
+    Console.WriteLine("QROS compression path traversal regression: PASS");
     Console.WriteLine("QROS compression compatibility smoke: PASS");
 }
 finally

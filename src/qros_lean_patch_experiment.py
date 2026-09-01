@@ -21,10 +21,68 @@ def _replace_once(path: Path, old: str, new: str) -> None:
     path.write_text(text.replace(old, new), encoding="utf-8")
 
 
+PATH_TRAVERSAL_OLD = """                else
+                {
+                    using (var archive = new ZipArchive(File.OpenRead(zip)))
+                    {
+                        foreach (var file in archive.Entries)
+                        {
+                            // skip directories
+                            if (string.IsNullOrEmpty(file.Name)) continue;
+                            var filepath = Path.Combine(directory, file.FullName);
+                            if (IsLinux) filepath = filepath.Replace(@"\\", "/");
+                            var outputFile = new FileInfo(filepath);
+                            if (!outputFile.Directory.Exists)
+                            {
+                                outputFile.Directory.Create();
+                            }
+                            file.ExtractToFile(outputFile.FullName, true);
+                        }
+                    }
+                }
+"""
+
+PATH_TRAVERSAL_NEW = """                else
+                {
+                    var extractionRoot = Path.GetFullPath(directory);
+                    if (!extractionRoot.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
+                    {
+                        extractionRoot += Path.DirectorySeparatorChar;
+                    }
+
+                    using (var archive = new ZipArchive(File.OpenRead(zip)))
+                    {
+                        foreach (var file in archive.Entries)
+                        {
+                            // skip directories
+                            if (string.IsNullOrEmpty(file.Name)) continue;
+                            var entryPath = IsLinux ? file.FullName.Replace(@"\\", "/") : file.FullName;
+                            var filepath = Path.GetFullPath(Path.Combine(extractionRoot, entryPath));
+                            if (!filepath.StartsWith(extractionRoot, StringComparison.Ordinal))
+                            {
+                                throw new IOException($"Archive entry '{file.FullName}' would extract outside the destination directory.");
+                            }
+
+                            var outputFile = new FileInfo(filepath);
+                            if (!outputFile.Directory.Exists)
+                            {
+                                outputFile.Directory.Create();
+                            }
+                            file.ExtractToFile(outputFile.FullName, true);
+                        }
+                    }
+                }
+"""
+
 def apply(candidate: str) -> list[Path]:
     if candidate == "messaging-netmq-4.0.4.3":
         path = LEAN / "Messaging" / "QuantConnect.Messaging.csproj"
         _replace_once(path, MESSAGING_OLD, MESSAGING_NEW)
+        return [path]
+
+    if candidate == "compression-path-traversal-hardening":
+        path = LEAN / "Compression" / "Compression.cs"
+        _replace_once(path, PATH_TRAVERSAL_OLD, PATH_TRAVERSAL_NEW)
         return [path]
 
     if candidate == "compression-system-io-bridge":
@@ -42,4 +100,5 @@ def apply(candidate: str) -> list[Path]:
 CANDIDATES = {
     "messaging-netmq-4.0.4.3",
     "compression-system-io-bridge",
+    "compression-path-traversal-hardening",
 }

@@ -25,6 +25,13 @@ class LeanPatchExperimentTests(unittest.TestCase):
         self.assertFalse(candidate["promotion_allowed"])
         self.assertFalse(e["combined_candidate"]["promotion_allowed"])
 
+    def test_path_traversal_candidate_is_research_only(self):
+        e=json.loads((ROOT/"config"/"lean-patch-experiment.json").read_text(encoding="utf-8"))
+        c=e["source_hardening_candidates"]["COMPRESSION_PATH_TRAVERSAL"]
+        self.assertEqual(c["rule"], "CA5389")
+        self.assertTrue(c["implementation_authorized"])
+        self.assertFalse(c["promotion_allowed"])
+
     def test_messaging_patch_is_exact_and_fail_closed(self):
         with tempfile.TemporaryDirectory() as d:
             p=Path(d)/"x.csproj"
