@@ -273,32 +273,6 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:nuget/fasterflect@3.0.0",
-      "name": "fasterflect",
-      "version": "3.0.0",
-      "purl": "pkg:nuget/fasterflect@3.0.0",
-      "licenses": [
-        {
-          "expression": "Apache-2.0"
-        }
-      ],
-      "properties": [
-        {
-          "name": "qros:nuget-content-hash-sha512-base64",
-          "value": "nXucxx84mYH+fS9U92a4Ak/MfWP0H204c8D2I64zsOQynnihhavO6HOCUcpp8HfKZMn3aNn01iv1bINnxH7Kow=="
-        },
-        {
-          "name": "qros:nuspec-sha256",
-          "value": "sha256:2988b4b0e3ddd44102f09ea01c3effac7dd0376f6f55150a2f0bcaaf3b79ae05"
-        },
-        {
-          "name": "qros:license-review-mode",
-          "value": "NUGET_SPDX_EXPRESSION"
-        }
-      ]
-    },
-    {
-      "type": "library",
       "bom-ref": "pkg:nuget/FSharp.Core@8.0.400",
       "name": "FSharp.Core",
       "version": "8.0.400",
@@ -533,32 +507,6 @@
     },
     {
       "type": "library",
-      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
-      "name": "Microsoft.CodeAnalysis.Common",
-      "version": "4.8.0",
-      "purl": "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
-      "licenses": [
-        {
-          "expression": "MIT"
-        }
-      ],
-      "properties": [
-        {
-          "name": "qros:nuget-content-hash-sha512-base64",
-          "value": "/jR+e/9aT+BApoQJABlVCKnnggGQbvGh7BKq2/wI1LamxC+LbzhcLj4Vj7gXCofl1n4E521YfF9w0WcASGg/KA=="
-        },
-        {
-          "name": "qros:nuspec-sha256",
-          "value": "sha256:e4fd91c91e17f4e35cbd96f8e69513326a27f50af4eade20a33c64deb60d6b48"
-        },
-        {
-          "name": "qros:license-review-mode",
-          "value": "NUGET_SPDX_EXPRESSION"
-        }
-      ]
-    },
-    {
-      "type": "library",
       "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.CSharp.Workspaces@4.8.0",
       "name": "Microsoft.CodeAnalysis.CSharp.Workspaces",
       "version": "4.8.0",
@@ -602,6 +550,32 @@
         {
           "name": "qros:nuspec-sha256",
           "value": "sha256:0bb9543bcbb528c3c414b5e7596b11fb839abcef01a1867a10a85eb76a9a1a83"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+      "name": "Microsoft.CodeAnalysis.Common",
+      "version": "4.8.0",
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "/jR+e/9aT+BApoQJABlVCKnnggGQbvGh7BKq2/wI1LamxC+LbzhcLj4Vj7gXCofl1n4E521YfF9w0WcASGg/KA=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:e4fd91c91e17f4e35cbd96f8e69513326a27f50af4eade20a33c64deb60d6b48"
         },
         {
           "name": "qros:license-review-mode",
@@ -970,58 +944,6 @@
         {
           "name": "qros:license-review-mode",
           "value": "MANUAL_REVIEWED"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "bom-ref": "pkg:nuget/protobuf-net.Core@3.1.33",
-      "name": "protobuf-net.Core",
-      "version": "3.1.33",
-      "purl": "pkg:nuget/protobuf-net.Core@3.1.33",
-      "licenses": [
-        {
-          "expression": "Apache-2.0"
-        }
-      ],
-      "properties": [
-        {
-          "name": "qros:nuget-content-hash-sha512-base64",
-          "value": "uq+KLED4Mwx1BnTE5TTtawQgaCRpajcbRKaYsEbY5biWWK1O5+rCBTd6+9EpK6CYxd2POUHkpwTslPs4SCoHOw=="
-        },
-        {
-          "name": "qros:nuspec-sha256",
-          "value": "sha256:4b0b05c861e50c21b862bbea0b683ab6690a75c98e76affc15eba64c2d4ff5f5"
-        },
-        {
-          "name": "qros:license-review-mode",
-          "value": "NUGET_SPDX_EXPRESSION"
-        }
-      ]
-    },
-    {
-      "type": "library",
-      "bom-ref": "pkg:nuget/protobuf-net@3.1.33",
-      "name": "protobuf-net",
-      "version": "3.1.33",
-      "purl": "pkg:nuget/protobuf-net@3.1.33",
-      "licenses": [
-        {
-          "expression": "Apache-2.0"
-        }
-      ],
-      "properties": [
-        {
-          "name": "qros:nuget-content-hash-sha512-base64",
-          "value": "tv6wc8QvCjGOY/grQ/irxUWqRtHpVzOLY87+jvINxYOD5n0o4TX9RukJ/FRkVyMeQtLLhf/0okQFb4rQgoWt8A=="
-        },
-        {
-          "name": "qros:nuspec-sha256",
-          "value": "sha256:b13536199ed5f04ca5ac2a5f0d4b89322f40488c70a5a49cb943f3937be9adbb"
-        },
-        {
-          "name": "qros:license-review-mode",
-          "value": "NUGET_SPDX_EXPRESSION"
         }
       ]
     },
@@ -1466,6 +1388,84 @@
           "value": "NUGET_SPDX_EXPRESSION"
         }
       ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/fasterflect@3.0.0",
+      "name": "fasterflect",
+      "version": "3.0.0",
+      "purl": "pkg:nuget/fasterflect@3.0.0",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "nXucxx84mYH+fS9U92a4Ak/MfWP0H204c8D2I64zsOQynnihhavO6HOCUcpp8HfKZMn3aNn01iv1bINnxH7Kow=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:2988b4b0e3ddd44102f09ea01c3effac7dd0376f6f55150a2f0bcaaf3b79ae05"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/protobuf-net.Core@3.1.33",
+      "name": "protobuf-net.Core",
+      "version": "3.1.33",
+      "purl": "pkg:nuget/protobuf-net.Core@3.1.33",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "uq+KLED4Mwx1BnTE5TTtawQgaCRpajcbRKaYsEbY5biWWK1O5+rCBTd6+9EpK6CYxd2POUHkpwTslPs4SCoHOw=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:4b0b05c861e50c21b862bbea0b683ab6690a75c98e76affc15eba64c2d4ff5f5"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/protobuf-net@3.1.33",
+      "name": "protobuf-net",
+      "version": "3.1.33",
+      "purl": "pkg:nuget/protobuf-net@3.1.33",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "tv6wc8QvCjGOY/grQ/irxUWqRtHpVzOLY87+jvINxYOD5n0o4TX9RukJ/FRkVyMeQtLLhf/0okQFb4rQgoWt8A=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:b13536199ed5f04ca5ac2a5f0d4b89322f40488c70a5a49cb943f3937be9adbb"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
     }
   ],
   "dependencies": [
@@ -1582,10 +1582,6 @@
       ]
     },
     {
-      "ref": "pkg:nuget/fasterflect@3.0.0",
-      "dependsOn": []
-    },
-    {
       "ref": "pkg:nuget/FSharp.Core@8.0.400",
       "dependsOn": []
     },
@@ -1626,12 +1622,6 @@
       "dependsOn": []
     },
     {
-      "ref": "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
-      "dependsOn": [
-        "pkg:nuget/Microsoft.CodeAnalysis.Analyzers@3.3.4"
-      ]
-    },
-    {
       "ref": "pkg:nuget/Microsoft.CodeAnalysis.CSharp.Workspaces@4.8.0",
       "dependsOn": [
         "pkg:nuget/Humanizer.Core@2.14.1",
@@ -1644,6 +1634,12 @@
       "ref": "pkg:nuget/Microsoft.CodeAnalysis.CSharp@4.8.0",
       "dependsOn": [
         "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+      "dependsOn": [
+        "pkg:nuget/Microsoft.CodeAnalysis.Analyzers@3.3.4"
       ]
     },
     {
@@ -1745,16 +1741,6 @@
       ]
     },
     {
-      "ref": "pkg:nuget/protobuf-net.Core@3.1.33",
-      "dependsOn": []
-    },
-    {
-      "ref": "pkg:nuget/protobuf-net@3.1.33",
-      "dependsOn": [
-        "pkg:nuget/protobuf-net.Core@3.1.33"
-      ]
-    },
-    {
       "ref": "pkg:nuget/QLNet@1.13.1",
       "dependsOn": []
     },
@@ -1841,6 +1827,20 @@
     {
       "ref": "pkg:nuget/System.Windows.Extensions@8.0.0",
       "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/fasterflect@3.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/protobuf-net.Core@3.1.33",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/protobuf-net@3.1.33",
+      "dependsOn": [
+        "pkg:nuget/protobuf-net.Core@3.1.33"
+      ]
     }
   ]
 }
