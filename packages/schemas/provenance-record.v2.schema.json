@@ -20,12 +20,35 @@
     "validation_status"
   ],
   "properties": {
-    "contract_id": {"const": "provenance-record"},
-    "contract_version": {"const": "2"},
-    "artifact_id": {"type": "string", "minLength": 1},
-    "artifact_type": {"type": "string", "minLength": 1},
-    "source_artifacts": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
-    "source_hashes": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}},
+    "contract_id": {
+      "const": "provenance-record"
+    },
+    "contract_version": {
+      "const": "2"
+    },
+    "artifact_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifact_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "source_hashes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^sha256:[0-9a-f]{64}$"
+      }
+    },
     "runtime_identity": {
       "type": "object",
       "additionalProperties": false,
@@ -40,21 +63,65 @@
         "runtime_assembly_count"
       ],
       "properties": {
-        "engine_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
-        "runtime_overlay_identity": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
-        "mode": {"const": "DETERMINISTIC_CHECKOUT_TIME_NO_FORK_NO_GITLINK_CHANGE"},
-        "patch_script_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
-        "patched_graph_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
-        "launcher_assembly_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
-        "runtime_assembly_manifest_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
-        "runtime_assembly_count": {"type": "string", "pattern": "^(?:[3-9]|[1-9][0-9]+)$"}
+        "engine_revision": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "runtime_overlay_identity": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "mode": {
+          "const": "DETERMINISTIC_CHECKOUT_TIME_NO_FORK_NO_GITLINK_CHANGE"
+        },
+        "patch_script_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "patched_graph_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "launcher_assembly_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "runtime_assembly_manifest_hash": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "runtime_assembly_count": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$"
+        }
       }
     },
-    "output_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
-    "code_revision": {"type": "string", "minLength": 1},
-    "config_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
-    "generated_at": {"type": "string", "minLength": 1},
-    "research_only": {"const": true},
-    "validation_status": {"enum": ["PASS_REVIEW_ONLY", "FAIL_REQUIRES_REPAIR", "BLOCKED_INSUFFICIENT_EVIDENCE", "UNKNOWN"]}
+    "output_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "code_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "config_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "generated_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "research_only": {
+      "const": true
+    },
+    "validation_status": {
+      "enum": [
+        "PASS_REVIEW_ONLY",
+        "FAIL_REQUIRES_REPAIR",
+        "BLOCKED_INSUFFICIENT_EVIDENCE",
+        "UNKNOWN"
+      ]
+    }
   }
 }
