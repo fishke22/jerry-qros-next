@@ -1,4 +1,5 @@
 import json
+import re
 import unittest
 from pathlib import Path
 
@@ -32,6 +33,10 @@ class Phase3BContractTests(unittest.TestCase):
             "runtime_assembly_manifest_hash",
             "runtime_assembly_count",
         })
+        count_pattern = overlay["properties"]["runtime_assembly_count"]["pattern"]
+        self.assertIsNone(re.fullmatch(count_pattern, "2"))
+        self.assertIsNotNone(re.fullmatch(count_pattern, "3"))
+        self.assertIsNotNone(re.fullmatch(count_pattern, "191"))
 
     def test_v2_provenance_contract_binds_runtime_identity(self):
         schema = self.load("packages/schemas/provenance-record.v2.schema.json")
@@ -39,10 +44,17 @@ class Phase3BContractTests(unittest.TestCase):
         runtime = schema["properties"]["runtime_identity"]
         self.assertFalse(runtime["additionalProperties"])
         self.assertIn("runtime_overlay_identity", runtime["required"])
+        count_pattern = runtime["properties"]["runtime_assembly_count"]["pattern"]
+        self.assertIsNone(re.fullmatch(count_pattern, "1"))
+        self.assertIsNotNone(re.fullmatch(count_pattern, "3"))
 
     def test_manifest_registers_v1_and_v2_backtest_contracts(self):
         manifest = self.load("packages/contracts/contract-manifest.json")
-        versions = {item["version"] for item in manifest["contracts"] if item["contract_id"] == "lean-backtest-result"}
+        versions = {
+            item["version"]
+            for item in manifest["contracts"]
+            if item["contract_id"] == "lean-backtest-result"
+        }
         self.assertEqual(versions, {"1", "2"})
 
 
