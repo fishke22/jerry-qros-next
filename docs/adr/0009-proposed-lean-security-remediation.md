@@ -1,20 +1,21 @@
 # ADR-0009 — Proposed LEAN security-remediation decision
 
-- Status: ACCEPTED RESEARCH DECISION / OPTION A / HARD STOP ACTIVE
+- Status: SUPERSEDED BY ADR-0010 / HISTORICAL OPTION A DECISION
 - Date: 2026-09-01
 - Evidence: Phase 3C exact-pinned NuGet audit
-- Approval scope: Option A only; no architecture amendment, source patch, fork, gitlink change, runtime promotion, merge, Phase 4, Yuanta, live trading, packaging, or release authorization
+- Historical approval scope: Option A only at the Phase 3C checkpoint
+- Superseded: 2026-09-01
 
 ## Finding
 
-The blocking dependency graph reduces to two source boundaries:
+The blocking dependency graph reduced to two source boundaries:
 
-1. Compression: DotNetZip 1.16.0 also brings the vulnerable System.Drawing.Common 4.7.0 chain.
-2. Messaging: NetMQ 4.0.1.6 brings the vulnerable ServiceModel/WinHttpHandler chain.
+1. Compression: DotNetZip 1.16.0 also brought the vulnerable System.Drawing.Common 4.7.0 chain.
+2. Messaging: NetMQ 4.0.1.6 brought the vulnerable ServiceModel/WinHttpHandler chain.
 
-The current official LEAN master still contains both root conditions. There is no demonstrated standard-Launcher build that excludes both without changing source/dependency resolution.
+At the Phase 3C checkpoint, official LEAN master still contained both root conditions and no demonstrated standard-Launcher build excluded both without changing source/dependency resolution.
 
-## Options
+## Options considered at that checkpoint
 
 ### A — Wait for official LEAN remediation
 
@@ -26,26 +27,20 @@ Keep Phase 3B blocked and periodically re-check official LEAN master/issue #8795
 
 ### B — Authorize a research-only upstream-aligned patch experiment
 
-In a separate non-promotable branch, evaluate:
-- complete migration of remaining DotNetZip/Ionic.Zip use to runtime compression; and
-- a modern NetMQ dependency or a Messaging-project reduction that removes the obsolete ServiceModel chain.
+In a separate non-promotable branch, evaluate dependency/source remediation with complete transitive SBOM/license review and deterministic regression.
 
-The experiment would need complete transitive SBOM/license review and the existing Phase 3B deterministic regression plus targeted compression/messaging tests.
-
-**Risk:** creates an effective QROS-maintained LEAN variant.
+**Risk:** could create an effective QROS-maintained LEAN variant.
 **Maintenance burden:** high.
-**Architecture drift:** yes; explicit approval required before any implementation.
+**Architecture drift:** requires explicit approval.
 
-### C — Warning suppression or drop-in DotNetZip fork
+### C — Warning suppression or unreviewed drop-in fork
 
 REJECT.
 
-## Decision
+## Historical decision
 
-**Option A is accepted.**
+Option A was accepted for the Phase 3C checkpoint. That decision did not authorize an architecture amendment, source patch, fork, gitlink change, runtime promotion, Phase 4, Yuanta integration, live trading, packaging, or release.
 
-Remain on the current exact LEAN pin and keep the Phase 3 security hard stop active until an official LEAN revision satisfies the established remediation gate and passes independent QROS re-validation.
+## Supersession
 
-This acceptance records the selected research disposition only. It does **not** approve an architecture amendment and does **not** authorize Option B, any LEAN source/dependency modification, PR #6 or PR #7 merge, runtime promotion, Phase 4, Yuanta integration, live trading, packaging, or release.
-
-If schedule pressure later justifies Option B, it still requires a separate explicit user architecture authorization before any source/dependency modification.
+A later explicit Phase 3D architecture decision, ADR-0010, superseded Option A after a deterministic checkout-time patch candidate completed full graph, license, CycloneDX, security, build, backtest, semantic-regression, and reproducibility review. The accepted solution does not change the LEAN gitlink or create a fork and is restricted to local Research/Backtest. The unpatched upstream runtime remains denied.

@@ -5,6 +5,9 @@ All notable QROS Next engineering milestones are recorded here.
 ## Unreleased
 
 ### Phase 3D
+- Merge closure: final accepted head `7b5f89a1972fd39abb78e0ad998eacf874e42739` passed independent same-head bit reproducibility and fresh PR #13 qros/security/LEAN workflows.
+- Integrated Phase 3B → 3C → 3D into `main` via PR #13 squash commit `744b53c18ab433346ab01fb26d35c55e5633ba43`; post-merge Git tree is identical to accepted head tree `303e1c043c2e56093641073ab19156f46028acd1`.
+- Closed historical stacked PRs #6, #7 and #11 without merge; their records remain available for traceability.
 - Accepted the deterministic checkout-time LEAN security patch as the local Research/Backtest runtime overlay only.
 - Kept the exact upstream LEAN gitlink unchanged and kept the unpatched upstream runtime denied.
 - Frozen and validated the patched Launcher NuGet graph (55 packages / 19 projects), license evidence, and dedicated CycloneDX SBOM.
