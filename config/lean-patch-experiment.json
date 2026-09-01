@@ -1,7 +1,7 @@
 {
   "experiment_version": 1,
   "phase": "Phase 3D — LEAN security patch experiment",
-  "status": "DEPENDENCY_CANDIDATES_PASS_PATH_HARDENING_REPAIR_PENDING_CI",
+  "status": "RESEARCH_CANDIDATE_PASS_PROMOTION_REVIEW_REQUIRED",
   "research_only": true,
   "user_authorization": "Option B",
   "base_lean_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
@@ -125,7 +125,7 @@
   },
   "source_hardening_candidates": {
     "COMPRESSION_PATH_TRAVERSAL": {
-      "status": "REPAIR_PENDING_CI",
+      "status": "RESEARCH_CANDIDATE_PASS",
       "rule": "CA5389",
       "source_path": "Compression/Compression.cs",
       "modified_paths": [
@@ -149,11 +149,15 @@
       "covered_methods": [
         "Compression.Unzip(string,string,bool overwrite=true)",
         "Compression.UnzipToFolder(byte[],string) via Stream overload"
-      ]
+      ],
+      "ci_run_id": 33454221962,
+      "ci_job_id": 99690600873,
+      "forced_rebuild_ca5389": "ABSENT",
+      "malicious_zip_regression": "PASS_BOTH_UNZIP_AND_UNZIP_TO_FOLDER"
     }
   },
   "final_combined_candidate": {
-    "status": "REPAIR_PENDING_CI",
+    "status": "RESEARCH_CANDIDATE_PASS_NOT_PROMOTABLE",
     "applies": [
       "MESSAGING_NETMQ_4_0_4_3",
       "COMPRESSION_SYSTEM_IO_MIGRATION",
@@ -167,6 +171,46 @@
       "QROS_COMPRESSION_COMPAT_SMOKE_PASS",
       "MALICIOUS_ZIP_REJECTED_BY_BOTH_EXTRACTION_PATHS",
       "DETERMINISTIC_BACKTEST_PASS"
+    ],
+    "ci_run_id": 33454221962,
+    "ci_job_id": 99690600933,
+    "vulnerable_package_audit": "NO_VULNERABLE_PACKAGES_REPORTED_BY_CONFIGURED_NUGET_SOURCES",
+    "normalized_backtest_hash": "sha256:2fd54e0cc4096b713473cc820fa7525fdfdc617e77531b766dcc6fd37a9590f8",
+    "quant_statistics": {
+      "qros_rows": "5",
+      "qros_sum": "510.0000",
+      "qros_last": "104.0000",
+      "total_orders": "0"
+    },
+    "path_traversal_regression": "PASS_BOTH_EXTRACTION_APIS",
+    "promotion_blockers": [
+      "COMPATIBILITY_BRIDGE_IS_QROS_OWNED_NOT_UPSTREAM_LEAN",
+      "ZIP_ENTRY_CONTENT_IS_BUFFERED_FULLY_IN_MEMORY_IN_COMPATIBILITY_BRIDGE",
+      "FULL_LEAN_COMPRESSION_REGRESSION_SUITE_NOT_YET_EXECUTED",
+      "WINDOWS_11_X64_PATCHED_ENGINE_SMOKE_NOT_YET_EXECUTED",
+      "TRANSITIVE_LICENSE_AND_SBOM_FOR_PATCHED_GRAPH_NOT_YET_FROZEN",
+      "CANONICAL_GITLINK_REMAINS_UNPATCHED_UPSTREAM_REVISION"
+    ]
+  },
+  "promotion_review": {
+    "status": "NOT_APPROVED",
+    "runtime_promotion_allowed": false,
+    "source_review_findings": [
+      {
+        "id": "ZIP_ENTRY_FULL_MEMORY_BUFFERING",
+        "severity": "REVIEW_REQUIRED",
+        "location": "QROS research compatibility bridge ZipFile.Load",
+        "effect": "Each ZIP entry is copied into a MemoryStream and retained as byte[]; large archives or highly compressed entries can create unbounded memory pressure.",
+        "disposition": "BLOCK_PROMOTION_UNTIL_STREAMING_OR_EXPLICIT_LIMITS_AND_TESTS"
+      }
+    ],
+    "required_next_evidence": [
+      "PATCHED_GRAPH_CYCLONEDX_TRANSITIVE_SBOM",
+      "PATCHED_GRAPH_LICENSE_REVIEW",
+      "LEAN_COMPRESSION_TARGETED_REGRESSION_TESTS",
+      "RESOURCE_LIMIT_ZIP_BOMB_TESTS",
+      "WINDOWS_11_X64_PATCHED_ENGINE_SMOKE",
+      "INDEPENDENT_ARCHITECTURE_PROMOTION_ADR"
     ]
   }
 }

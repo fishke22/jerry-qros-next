@@ -40,6 +40,12 @@ jobs:
           test "$(dotnet --version)" = "10.0.400"
           python scripts/validate_lean_pin.py --require-populated
           python scripts/validate_lean_patch_experiment.py
+      - name: Print Phase 3D canonical SHA256 evidence
+        shell: bash
+        run: |
+          for path in             .github/workflows/lean-patch-experiment.yml             .github/workflows/phase0-policy.yml             CHANGELOG.md             config/lean-patch-experiment.json             config/lean-remediation-research.json             docs/adr/0010-option-b-lean-patch-experiment.md             docs/adr/0011-phase-3d-promotion-denied.md             docs/source-evidence/phase-3d-lean-patch-experiment.md             integration/lean/QrosCompressionCompatSmoke/Program.cs             integration/lean/QrosCompressionCompatSmoke/QrosCompressionCompatSmoke.csproj             scripts/apply_lean_patch_experiment.py             scripts/validate_lean_patch_experiment.py             scripts/validate_lean_remediation_research.py             src/qros_lean_patch_experiment.py             tests/test_lean_patch_experiment.py             tests/test_lean_remediation_research.py; do
+            git show "HEAD:$path" | sha256sum | sed "s#  -#  $path#"
+          done
       - name: Apply isolated Messaging candidate
         run: python scripts/apply_lean_patch_experiment.py --candidate messaging-netmq-4.0.4.3
       - name: Verify source-change scope

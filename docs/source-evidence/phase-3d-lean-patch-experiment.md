@@ -80,3 +80,36 @@ The repaired experiment:
 - applies the same forced analyzer gate to the combined candidate.
 
 Until the repaired CI passes, source hardening and the final combined candidate remain PENDING.
+
+## Repaired CA5389 and combined result
+
+Final repaired experiment run `33454221962`:
+
+- Messaging job `99690600683` — SUCCESS.
+- Compression job `99690600873` — SUCCESS.
+- Combined job `99690600933` — SUCCESS.
+
+Compression job evidence:
+- patched Launcher dependency audit removed DotNetZip/System.Drawing HIGH/CRITICAL blockers while leaving the independent Messaging blockers for isolated attribution;
+- patched LEAN Launcher build — PASS;
+- forced `dotnet clean` + `-t:Rebuild` analyzer checks — PASS with no CA5389 match;
+- malicious `../escape.txt` regression — PASS through both `Compression.Unzip` and `Compression.UnzipToFolder`;
+- QROS compression compatibility smoke — PASS;
+- deterministic two-run backtest — PASS.
+
+Combined job evidence:
+- `dotnet list ... package --vulnerable --include-transitive`: **no vulnerable packages reported by the configured NuGet sources**;
+- patched LEAN Launcher build — PASS;
+- compression compatibility/path-traversal smoke — PASS;
+- QROS synthetic algorithm build — PASS;
+- deterministic two-run backtest — PASS;
+- normalized hash: `sha256:2fd54e0cc4096b713473cc820fa7525fdfdc617e77531b766dcc6fd37a9590f8`;
+- quant statistics unchanged: rows 5 / sum 510.0000 / last 104.0000 / total orders 0.
+
+The original pinned LEAN integration remained functionally green and was still blocked by ADR-0007 as designed. The experiment does not alter the canonical gitlink.
+
+## Promotion review finding
+
+The QROS research compatibility bridge is intentionally a narrow compatibility device, not an upstream-quality implementation. Its `ZipFile.Load` copies every ZIP entry into a `MemoryStream` and retains the resulting `byte[]`. This creates an unbounded-memory/resource-exhaustion concern for large or highly compressed archives and changes behavior from a streaming archive API.
+
+Therefore Phase 3D can be accepted as a **research candidate**, but the patch is **not promotable** yet. Promotion requires a streaming or explicitly bounded design, ZIP-bomb/resource tests, targeted LEAN compression regressions, patched-graph SBOM/license evidence, Windows 11 x64 validation, and a separate promotion ADR.

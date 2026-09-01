@@ -1,7 +1,7 @@
 {
   "research_version": 1,
   "phase": "Phase 3C — LEAN Dependency Security Remediation Research",
-  "status": "OPTION_B_RESEARCH_PATCH_EXPERIMENT_AUTHORIZED",
+  "status": "OPTION_B_EXPERIMENT_PASS_PROMOTION_HARD_STOP_ACTIVE",
   "evidence_date": "2026-09-01",
   "research_only": true,
   "architecture_amendment_approved": true,
@@ -87,14 +87,16 @@
   ],
   "next_gate": {
     "research_evidence_accepted": true,
-    "security_remediation_available": false,
+    "security_remediation_available": true,
     "hard_stop_active": true,
     "architecture_amendment_approved": true,
     "runtime_promotion_allowed": false,
     "required_user_decision_only_if_unblocking_before_upstream": [
       "AUTHORIZE_RESEARCH_ONLY_UPSTREAM_ALIGNED_LEAN_PATCH_EXPERIMENT",
       "OR_KEEP_BLOCKED_AND_WAIT_FOR_OFFICIAL_LEAN_REMEDIATION"
-    ]
+    ],
+    "security_remediation_scope": "RESEARCH_PATCH_CANDIDATE_ONLY",
+    "promotion_review_required": true
   },
   "root_cause_clusters": [
     {
