@@ -11,6 +11,7 @@ on:
       - 'scripts/validate_lean_patch_audit.py'
       - 'scripts/validate_lean_nuget_graph.py'
       - 'scripts/validate_lean_nuget_licenses.py'
+      - 'scripts/validate_lean_nuget_sbom.py'
       - 'scripts/run_lean_synthetic_backtest.py'
       - 'scripts/validate_lean_semantic_regression.py'
       - 'integration/lean/**'
@@ -63,6 +64,8 @@ jobs:
         run: python scripts/validate_lean_nuget_graph.py --assets external/lean/Launcher/obj/project.assets.json --expected supply-chain/lean/launcher-patched-nuget-graph.json
       - name: Verify patched Launcher NuGet licenses
         run: python scripts/validate_lean_nuget_licenses.py --assets external/lean/Launcher/obj/project.assets.json --expected-metadata supply-chain/lean/launcher-patched-nuget-license-metadata.json --manual-dispositions config/lean-nuget-license-dispositions.json
+      - name: Verify patched Launcher CycloneDX SBOM
+        run: python scripts/validate_lean_nuget_sbom.py --graph supply-chain/lean/launcher-patched-nuget-graph.json --metadata supply-chain/lean/launcher-patched-nuget-license-metadata.json --manual-dispositions config/lean-nuget-license-dispositions.json --expected supply-chain/lean/launcher-patched-bom.cdx.json
       - name: Build patched LEAN Launcher
         run: dotnet build external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --configuration Release --nologo --no-restore -p:ContinuousIntegrationBuild=true
       - name: Audit patched LEAN dependency graph

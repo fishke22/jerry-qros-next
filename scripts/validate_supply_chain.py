@@ -50,8 +50,22 @@ def validate_source_and_provenance():
  e=load("supply-chain/build-environment.json")
  if e.get("paid_compute_allowed") is not False or e.get("product_build_exists") is not False:fail("hard gate drift")
  if e.get("quant_engine",{}).get("revision")!="b692bf4788e8b54fc23bdcb5659666bf055ce89f":fail("LEAN build evidence drift")
+def validate_phase3d_lean_evidence():
+ g=load("supply-chain/lean/launcher-patched-nuget-graph.json");m=load("supply-chain/lean/launcher-patched-nuget-license-metadata.json");d=load("config/lean-nuget-license-dispositions.json");b=load("supply-chain/lean/launcher-patched-bom.cdx.json")
+ if g.get("package_count")!=55 or g.get("project_count")!=19:fail("Phase 3D NuGet graph count drift")
+ ids={n["identity"] for t in g["targets"] for n in t["nodes"] if n.get("type")=="package"}
+ if "ProDotNetZip/1.20.0" not in ids or any(x.split("/",1)[0].lower() in ("dotnetzip","netmq") for x in ids):fail("Phase 3D patched package set drift")
+ if m.get("package_count")!=55 or {x["identity"] for x in m["packages"]}!=ids:fail("Phase 3D license metadata coverage drift")
+ if d.get("unknown_is_deny") is not True or d.get("package_release_authorized") is not False:fail("Phase 3D license policy drift")
+ manual={x["identity"] for x in m["packages"] if x.get("requires_manual_review")}
+ rows=d.get("dispositions",[])
+ if len(rows)!=11 or {x.get("identity") for x in rows}!=manual or any(x.get("review_status")!="ACCEPTED" or not x.get("spdx_expression") for x in rows):fail("Phase 3D manual license disposition drift")
+ if len(b.get("components",[]))!=55:fail("Phase 3D patched SBOM count drift")
+ purls={x.get("purl") for x in b["components"]}
+ expected={"pkg:nuget/"+x.rsplit("/",1)[0]+"@"+x.rsplit("/",1)[1] for x in ids}
+ if purls!=expected:fail("Phase 3D patched SBOM package coverage drift")
 def main():
- for f in (validate_dependency_registry,validate_lockfile,validate_lean_gitlink,validate_sbom,validate_license_manifest,validate_source_and_provenance):f();print("PASS",f.__name__)
+ for f in (validate_dependency_registry,validate_lockfile,validate_lean_gitlink,validate_sbom,validate_license_manifest,validate_source_and_provenance,validate_phase3d_lean_evidence):f();print("PASS",f.__name__)
  print("QROS Phase 3A supply-chain gate: PASS");return 0
 if __name__=="__main__":
  try:raise SystemExit(main())
