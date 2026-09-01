@@ -3,18 +3,19 @@ import unittest
 from scripts.validate_lean_patch_audit import validate_audit_documents
 
 
-def doc(packages=None, *, framework="net10.0", problems=None):
-    framework_node = {
-        "framework": framework,
-        "topLevelPackages": packages or [],
-        "transitivePackages": [],
+def doc(packages=None, *, framework="net10.0", problems=None, include_framework=True):
+    project = {
+        "path": "external/lean/Launcher/QuantConnect.Lean.Launcher.csproj",
     }
+    if include_framework:
+        project["frameworks"] = [{
+            "framework": framework,
+            "topLevelPackages": packages or [],
+            "transitivePackages": [],
+        }]
     result = {
         "version": 1,
-        "projects": [{
-            "path": "external/lean/Launcher/QuantConnect.Lean.Launcher.csproj",
-            "frameworks": [framework_node],
-        }],
+        "projects": [project],
     }
     if problems is not None:
         result["problems"] = problems
@@ -26,6 +27,14 @@ class LeanPatchAuditEvidenceTests(unittest.TestCase):
         pairs, severe = validate_audit_documents(
             doc([{"id": "ProDotNetZip", "resolvedVersion": "1.20.0"}]),
             doc([]),
+        )
+        self.assertIn(("ProDotNetZip", "1.20.0"), pairs)
+        self.assertEqual(severe, [])
+
+    def test_clean_vulnerable_output_may_omit_frameworks(self):
+        pairs, severe = validate_audit_documents(
+            doc([{"id": "ProDotNetZip", "resolvedVersion": "1.20.0"}]),
+            doc(include_framework=False),
         )
         self.assertIn(("ProDotNetZip", "1.20.0"), pairs)
         self.assertEqual(severe, [])
