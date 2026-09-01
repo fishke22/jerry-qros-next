@@ -114,7 +114,7 @@ jobs:
       - name: Verify Phase 3B quantitative semantic regression baseline
         env:
           PYTHONPATH: src
-        run: python scripts/validate_lean_semantic_regression.py "$RUNNER_TEMP/qros-phase3e/lean-backtest-result.v2.json"
+        run: python scripts/validate_lean_semantic_regression.py "$RUNNER_TEMP/qros-phase3e/lean-backtest-result.v3.json"
       - name: Confirm accepted runtime scope remains restricted
         run: |
           python scripts/validate_lean_security.py --enforce-runtime-promotion
