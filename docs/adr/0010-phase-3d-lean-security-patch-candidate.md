@@ -73,3 +73,13 @@ Accept the deterministic Phase 3D checkout-time security patch as the QROS LEAN 
 This boolean is valid only together with the restricted runtime scope above. The unpatched upstream LEAN runtime remains denied. Any drift in the exact LEAN gitlink, patch anchors, resolved graph, license disposition, SBOM, vulnerability audit, quantitative regression, or hard-gate state returns the runtime to DENY.
 
 This acceptance is not a production-readiness claim.
+
+## Final merge closure — 2026-09-01
+
+The final accepted source head was `7b5f89a1972fd39abb78e0ad998eacf874e42739`. Independent same-head jobs `99846751986` and `99847616213` produced identical algorithm assembly `sha256:e05ef74439000c2d1dd93cc8c5335576bed7a3fdac653172f40ba05c0d6bf399`, normalized result `sha256:832995016f9adaa7171424e509a7004284a13b9d0c85fed5101f29e3623aead2`, semantic regression `sha256:d786b5911e0f9e9d2c4959cf3aa7f87d92891c1370fbb276cbf7fff3bc2d15c1`, input `sha256:3921a0ab8ed226e6a404aca6024cf28e91100f97fb51766ecd78151c9e063e44`, config `sha256:4f2e7517fbf5dae1b6fe2275ce3e7fe8873d5209f7fa5b685a2f6cef9ff7e5b8`, and the same quantitative statistics.
+
+Final integration PR #13 re-ran `qros-gate` run `33506997060`, `lean-security-research` run `33506996973`, and `lean-integration` run `33506996908` / job `99853305836`; all succeeded.
+
+GitHub rejected merge method `merge` with HTTP 405, so PR #13 was squash-merged with expected-head protection. The Phase 3 integration commit is `744b53c18ab433346ab01fb26d35c55e5633ba43`. Post-merge verification proved that this commit and the accepted source head share the identical Git tree `303e1c043c2e56093641073ab19156f46028acd1`. Historical PRs #6, #7 and #11 are closed without merge.
+
+Phase 3 is merge-complete only for `LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY_WITH_PHASE3D_PATCH`. The unpatched runtime and all packaging, release, Yuanta and live-trading gates remain denied.
