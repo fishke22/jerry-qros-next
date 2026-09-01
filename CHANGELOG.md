@@ -4,6 +4,25 @@ All notable QROS Next engineering milestones are recorded here.
 
 ## Unreleased
 
+### Phase 3D
+- Accepted the deterministic checkout-time LEAN security patch as the local Research/Backtest runtime overlay only.
+- Kept the exact upstream LEAN gitlink unchanged and kept the unpatched upstream runtime denied.
+- Frozen and validated the patched Launcher NuGet graph (55 packages / 19 projects), license evidence, and dedicated CycloneDX SBOM.
+- Passed exact-head governance/SHA/tests, patched Launcher build, HIGH/CRITICAL dependency audit, deterministic backtest, and Phase 3B semantic regression.
+- Kept packaging, release, Yuanta integration, and live trading hard-disabled.
+
+### Phase 3C
+- Started fail-closed LEAN dependency-remediation research on a stacked branch.
+- Recorded current official upstream master/issue/PR evidence without changing the LEAN pin.
+- Added an exact-pinned NuGet direct/transitive vulnerability audit workflow.
+- Mapped blockers to Compression/DotNetZip and Messaging/NetMQ root-cause clusters.
+- Marked Phase 3C research accepted while keeping LEAN runtime promotion hard-blocked.
+
+### Phase 3B
+- Added a QROS-owned C# synthetic algorithm and five-row local custom-data fixture.
+- Added a two-run deterministic LEAN backtest normalizer with provenance and validation outputs.
+- Added lean-backtest-result/v1 as a research-only, non-gate-opening contract.
+
 ### Phase 3A
 - Pinned QuantConnect LEAN as the sole canonical quant engine using an external gitlink/submodule.
 - Pinned .NET SDK 10.0.400 and actions/setup-dotnet v6.0.0 by immutable revision.

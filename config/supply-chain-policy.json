@@ -19,7 +19,9 @@
     "unspecified_revision": "DENY_INTRODUCTION",
     "paid_or_metered_unknown_cost": "DENY",
     "agpl_proprietary_restrictive_or_unclear_core": "DENY_PENDING_REVIEW",
-    "lockfile_required_when_package_ecosystem_is_introduced": true
+    "lockfile_required_when_package_ecosystem_is_introduced": true,
+    "known_high_or_critical_vulnerability": "DENY_RUNTIME_PROMOTION",
+    "incomplete_transitive_sbom": "DENY_RUNTIME_PROMOTION"
   },
   "github_actions": {
     "full_commit_sha_required": true,

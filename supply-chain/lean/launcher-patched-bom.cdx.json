@@ -1,0 +1,1846 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.7",
+  "version": 1,
+  "metadata": {
+    "component": {
+      "type": "application",
+      "bom-ref": "pkg:github/QuantConnect/Lean@b692bf4788e8b54fc23bdcb5659666bf055ce89f#Launcher",
+      "name": "QuantConnect LEAN Launcher — QROS Phase 3D patched checkout-time runtime",
+      "version": "b692bf4788e8b54fc23bdcb5659666bf055ce89f+qros-phase3d",
+      "properties": [
+        {
+          "name": "qros:base-lean-gitlink",
+          "value": "b692bf4788e8b54fc23bdcb5659666bf055ce89f"
+        },
+        {
+          "name": "qros:runtime-scope",
+          "value": "LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY"
+        },
+        {
+          "name": "qros:patch-mode",
+          "value": "DETERMINISTIC_CHECKOUT_TIME_NO_FORK_NO_GITLINK_CHANGE"
+        },
+        {
+          "name": "qros:canonical-graph-sha256",
+          "value": "sha256:165ba17fec034b417f4ae91b86544cbe9b2002f1c561f4908b0d43a76875f235"
+        },
+        {
+          "name": "qros:package-authorized",
+          "value": "false"
+        },
+        {
+          "name": "qros:release-authorized",
+          "value": "false"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Accord.Fuzzy@3.6.0",
+      "name": "Accord.Fuzzy",
+      "version": "3.6.0",
+      "purl": "pkg:nuget/Accord.Fuzzy@3.6.0",
+      "licenses": [
+        {
+          "expression": "LGPL-2.1-or-later"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "jQGcuUBReN7odJA4OTixVyVJujNW4w7VUZbEqWb9KZ7mYDJDdZUoE+FS1Kx89pIboFQQK7WFxGWSrKwE96g3vw=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:0a784400b050616b79a32456edddaff09a11e16453731ce1b464d92bacf71121"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "MANUAL_REVIEWED"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Accord.MachineLearning@3.6.0",
+      "name": "Accord.MachineLearning",
+      "version": "3.6.0",
+      "purl": "pkg:nuget/Accord.MachineLearning@3.6.0",
+      "licenses": [
+        {
+          "expression": "LGPL-2.1-or-later"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "R9iqbkXy4vqXgbJtHV2eW79i7pi8HjZVyG+0WEbbHvNft/rkExN7/o6I53w0GlKQEUPVu12Gr1e6XLBEqw7rLw=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:63a1383c0a76b074332e4cb5be12e006b02d60fdb3e6698619054c7092279bce"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "MANUAL_REVIEWED"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Accord.Math@3.6.0",
+      "name": "Accord.Math",
+      "version": "3.6.0",
+      "purl": "pkg:nuget/Accord.Math@3.6.0",
+      "licenses": [
+        {
+          "expression": "LGPL-2.1-or-later"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "mGhAp+ItUEFI/HUb8krKEwo2tB4SpVpTvZI5U9X+a5WKm8OSSW4Ern1fGq1jm6PXFbhFfhvLWC1WANc3fjrg0Q=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:d17ea7c30292f5f104b69155273e7e78754a2809423f2bc8b6056bb7817f402a"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "MANUAL_REVIEWED"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Accord.Statistics@3.6.0",
+      "name": "Accord.Statistics",
+      "version": "3.6.0",
+      "purl": "pkg:nuget/Accord.Statistics@3.6.0",
+      "licenses": [
+        {
+          "expression": "LGPL-2.1-or-later"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "x5ZlX4bkC+OBPGG1cWt7lAWh5YeNadJ3vkfEgNv39EptsBr9Jj3ddRbfSce3oO5vQ6Q2RrtQyekNAL5d7pOkzA=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:6029aae2d5660c67fd48d045a81c39cd8cbfc0f34362d97d9f986ba9e25658c6"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "MANUAL_REVIEWED"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Accord@3.6.0",
+      "name": "Accord",
+      "version": "3.6.0",
+      "purl": "pkg:nuget/Accord@3.6.0",
+      "licenses": [
+        {
+          "expression": "LGPL-2.1-or-later"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "xJyL8zhWcfb7eYp4EiXamEkUo3dAvAriOQTWTgulP31wH7BCZqp/rI62+mPn29xcCH8a0iCKRxjEh6p0NsIG1w=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:3f433a77436fa69c74b196791ca3e98e06ff2ec4182a5ef561116d1d35c970a7"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "MANUAL_REVIEWED"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/CloneExtensions@1.3.0",
+      "name": "CloneExtensions",
+      "version": "1.3.0",
+      "purl": "pkg:nuget/CloneExtensions@1.3.0",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "4YL85qfQuWplSQCIML3qAYb4dOHtujD2hCP0JVvai+jQGiM4HLZ8qFipoMwNOA8k16lTX/MaRVULb0kKAbfoOA=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:9817def373cf40edab6bdeb1874ccb0caa758e6791094a02cbd9493ac0d3465b"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "MANUAL_REVIEWED"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/CsvHelper@19.0.0",
+      "name": "CsvHelper",
+      "version": "19.0.0",
+      "purl": "pkg:nuget/CsvHelper@19.0.0",
+      "licenses": [
+        {
+          "expression": "MS-PL OR Apache-2.0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "vUHF8wPOVvdtUQ4sXQI62jEIGcz5p7MG3Qf4Hazg+3EZQFh+UoTASEG0a1tsGmhNsHZ/Y+qRO+SgLMZO8jNcSg=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:776de2f7f4a226166cb92e379127454885be9f2e6bdd2df2736db870f4ab074f"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/DynamicInterop@0.9.1",
+      "name": "DynamicInterop",
+      "version": "0.9.1",
+      "purl": "pkg:nuget/DynamicInterop@0.9.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "n21+Hd+tceX8lgaOosPV+Pne+YqnZUd5RLW3OhnsVxWRzYXiAIAKmKweHIePYeY+fmcn3N5tjkJyQUccFuL3bg=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:0d2f00c136cc156a72bc9bccdf9d207e64762a1dba808f446720f77e8de8af77"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "MANUAL_REVIEWED"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/DynamicObj@2.0.0",
+      "name": "DynamicObj",
+      "version": "2.0.0",
+      "purl": "pkg:nuget/DynamicObj@2.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "26GDec7PIgj/vyRGk+Ijogk2PU24ltqy9s2fQudJtXik0nLU56Ydq/XXNYWMRBxn9HtFiSFigOMQ3yZ2HavnVA=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:b7874118e8101384e48a3f28ba5151a79049f1fb2d4845ce35036343d52e6d2b"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/FSharp.Core@8.0.400",
+      "name": "FSharp.Core",
+      "version": "8.0.400",
+      "purl": "pkg:nuget/FSharp.Core@8.0.400",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "kHMdDDmlZl98tujgHCmL8/HNH9VKbxsRMC9s7wbwr4noR40SSa5D4d00yF8cMK52s8jabVuiLLcrUw9r+PkKDQ=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:29b732a68f26acb1e6f327455a37e50f4a244707220dbf1e745daaddb8826e8f"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Giraffe.ViewEngine.StrongName@2.0.0-alpha1",
+      "name": "Giraffe.ViewEngine.StrongName",
+      "version": "2.0.0-alpha1",
+      "purl": "pkg:nuget/Giraffe.ViewEngine.StrongName@2.0.0-alpha1",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "jGmYvcCyMTSF8DBdK7KGfkFILyaGAn1QAONpRPSNCXSVhp3RMRCvqsIQakvxfo6lPQFaP+AsvBtkJ1PSqdptKA=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:ee28f68a00d42276c63559e2e8d71fc88d6b245585a00265dbf4d21fbcbffb9d"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Humanizer.Core@2.14.1",
+      "name": "Humanizer.Core",
+      "version": "2.14.1",
+      "purl": "pkg:nuget/Humanizer.Core@2.14.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:9233ebeabcf74461613f4d3a71d503d0bfa8a7754e62fab83ace72110daf77e7"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/MathNet.Numerics@5.0.0",
+      "name": "MathNet.Numerics",
+      "version": "5.0.0",
+      "purl": "pkg:nuget/MathNet.Numerics@5.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "pg1W2VwaEQMAiTpGK840hZgzavnqjlCMTVSbtVCXVyT+7AX4mc1o89SPv4TBlAjhgCOo9c1Y+jZ5m3ti2YgGgA=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:cff33be848d7e0e8066f96fee7980adad223c7eff6f586f1e8221ce07a95467d"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/McMaster.Extensions.CommandLineUtils@2.6.0",
+      "name": "McMaster.Extensions.CommandLineUtils",
+      "version": "2.6.0",
+      "purl": "pkg:nuget/McMaster.Extensions.CommandLineUtils@2.6.0",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "paiRzqvqdSFdcWVTXn6SzphajrpjFM5ERiGlgccL5J2lgHbty068D63Maqmj0VTG0G9ciP2m/NSIgGnNv8WOLw=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:f60b376864c7cf1a398c97b9e10fcc907171adad429189d3bae5e18336424fba"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.AspNetCore.Html.Abstractions@2.2.0",
+      "name": "Microsoft.AspNetCore.Html.Abstractions",
+      "version": "2.2.0",
+      "purl": "pkg:nuget/Microsoft.AspNetCore.Html.Abstractions@2.2.0",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "Y4rs5aMEXY8G7wJo5S3EEt6ltqyOTr/qOeZzfn+hw/fuQj5GppGckMY5psGLETo1U9hcT5MmAhaT5xtusM1b5g=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:036b420e2fd08833239fcb50846e4f97f7241c2087a992e21227b06db2b72823"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "MANUAL_REVIEWED"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@8.0.0",
+      "name": "Microsoft.Bcl.AsyncInterfaces",
+      "version": "8.0.0",
+      "purl": "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@8.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "3WA9q9yVqJp222P3x1wYIGDAkpjAku0TMUaaQV22g6L67AI0LdOIrVS7Ht2vJfLHGSPVuqN94vIr15qn+HEkHw=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:a414ecfcf15d90be1f13152ad60651077c7511eec2857a7d6910f55df19af263"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.Bcl.HashCode@1.1.1",
+      "name": "Microsoft.Bcl.HashCode",
+      "version": "1.1.1",
+      "purl": "pkg:nuget/Microsoft.Bcl.HashCode@1.1.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "MalY0Y/uM/LjXtHfX/26l2VtN4LDNZ2OE3aumNOHDLsT4fNYy2hiHXI4CXCqKpNUNm7iJ2brrc4J89UdaL56FA=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:02403b9ba6b8db960d3d1ba49b069b2d38299523ffb66baabebc9468743d2deb"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.Analyzers@3.3.4",
+      "name": "Microsoft.CodeAnalysis.Analyzers",
+      "version": "3.3.4",
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis.Analyzers@3.3.4",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "AxkxcPR+rheX0SmvpLVIGLhOUXAKG56a64kV9VQZ4y9gR9ZmPXnqZvHJnmwLSwzrEP6junUF11vuc+aqo5r68g=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:cfbdf46a9f4efb7b98af9e46c4d98e9746e8ab2b979498ef21b2f1864799e749"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.CSharp.Workspaces@4.8.0",
+      "name": "Microsoft.CodeAnalysis.CSharp.Workspaces",
+      "version": "4.8.0",
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis.CSharp.Workspaces@4.8.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "3amm4tq4Lo8/BGvg9p3BJh3S9nKq2wqCXfS7138i69TUpo/bD+XvD0hNurpEBtcNZhi1FyutiomKJqVF39ugYA=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:bdb86c6da8371ccc0a29c52a816c5dbe9c9e834f8c27cd1cf3a7b80758f875cc"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.CSharp@4.8.0",
+      "name": "Microsoft.CodeAnalysis.CSharp",
+      "version": "4.8.0",
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis.CSharp@4.8.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "+3+qfdb/aaGD8PZRCrsdobbzGs1m9u119SkkJt8e/mk3xLJz/udLtS2T6nY27OTXxBBw10HzAbC8Z9w08VyP/g=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:0bb9543bcbb528c3c414b5e7596b11fb839abcef01a1867a10a85eb76a9a1a83"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+      "name": "Microsoft.CodeAnalysis.Common",
+      "version": "4.8.0",
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "/jR+e/9aT+BApoQJABlVCKnnggGQbvGh7BKq2/wI1LamxC+LbzhcLj4Vj7gXCofl1n4E521YfF9w0WcASGg/KA=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:e4fd91c91e17f4e35cbd96f8e69513326a27f50af4eade20a33c64deb60d6b48"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic.Workspaces@4.8.0",
+      "name": "Microsoft.CodeAnalysis.VisualBasic.Workspaces",
+      "version": "4.8.0",
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic.Workspaces@4.8.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "4fNpQX8LRV0ZCfB6+rr9s61zdhNpN6Bgow/kmvsO2Gm5KtzbOUPijbUZex26wJwRHyW+ZYoatTRd449A7+D3Wg=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:7c4941cd97f633aae957735c2f736f56a242af630f687cc0f456dae48d311e47"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic@4.8.0",
+      "name": "Microsoft.CodeAnalysis.VisualBasic",
+      "version": "4.8.0",
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic@4.8.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "kfHPh/etcWypMDYfHxgfitgJMhi986OFCICb76RPcA1Toordf6bBYEJytWr2L5CNdkXFWuw5qTkrlsktBav4VA=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:e438a0cf34c3ba5331349c1a365c9957c489645586d847e03e312a6c6e025f95"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis.Workspaces.Common@4.8.0",
+      "name": "Microsoft.CodeAnalysis.Workspaces.Common",
+      "version": "4.8.0",
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis.Workspaces.Common@4.8.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "LXyV+MJKsKRu3FGJA3OmSk40OUIa/dQCFLOnm5X8MNcujx7hzGu8o+zjXlb/cy5xUdZK2UKYb9YaQ2E8m9QehQ=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:e8aaf137e9e96d3054fee92e5c65251f0feb74933b3da6af254ec368837e8fc6"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.CodeAnalysis@4.8.0",
+      "name": "Microsoft.CodeAnalysis",
+      "version": "4.8.0",
+      "purl": "pkg:nuget/Microsoft.CodeAnalysis@4.8.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "g5eTgZVyBr4k1zxvJeVrJ1nDvBHrDt7XX2Uo7UWRoF9GdzOv9od4WtOeL1/e86ifgwX/H7H1Vs5u2OCdv0HYpQ=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:6f48a553b8f5a87e9f45fd4547846106e65df5d225e8f51668a68591cf3826c3"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.DotNet.Interactive.Documents@1.0.0-beta.24229.4",
+      "name": "Microsoft.DotNet.Interactive.Documents",
+      "version": "1.0.0-beta.24229.4",
+      "purl": "pkg:nuget/Microsoft.DotNet.Interactive.Documents@1.0.0-beta.24229.4",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "nA4hvUd6TZ4WZTMqivJcewDcoI3aVL/tI0MSV0GXSnfLEqjarRFqZcy5ikiequlHi7ztuQI7IMAgR1SUru0RSw=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:a542464ae89bd4a4c4b1ede227cd7290b500427efa4c186311c453e958bd5125"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.DotNet.Interactive.Formatting@1.0.0-beta.24229.4",
+      "name": "Microsoft.DotNet.Interactive.Formatting",
+      "version": "1.0.0-beta.24229.4",
+      "purl": "pkg:nuget/Microsoft.DotNet.Interactive.Formatting@1.0.0-beta.24229.4",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "j/bsDDHX9Pfn9vP7fpbwP93WgA4JFdFqMWUGVtr4u0AarDMRAWtsG+BpQZPb1Vpoj86bkrX/eBAEc7EE9cYPsg=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:f83ff592fcd2fae9ae2bfe7689f76fd55d028fdc434b626755d15997a4509c2f"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.DotNet.Interactive@1.0.0-beta.24229.4",
+      "name": "Microsoft.DotNet.Interactive",
+      "version": "1.0.0-beta.24229.4",
+      "purl": "pkg:nuget/Microsoft.DotNet.Interactive@1.0.0-beta.24229.4",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "y0OrHu7CZpH4KMqHO66NHklLN814s2D0jhW+ND2Lm+Guqe/vxXlth9dCZOrufYWcL85LXruijW81tlSmulpLYg=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:ebbe0a014d5ccdd44b430271b85a0333f6388eb079ec6da5a522ba0f65ec3c23"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Microsoft.IO.RecyclableMemoryStream@3.0.1",
+      "name": "Microsoft.IO.RecyclableMemoryStream",
+      "version": "3.0.1",
+      "purl": "pkg:nuget/Microsoft.IO.RecyclableMemoryStream@3.0.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "s/s20YTVY9r9TPfTrN5g8zPF1YhwxyqO6PxUkrYTGI2B+OGPe9AdajWZrLhFqXIvqIW23fnUE4+ztrUWNU1+9g=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:fc55ca81055b708f2ed866249fc50fd343d4ad4f76a0550b51873df18273d771"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Newtonsoft.Json@13.0.2",
+      "name": "Newtonsoft.Json",
+      "version": "13.0.2",
+      "purl": "pkg:nuget/Newtonsoft.Json@13.0.2",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "R2pZ3B0UjeyHShm9vG+Tu0EBb2lC8b0dFzV9gVn50ofHXh9Smjk6kTn7A/FdAsC8B5cKib1OnGYOXxRBz5XQDg=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:55826dff1646e4e19cc54f96f4b754d2972d500c3e8ef032df431f701d9968a8"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/NodaTime@3.0.5",
+      "name": "NodaTime",
+      "version": "3.0.5",
+      "purl": "pkg:nuget/NodaTime@3.0.5",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "ctgx76GTZ3hcE0lV/XepXskkZ2m3F/XSftwb/a3vK+vSorbT3QhGgWp/ZNb13oyKQhBdFIPiISilvx49LQggtw=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:f888991fb053802428e0b4d3ae98cc7aee6c9a7d4a7028ad32d829fcbc57cb54"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Plotly.NET.CSharp@0.13.0",
+      "name": "Plotly.NET.CSharp",
+      "version": "0.13.0",
+      "purl": "pkg:nuget/Plotly.NET.CSharp@0.13.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "37pUEk86QbQEbdK6sL9V1EBuc1De8IhXs0d/VehX7vfArJvqeiGy5iXZWRhzp1JMOXFZfFJuUt8Hx1HA9JGIKA=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:5eb673746a7c7eb132593c32ccdb93682348081c5ad82021712021f9ae80e7d2"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Plotly.NET.Interactive@5.0.0",
+      "name": "Plotly.NET.Interactive",
+      "version": "5.0.0",
+      "purl": "pkg:nuget/Plotly.NET.Interactive@5.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "+aGmjIypwdX+P/BiqxiLEyLVIQlvlWISWO/ZT4wr0Xyu0Qo2nhKcnlgGkJltJnopj356ZcD3J2NzBXIncv158g=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:45a9cfd922ca97cf70e26998587aa26bb2e218a9df0afea626b7ccacb92578ec"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/Plotly.NET@5.1.0",
+      "name": "Plotly.NET",
+      "version": "5.1.0",
+      "purl": "pkg:nuget/Plotly.NET@5.1.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "8Ase+25k4jdSe30tIkgckc7q0FGZRZMugxdex8Zwait0iVkB/bE8T8TYdO44KFbRvFzQJ4yS1LRQ7vddI1nbJQ=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:fe12291454a53a50bc0222d4e3fad8a33518fd64b071c842fc8a7312e8fd33bd"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/ProDotNetZip@1.20.0",
+      "name": "ProDotNetZip",
+      "version": "1.20.0",
+      "purl": "pkg:nuget/ProDotNetZip@1.20.0",
+      "licenses": [
+        {
+          "expression": "MS-PL AND BSD-3-Clause AND Zlib AND Apache-2.0 AND MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "3UQ+ZARja9UbUhIi21UmFxcPiSOg12HdfQvWvnyMjSfWTWIuWitH4XXOKgV7wk9wHZj0f0olOJYFAK52encGZg=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:3bb58555140c5abf432742da278c16dc1ae49b5e46df9231fb7eeeb1d8f11674"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "MANUAL_REVIEWED"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/QLNet@1.13.1",
+      "name": "QLNet",
+      "version": "1.13.1",
+      "purl": "pkg:nuget/QLNet@1.13.1",
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "lJrP6Dmr8bqeiqbIce/4RQPOAePFCPzOt2+Wmrqbu5q1egotXx80Flv9rCsZfb443Fi8znM65Lay/PfvJuDfRw=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:680623970c918180c8ff530f9362264a96d86acd53dce35b5fd1fdebd40f4d01"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "MANUAL_REVIEWED"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/QuantConnect.pythonnet@2.0.65",
+      "name": "QuantConnect.pythonnet",
+      "version": "2.0.65",
+      "purl": "pkg:nuget/QuantConnect.pythonnet@2.0.65",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "OeQpsfHRhK3boULMQ1km15Oi6EfpH9yGaCX0oozdpFbWUduh3BsKprty5PCINoiWI61fXCGCMDohddIBWVUvYg=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:36cb7aff4daff66dbacd7a6c1a2f17e8ac77e42ee982618d3471329390f3fa56"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "MANUAL_REVIEWED"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/RestSharp@106.12.0",
+      "name": "RestSharp",
+      "version": "106.12.0",
+      "purl": "pkg:nuget/RestSharp@106.12.0",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "irOsQHe5nTJB0BKxGQnTX1dsgCPl5dLTxvL7gbl98JiFPiHMN4wpFyUG/66ZpaFCsIrPKh6XwozWXlwYe9JwYQ=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:83b6dea533bb103b570a833a982a88f46eafd0b998fb68c8e41742c6f963a966"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/SharpZipLib@1.3.3",
+      "name": "SharpZipLib",
+      "version": "1.3.3",
+      "purl": "pkg:nuget/SharpZipLib@1.3.3",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "N8+hwhsKZm25tDJfWpBSW7EGhH/R7EMuiX+KJ4C4u+fCWVc1lJ5zg1u3S1RPPVYgTqhx/C3hxrqUpi6RwK5+Tg=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:3a797eb24e599a6462999de4facb474bf7d91ce5949be653bc0791e2d6e29bfd"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/System.CommandLine.NamingConventionBinder@2.0.0-beta4.22272.1",
+      "name": "System.CommandLine.NamingConventionBinder",
+      "version": "2.0.0-beta4.22272.1",
+      "purl": "pkg:nuget/System.CommandLine.NamingConventionBinder@2.0.0-beta4.22272.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "ux2eUA/syF+JtlpMDc/Lsd6PBIBuwjH3AvHnestoh5uD0WKT5b+wkQxDWVCqp9qgVjMBTLNhX19ZYFtenunt9A=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:d3015fdd4d978afba8ad62af38d06a79ad373321280222b61bc1571468055a3b"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/System.CommandLine@2.0.0-beta4.22272.1",
+      "name": "System.CommandLine",
+      "version": "2.0.0-beta4.22272.1",
+      "purl": "pkg:nuget/System.CommandLine@2.0.0-beta4.22272.1",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "1uqED/q2H0kKoLJ4+hI2iPSBSEdTuhfCYADeJrAqERmiGQ2NNacYKRNEQ+gFbU4glgVyK8rxI+ZOe1onEtr/Pg=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:1af8ac9da46db8d6a09f37ae89d00179aca651a087d5b5c759c896a25f5c724f"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/System.ComponentModel.Annotations@4.7.0",
+      "name": "System.ComponentModel.Annotations",
+      "version": "4.7.0",
+      "purl": "pkg:nuget/System.ComponentModel.Annotations@4.7.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "0YFqjhp/mYkDGpU0Ye1GjE53HMp9UVfGN7seGpAMttAC0C40v5gw598jCgpbBLMmCo0E5YRLBv5Z2doypO49ZQ=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:10d7abaf3ffba4af2f7c1a995dd4d74a1226a0053e1f2e8fca17150fd965805c"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/System.ComponentModel.Composition@6.0.0",
+      "name": "System.ComponentModel.Composition",
+      "version": "6.0.0",
+      "purl": "pkg:nuget/System.ComponentModel.Composition@6.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "60Qv+F7oxomOjJeTDA5Z4iCyFbQ0B/2Mi5HT+13pxxq0lVnu2ipbWMzFB+RWKr3wWKA8BSncXr9PH/fECwMX5Q=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:1e71a5b7f6940ac6194aea94c554be7c1050421bc2ad53e225f800756d30bd5b"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/System.Composition.AttributedModel@7.0.0",
+      "name": "System.Composition.AttributedModel",
+      "version": "7.0.0",
+      "purl": "pkg:nuget/System.Composition.AttributedModel@7.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "2QzClqjElKxgI1jK1Jztnq44/8DmSuTSGGahXqQ4TdEV0h9s2KikQZIgcEqVzR7OuWDFPGLHIprBJGQEPr8fAQ=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:f5ccc51f2e32219792c7682ca6376e76a8c139b9f33809e149cf7d45f6d4dd14"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/System.Composition.Convention@7.0.0",
+      "name": "System.Composition.Convention",
+      "version": "7.0.0",
+      "purl": "pkg:nuget/System.Composition.Convention@7.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "IMhTlpCs4HmlD8B+J8/kWfwX7vrBBOs6xyjSTzBlYSs7W4OET4tlkR/Sg9NG8jkdJH9Mymq0qGdYS1VPqRTBnQ=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:da80e9eed5151b5e2c096bb49d619f694e7478f0b5f93444676518df4aad796c"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/System.Composition.Hosting@7.0.0",
+      "name": "System.Composition.Hosting",
+      "version": "7.0.0",
+      "purl": "pkg:nuget/System.Composition.Hosting@7.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "eB6gwN9S+54jCTBJ5bpwMOVerKeUfGGTYCzz3QgDr1P55Gg/Wb27ShfPIhLMjmZ3MoAKu8uUSv6fcCdYJTN7Bg=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:53dfb1807c04c35ed942229debbef4170bea94a6cdf20e4efda19d7eb93f6e26"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/System.Composition.Runtime@7.0.0",
+      "name": "System.Composition.Runtime",
+      "version": "7.0.0",
+      "purl": "pkg:nuget/System.Composition.Runtime@7.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "aZJ1Zr5Txe925rbo4742XifEyW0MIni1eiUebmcrP3HwLXZ3IbXUj4MFMUH/RmnJOAQiS401leg/2Sz1MkApDw=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:fdff7f79fb511d11191f6e687ea5baf60e506f75cc175b01f8015521b4ce513d"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/System.Composition.TypedParts@7.0.0",
+      "name": "System.Composition.TypedParts",
+      "version": "7.0.0",
+      "purl": "pkg:nuget/System.Composition.TypedParts@7.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "ZK0KNPfbtxVceTwh+oHNGUOYV2WNOHReX2AXipuvkURC7s/jPwoWfsu3SnDBDgofqbiWr96geofdQ2erm/KTHg=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:40f720f38144e6155481395a477ce5f23508150fd9282a2044c896f64de40c70"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/System.Composition@7.0.0",
+      "name": "System.Composition",
+      "version": "7.0.0",
+      "purl": "pkg:nuget/System.Composition@7.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "tRwgcAkDd85O8Aq6zHDANzQaq380cek9lbMg5Qma46u5BZXq/G+XvIYmu+UI+BIIZ9zssXLYrkTykEqxxvhcmg=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:4259535fa2c27de0f805140cbea365e429834610858e5eed477af248a5782476"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/System.Reactive@6.0.0",
+      "name": "System.Reactive",
+      "version": "6.0.0",
+      "purl": "pkg:nuget/System.Reactive@6.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "31kfaW4ZupZzPsI5PVe77VhnvFF55qgma7KZr/E0iFTs6fmdhhG8j0mgEx620iLTey1EynOkEfnyTjtNEpJzGw=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:d972e06f45bf5a7dc931257f146460a844f50ce0eb69469c241bf66896be8d72"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/System.Security.Permissions@8.0.0",
+      "name": "System.Security.Permissions",
+      "version": "8.0.0",
+      "purl": "pkg:nuget/System.Security.Permissions@8.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "v/BBylw7XevuAsHXoX9dDUUfmBIcUf7Lkz8K3ZXIKz3YRKpw8YftpSir4n4e/jDTKFoaK37AsC3xnk+GNFI1Ow=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:411ed7c2edc00c0f175185db8a24698c04745cf65687438b0885a461d262632a"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/System.Windows.Extensions@8.0.0",
+      "name": "System.Windows.Extensions",
+      "version": "8.0.0",
+      "purl": "pkg:nuget/System.Windows.Extensions@8.0.0",
+      "licenses": [
+        {
+          "expression": "MIT"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "Obg3a90MkOw9mYKxrardLpY2u0axDMrSmy4JCdq2cYbelM2cUwmUir5Bomvd1yxmPL9h5LVHU1tuKBZpUjfASg=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:e69c92f5c72150371890fc9569fea8ba724e7dbe8bb25615a247f52e59fcbaf3"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/fasterflect@3.0.0",
+      "name": "fasterflect",
+      "version": "3.0.0",
+      "purl": "pkg:nuget/fasterflect@3.0.0",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "nXucxx84mYH+fS9U92a4Ak/MfWP0H204c8D2I64zsOQynnihhavO6HOCUcpp8HfKZMn3aNn01iv1bINnxH7Kow=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:2988b4b0e3ddd44102f09ea01c3effac7dd0376f6f55150a2f0bcaaf3b79ae05"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/protobuf-net.Core@3.1.33",
+      "name": "protobuf-net.Core",
+      "version": "3.1.33",
+      "purl": "pkg:nuget/protobuf-net.Core@3.1.33",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "uq+KLED4Mwx1BnTE5TTtawQgaCRpajcbRKaYsEbY5biWWK1O5+rCBTd6+9EpK6CYxd2POUHkpwTslPs4SCoHOw=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:4b0b05c861e50c21b862bbea0b683ab6690a75c98e76affc15eba64c2d4ff5f5"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:nuget/protobuf-net@3.1.33",
+      "name": "protobuf-net",
+      "version": "3.1.33",
+      "purl": "pkg:nuget/protobuf-net@3.1.33",
+      "licenses": [
+        {
+          "expression": "Apache-2.0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "qros:nuget-content-hash-sha512-base64",
+          "value": "tv6wc8QvCjGOY/grQ/irxUWqRtHpVzOLY87+jvINxYOD5n0o4TX9RukJ/FRkVyMeQtLLhf/0okQFb4rQgoWt8A=="
+        },
+        {
+          "name": "qros:nuspec-sha256",
+          "value": "sha256:b13536199ed5f04ca5ac2a5f0d4b89322f40488c70a5a49cb943f3937be9adbb"
+        },
+        {
+          "name": "qros:license-review-mode",
+          "value": "NUGET_SPDX_EXPRESSION"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:github/QuantConnect/Lean@b692bf4788e8b54fc23bdcb5659666bf055ce89f#Launcher",
+      "dependsOn": [
+        "pkg:nuget/Accord.Fuzzy@3.6.0",
+        "pkg:nuget/Accord.MachineLearning@3.6.0",
+        "pkg:nuget/Accord.Math@3.6.0",
+        "pkg:nuget/Accord.Statistics@3.6.0",
+        "pkg:nuget/Accord@3.6.0",
+        "pkg:nuget/CloneExtensions@1.3.0",
+        "pkg:nuget/CsvHelper@19.0.0",
+        "pkg:nuget/DynamicInterop@0.9.1",
+        "pkg:nuget/DynamicObj@2.0.0",
+        "pkg:nuget/FSharp.Core@8.0.400",
+        "pkg:nuget/Giraffe.ViewEngine.StrongName@2.0.0-alpha1",
+        "pkg:nuget/Humanizer.Core@2.14.1",
+        "pkg:nuget/MathNet.Numerics@5.0.0",
+        "pkg:nuget/McMaster.Extensions.CommandLineUtils@2.6.0",
+        "pkg:nuget/Microsoft.AspNetCore.Html.Abstractions@2.2.0",
+        "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@8.0.0",
+        "pkg:nuget/Microsoft.Bcl.HashCode@1.1.1",
+        "pkg:nuget/Microsoft.CodeAnalysis.Analyzers@3.3.4",
+        "pkg:nuget/Microsoft.CodeAnalysis.CSharp.Workspaces@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.CSharp@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic.Workspaces@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.Workspaces.Common@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis@4.8.0",
+        "pkg:nuget/Microsoft.DotNet.Interactive.Documents@1.0.0-beta.24229.4",
+        "pkg:nuget/Microsoft.DotNet.Interactive.Formatting@1.0.0-beta.24229.4",
+        "pkg:nuget/Microsoft.DotNet.Interactive@1.0.0-beta.24229.4",
+        "pkg:nuget/Microsoft.IO.RecyclableMemoryStream@3.0.1",
+        "pkg:nuget/Newtonsoft.Json@13.0.2",
+        "pkg:nuget/NodaTime@3.0.5",
+        "pkg:nuget/Plotly.NET.CSharp@0.13.0",
+        "pkg:nuget/Plotly.NET.Interactive@5.0.0",
+        "pkg:nuget/Plotly.NET@5.1.0",
+        "pkg:nuget/ProDotNetZip@1.20.0",
+        "pkg:nuget/QLNet@1.13.1",
+        "pkg:nuget/QuantConnect.pythonnet@2.0.65",
+        "pkg:nuget/RestSharp@106.12.0",
+        "pkg:nuget/SharpZipLib@1.3.3",
+        "pkg:nuget/System.CommandLine.NamingConventionBinder@2.0.0-beta4.22272.1",
+        "pkg:nuget/System.CommandLine@2.0.0-beta4.22272.1",
+        "pkg:nuget/System.ComponentModel.Annotations@4.7.0",
+        "pkg:nuget/System.ComponentModel.Composition@6.0.0",
+        "pkg:nuget/System.Composition.AttributedModel@7.0.0",
+        "pkg:nuget/System.Composition.Convention@7.0.0",
+        "pkg:nuget/System.Composition.Hosting@7.0.0",
+        "pkg:nuget/System.Composition.Runtime@7.0.0",
+        "pkg:nuget/System.Composition.TypedParts@7.0.0",
+        "pkg:nuget/System.Composition@7.0.0",
+        "pkg:nuget/System.Reactive@6.0.0",
+        "pkg:nuget/System.Security.Permissions@8.0.0",
+        "pkg:nuget/System.Windows.Extensions@8.0.0",
+        "pkg:nuget/fasterflect@3.0.0",
+        "pkg:nuget/protobuf-net.Core@3.1.33",
+        "pkg:nuget/protobuf-net@3.1.33"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Accord.Fuzzy@3.6.0",
+      "dependsOn": [
+        "pkg:nuget/Accord.Math@3.6.0",
+        "pkg:nuget/Accord.Statistics@3.6.0",
+        "pkg:nuget/Accord@3.6.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Accord.MachineLearning@3.6.0",
+      "dependsOn": [
+        "pkg:nuget/Accord.Math@3.6.0",
+        "pkg:nuget/Accord.Statistics@3.6.0",
+        "pkg:nuget/Accord@3.6.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Accord.Math@3.6.0",
+      "dependsOn": [
+        "pkg:nuget/Accord@3.6.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Accord.Statistics@3.6.0",
+      "dependsOn": [
+        "pkg:nuget/Accord.Math@3.6.0",
+        "pkg:nuget/Accord@3.6.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Accord@3.6.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/CloneExtensions@1.3.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/CsvHelper@19.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/DynamicInterop@0.9.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/DynamicObj@2.0.0",
+      "dependsOn": [
+        "pkg:nuget/FSharp.Core@8.0.400",
+        "pkg:nuget/Newtonsoft.Json@13.0.2"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/FSharp.Core@8.0.400",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/Giraffe.ViewEngine.StrongName@2.0.0-alpha1",
+      "dependsOn": [
+        "pkg:nuget/FSharp.Core@8.0.400"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Humanizer.Core@2.14.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/MathNet.Numerics@5.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/McMaster.Extensions.CommandLineUtils@2.6.0",
+      "dependsOn": [
+        "pkg:nuget/System.ComponentModel.Annotations@4.7.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.AspNetCore.Html.Abstractions@2.2.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@8.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.Bcl.HashCode@1.1.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis.Analyzers@3.3.4",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis.CSharp.Workspaces@4.8.0",
+      "dependsOn": [
+        "pkg:nuget/Humanizer.Core@2.14.1",
+        "pkg:nuget/Microsoft.CodeAnalysis.CSharp@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.Workspaces.Common@4.8.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis.CSharp@4.8.0",
+      "dependsOn": [
+        "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+      "dependsOn": [
+        "pkg:nuget/Microsoft.CodeAnalysis.Analyzers@3.3.4"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic.Workspaces@4.8.0",
+      "dependsOn": [
+        "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.Workspaces.Common@4.8.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic@4.8.0",
+      "dependsOn": [
+        "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis.Workspaces.Common@4.8.0",
+      "dependsOn": [
+        "pkg:nuget/Humanizer.Core@2.14.1",
+        "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@8.0.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.Common@4.8.0",
+        "pkg:nuget/System.Composition@7.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.CodeAnalysis@4.8.0",
+      "dependsOn": [
+        "pkg:nuget/Microsoft.CodeAnalysis.CSharp.Workspaces@4.8.0",
+        "pkg:nuget/Microsoft.CodeAnalysis.VisualBasic.Workspaces@4.8.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.DotNet.Interactive.Documents@1.0.0-beta.24229.4",
+      "dependsOn": [
+        "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@8.0.0",
+        "pkg:nuget/Microsoft.Bcl.HashCode@1.1.1",
+        "pkg:nuget/System.CommandLine@2.0.0-beta4.22272.1"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.DotNet.Interactive.Formatting@1.0.0-beta.24229.4",
+      "dependsOn": [
+        "pkg:nuget/Microsoft.AspNetCore.Html.Abstractions@2.2.0",
+        "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@8.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.DotNet.Interactive@1.0.0-beta.24229.4",
+      "dependsOn": [
+        "pkg:nuget/Microsoft.CodeAnalysis@4.8.0",
+        "pkg:nuget/Microsoft.DotNet.Interactive.Documents@1.0.0-beta.24229.4",
+        "pkg:nuget/Microsoft.DotNet.Interactive.Formatting@1.0.0-beta.24229.4",
+        "pkg:nuget/System.CommandLine.NamingConventionBinder@2.0.0-beta4.22272.1",
+        "pkg:nuget/System.CommandLine@2.0.0-beta4.22272.1",
+        "pkg:nuget/System.Reactive@6.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Microsoft.IO.RecyclableMemoryStream@3.0.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/Newtonsoft.Json@13.0.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/NodaTime@3.0.5",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/Plotly.NET.CSharp@0.13.0",
+      "dependsOn": [
+        "pkg:nuget/Plotly.NET@5.1.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Plotly.NET.Interactive@5.0.0",
+      "dependsOn": [
+        "pkg:nuget/FSharp.Core@8.0.400",
+        "pkg:nuget/Microsoft.DotNet.Interactive.Formatting@1.0.0-beta.24229.4",
+        "pkg:nuget/Microsoft.DotNet.Interactive@1.0.0-beta.24229.4",
+        "pkg:nuget/Plotly.NET@5.1.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/Plotly.NET@5.1.0",
+      "dependsOn": [
+        "pkg:nuget/DynamicObj@2.0.0",
+        "pkg:nuget/FSharp.Core@8.0.400",
+        "pkg:nuget/Giraffe.ViewEngine.StrongName@2.0.0-alpha1",
+        "pkg:nuget/Newtonsoft.Json@13.0.2"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/ProDotNetZip@1.20.0",
+      "dependsOn": [
+        "pkg:nuget/System.Security.Permissions@8.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/QLNet@1.13.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/QuantConnect.pythonnet@2.0.65",
+      "dependsOn": [
+        "pkg:nuget/fasterflect@3.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/RestSharp@106.12.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/SharpZipLib@1.3.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/System.CommandLine.NamingConventionBinder@2.0.0-beta4.22272.1",
+      "dependsOn": [
+        "pkg:nuget/System.CommandLine@2.0.0-beta4.22272.1"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/System.CommandLine@2.0.0-beta4.22272.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/System.ComponentModel.Annotations@4.7.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/System.ComponentModel.Composition@6.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/System.Composition.AttributedModel@7.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/System.Composition.Convention@7.0.0",
+      "dependsOn": [
+        "pkg:nuget/System.Composition.AttributedModel@7.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/System.Composition.Hosting@7.0.0",
+      "dependsOn": [
+        "pkg:nuget/System.Composition.Runtime@7.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/System.Composition.Runtime@7.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/System.Composition.TypedParts@7.0.0",
+      "dependsOn": [
+        "pkg:nuget/System.Composition.AttributedModel@7.0.0",
+        "pkg:nuget/System.Composition.Hosting@7.0.0",
+        "pkg:nuget/System.Composition.Runtime@7.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/System.Composition@7.0.0",
+      "dependsOn": [
+        "pkg:nuget/System.Composition.AttributedModel@7.0.0",
+        "pkg:nuget/System.Composition.Convention@7.0.0",
+        "pkg:nuget/System.Composition.Hosting@7.0.0",
+        "pkg:nuget/System.Composition.Runtime@7.0.0",
+        "pkg:nuget/System.Composition.TypedParts@7.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/System.Reactive@6.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/System.Security.Permissions@8.0.0",
+      "dependsOn": [
+        "pkg:nuget/System.Windows.Extensions@8.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:nuget/System.Windows.Extensions@8.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/fasterflect@3.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/protobuf-net.Core@3.1.33",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:nuget/protobuf-net@3.1.33",
+      "dependsOn": [
+        "pkg:nuget/protobuf-net.Core@3.1.33"
+      ]
+    }
+  ]
+}

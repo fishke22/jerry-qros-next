@@ -26,6 +26,10 @@
     {
       "path": "packages/schemas/canonical-market-bar-row.v1.schema.json",
       "git_blob_sha": "294bc0002dadae40b751c694ddf3a2e237c47605"
+    },
+    {
+      "path": "packages/schemas/lean-backtest-result.v1.schema.json",
+      "git_blob_sha": "53c31f26ed369cf822256d2d3995fcbcf06d5b03"
     }
   ]
 }

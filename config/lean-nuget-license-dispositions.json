@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "scope": "PATCHED_LEAN_LAUNCHER_NUGET_GRAPH",
+  "unknown_is_deny": true,
+  "current_runtime_scope": "LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+  "package_release_authorized": false,
+  "dispositions": [
+    {
+      "identity": "Accord.Fuzzy/3.6.0",
+      "review_status": "ACCEPTED",
+      "spdx_expression": "LGPL-2.1-or-later",
+      "compatibility_disposition": "ALLOWED_INTERNAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+      "evidence": [
+        "https://github.com/accord-net/framework/blob/v3.6.0/License.txt"
+      ],
+      "distribution_obligations": [
+        "FUTURE_PACKAGE_OR_RELEASE_REQUIRES_LGPL_2_1_OR_LATER_COMPLIANCE_REVIEW",
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "PRESERVE_USER_ABILITY_TO_RELINK_OR_REPLACE_LIBRARY_AS_APPLICABLE"
+      ],
+      "notes": "Exact v3.6.0 License.txt states LGPL 2.1 or, at the user's option, any later version."
+    },
+    {
+      "identity": "Accord.MachineLearning/3.6.0",
+      "review_status": "ACCEPTED",
+      "spdx_expression": "LGPL-2.1-or-later",
+      "compatibility_disposition": "ALLOWED_INTERNAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+      "evidence": [
+        "https://github.com/accord-net/framework/blob/v3.6.0/License.txt"
+      ],
+      "distribution_obligations": [
+        "FUTURE_PACKAGE_OR_RELEASE_REQUIRES_LGPL_2_1_OR_LATER_COMPLIANCE_REVIEW",
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "PRESERVE_USER_ABILITY_TO_RELINK_OR_REPLACE_LIBRARY_AS_APPLICABLE"
+      ],
+      "notes": "Exact v3.6.0 License.txt states LGPL 2.1 or, at the user's option, any later version."
+    },
+    {
+      "identity": "Accord.Math/3.6.0",
+      "review_status": "ACCEPTED",
+      "spdx_expression": "LGPL-2.1-or-later",
+      "compatibility_disposition": "ALLOWED_INTERNAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+      "evidence": [
+        "https://github.com/accord-net/framework/blob/v3.6.0/License.txt"
+      ],
+      "distribution_obligations": [
+        "FUTURE_PACKAGE_OR_RELEASE_REQUIRES_LGPL_2_1_OR_LATER_COMPLIANCE_REVIEW",
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "PRESERVE_USER_ABILITY_TO_RELINK_OR_REPLACE_LIBRARY_AS_APPLICABLE"
+      ],
+      "notes": "Exact v3.6.0 License.txt states LGPL 2.1 or, at the user's option, any later version."
+    },
+    {
+      "identity": "Accord.Statistics/3.6.0",
+      "review_status": "ACCEPTED",
+      "spdx_expression": "LGPL-2.1-or-later",
+      "compatibility_disposition": "ALLOWED_INTERNAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+      "evidence": [
+        "https://github.com/accord-net/framework/blob/v3.6.0/License.txt"
+      ],
+      "distribution_obligations": [
+        "FUTURE_PACKAGE_OR_RELEASE_REQUIRES_LGPL_2_1_OR_LATER_COMPLIANCE_REVIEW",
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "PRESERVE_USER_ABILITY_TO_RELINK_OR_REPLACE_LIBRARY_AS_APPLICABLE"
+      ],
+      "notes": "Exact v3.6.0 License.txt states LGPL 2.1 or, at the user's option, any later version."
+    },
+    {
+      "identity": "Accord/3.6.0",
+      "review_status": "ACCEPTED",
+      "spdx_expression": "LGPL-2.1-or-later",
+      "compatibility_disposition": "ALLOWED_INTERNAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+      "evidence": [
+        "https://github.com/accord-net/framework/blob/v3.6.0/License.txt"
+      ],
+      "distribution_obligations": [
+        "FUTURE_PACKAGE_OR_RELEASE_REQUIRES_LGPL_2_1_OR_LATER_COMPLIANCE_REVIEW",
+        "PRESERVE_LICENSE_AND_COPYRIGHT_NOTICES",
+        "PRESERVE_USER_ABILITY_TO_RELINK_OR_REPLACE_LIBRARY_AS_APPLICABLE"
+      ],
+      "notes": "Exact v3.6.0 License.txt states LGPL 2.1 or, at the user's option, any later version."
+    },
+    {
+      "identity": "CloneExtensions/1.3.0",
+      "review_status": "ACCEPTED",
+      "spdx_expression": "Apache-2.0",
+      "compatibility_disposition": "ALLOWED_INTERNAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+      "evidence": [
+        "https://github.com/MarcinJuraszek/CloneExtensions/blob/3a14000a39880cee62daa06b20dbe38a611b05aa/LICENSE",
+        "https://www.nuget.org/packages/CloneExtensions/1.3.0"
+      ],
+      "distribution_obligations": [
+        "PRESERVE_APACHE_2_0_LICENSE_AND_REQUIRED_NOTICES_IF_DISTRIBUTED"
+      ],
+      "notes": "NuGet 1.3.0 has no embedded license metadata; exact release-date source commit carries Apache-2.0."
+    },
+    {
+      "identity": "DynamicInterop/0.9.1",
+      "review_status": "ACCEPTED",
+      "spdx_expression": "MIT",
+      "compatibility_disposition": "ALLOWED_INTERNAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+      "evidence": [
+        "https://github.com/rdotnet/dynamic-interop-dll/blob/57c32cb489ebfdbbf4dac01b652086ff8380dbb9/License.txt",
+        "https://www.nuget.org/packages/DynamicInterop/0.9.1"
+      ],
+      "distribution_obligations": [
+        "PRESERVE_MIT_COPYRIGHT_AND_LICENSE_NOTICE_IF_DISTRIBUTED"
+      ],
+      "notes": "Exact 0.9.1 release commit message and date match NuGet 0.9.1; License.txt is MIT."
+    },
+    {
+      "identity": "Microsoft.AspNetCore.Html.Abstractions/2.2.0",
+      "review_status": "ACCEPTED",
+      "spdx_expression": "Apache-2.0",
+      "compatibility_disposition": "ALLOWED_INTERNAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+      "evidence": [
+        "https://github.com/aspnet/HtmlAbstractions/blob/6c5ca90d81f9013a8652da4c1752bd0b4d18e908/LICENSE.txt",
+        "https://www.nuget.org/packages/Microsoft.AspNetCore.Html.Abstractions/2.2.0"
+      ],
+      "distribution_obligations": [
+        "PRESERVE_APACHE_2_0_LICENSE_AND_REQUIRED_NOTICES_IF_DISTRIBUTED"
+      ],
+      "notes": "NuGet exact package source commit 6c5ca90... is licensed Apache-2.0. Package is legacy/deprecated; vulnerability gate remains independently enforced."
+    },
+    {
+      "identity": "ProDotNetZip/1.20.0",
+      "review_status": "ACCEPTED",
+      "spdx_expression": "MS-PL AND BSD-3-Clause AND Zlib AND Apache-2.0 AND MIT",
+      "compatibility_disposition": "ALLOWED_INTERNAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+      "evidence": [
+        "https://www.nuget.org/packages/ProDotNetZip/1.20.0/License",
+        "https://github.com/mihula/ProDotNetZip/blob/1.20.0/NOTICE"
+      ],
+      "exact_package_license_file_sha256": "sha256:767eab1311d896cd51d27489c0a9d56b16c1d680532727b920e75079f0125ba1",
+      "additional_non_spdx_notice": "LZMA SDK 9.20 portions are identified by upstream NOTICE as public domain; preserve this notice. This is not represented as an SPDX license identifier.",
+      "distribution_obligations": [
+        "PRESERVE_ALL_APPLICABLE_COPYRIGHT_PATENT_TRADEMARK_AND_ATTRIBUTION_NOTICES",
+        "SOURCE_DISTRIBUTION_OF_MS_PL_PORTIONS_MUST_REMAIN_UNDER_MS_PL",
+        "PRESERVE_BSD_3_CLAUSE_ZLIB_APACHE_2_0_AND_MIT_NOTICES_FOR_THEIR_RESPECTIVE_PORTIONS",
+        "PRESERVE_UPSTREAM_NOTICE_INCLUDING_LZMA_PUBLIC_DOMAIN_NOTICE"
+      ],
+      "notes": "Aggregate package disposition. Different portions are under different licenses; expression is an inventory aggregation, not a claim that every file is jointly licensed under all terms."
+    },
+    {
+      "identity": "QLNet/1.13.1",
+      "review_status": "ACCEPTED",
+      "spdx_expression": "BSD-3-Clause",
+      "compatibility_disposition": "ALLOWED_INTERNAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+      "evidence": [
+        "https://github.com/amaggiulli/QLNet/blob/QLNet-v1.13.1/LICENSE",
+        "https://www.nuget.org/packages/QLNet/1.13.1"
+      ],
+      "distribution_obligations": [
+        "PRESERVE_BSD_3_CLAUSE_COPYRIGHT_CONDITIONS_AND_DISCLAIMER_IF_DISTRIBUTED"
+      ],
+      "notes": "Exact QLNet-v1.13.1 tag LICENSE is BSD-3-Clause."
+    },
+    {
+      "identity": "QuantConnect.pythonnet/2.0.65",
+      "review_status": "ACCEPTED",
+      "spdx_expression": "MIT",
+      "compatibility_disposition": "ALLOWED_INTERNAL_RESEARCH_BACKTEST_RUNTIME_ONLY",
+      "evidence": [
+        "https://www.nuget.org/packages/QuantConnect.pythonnet/2.0.65",
+        "https://github.com/pythonnet/pythonnet/blob/master/LICENSE"
+      ],
+      "exact_package_license_file_sha256": "sha256:b06e8c86c0291fde1ebc95cbaada18733e6bde658c3fe59bbf2f3f466535369b",
+      "distribution_obligations": [
+        "PRESERVE_MIT_COPYRIGHT_AND_LICENSE_NOTICE_IF_DISTRIBUTED"
+      ],
+      "notes": "Exact NuGet package contains a LICENSE file with captured SHA-256; package metadata points to pythonnet upstream, whose LICENSE is MIT."
+    }
+  ]
+}

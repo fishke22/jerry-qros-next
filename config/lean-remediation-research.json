@@ -1,0 +1,139 @@
+{
+  "research_version": 1,
+  "phase": "Phase 3C — LEAN Dependency Security Remediation Research",
+  "status": "RESEARCH_ACCEPTED_SECURITY_REMEDIATION_UNAVAILABLE",
+  "evidence_date": "2026-09-01",
+  "research_only": true,
+  "architecture_amendment_approved": false,
+  "lean_source_patch_authorized": false,
+  "lean_fork_authorized": false,
+  "lean_gitlink_change_authorized": false,
+  "runtime_promotion_allowed": false,
+  "pinned_lean_revision": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+  "upstream": {
+    "repository": "QuantConnect/Lean",
+    "latest_master_revision": "abeb0a0627ec484b92291c45c3f2553726c26199",
+    "latest_master_observed_at": "2026-09-01",
+    "latest_master_dotnetzip_version": "1.16.0",
+    "official_revision_remediation_available": false,
+    "issue_8795": {
+      "state": "OPEN",
+      "updated_at": "2026-08-31T02:39:13Z",
+      "title": "Replace no longer maintained DotNetZip"
+    },
+    "pr_9744": {
+      "state": "MERGED",
+      "merged_at": "2026-08-24T14:50:27Z",
+      "effect": "PARTIAL_SYSTEM_IO_COMPRESSION_MIGRATION",
+      "removes_dotnetzip_package": false
+    },
+    "pr_8820": {
+      "state": "CLOSED_UNMERGED",
+      "disposition": "DROP_IN_DOTNETZIP_FORK_NOT_ACCEPTED",
+      "maintainer_direction": "MIGRATE_TO_RUNTIME_SYSTEM_IO_COMPRESSION_AND_REMOVE_LIBRARY_DEPENDENCY"
+    },
+    "net11_note": {
+      "source": "QuantConnect/Lean issue #8795 maintainer comment",
+      "claim": "Full migration to System.IO.Compression is expected to become possible with .NET 11 capabilities.",
+      "independently_verified": "PARTIAL_ONLY",
+      "current_qros_toolchain": "10.0.400",
+      "action": "DO_NOT_UPGRADE_TOOLCHAIN_WITHOUT_SEPARATE_RESEARCH_AND_AMENDMENT"
+    }
+  },
+  "current_constraints": {
+    "launcher_directly_references_compression": true,
+    "common_directly_references_compression": true,
+    "master_still_contains_ionic_zip_usages": true,
+    "complete_transitive_nuget_graph_status": "AUDITED",
+    "audit_run_id": 33449064111,
+    "audit_job_id": 99674614880
+  },
+  "candidate_paths": [
+    {
+      "rank": 1,
+      "candidate": "OFFICIAL_LEAN_REVISION_WITH_BLOCKERS_REMOVED",
+      "status": "CURRENTLY_UNAVAILABLE",
+      "allowed_now": false,
+      "reason": "Latest official master still pins DotNetZip 1.16.0."
+    },
+    {
+      "rank": 2,
+      "candidate": "UPSTREAM_ALIGNED_SYSTEM_IO_COMPRESSION_PATCH",
+      "status": "RESEARCH_ONLY_REQUIRES_ARCHITECTURE_AMENDMENT",
+      "allowed_now": false,
+      "reason": "Matches maintainer direction but changes canonical engine source and requires full regression."
+    },
+    {
+      "rank": 3,
+      "candidate": "PROVEN_MINIMAL_BUILD_EXCLUDING_VULNERABLE_COMPONENTS",
+      "status": "UNPROVEN_REQUIRES_DEPENDENCY_GRAPH_EVIDENCE",
+      "allowed_now": false,
+      "reason": "Current Launcher/Common project references include Compression; no supported minimal target is established."
+    },
+    {
+      "rank": 4,
+      "candidate": "DROP_IN_DOTNETZIP_FORK",
+      "status": "REJECTED",
+      "allowed_now": false,
+      "reason": "LEAN maintainer rejected this direction; does not address the full vulnerable dependency graph."
+    },
+    {
+      "rank": 5,
+      "candidate": "SUPPRESS_NUGET_SECURITY_WARNINGS",
+      "status": "REJECTED",
+      "allowed_now": false,
+      "reason": "Warning suppression is not remediation."
+    }
+  ],
+  "next_gate": {
+    "research_evidence_accepted": true,
+    "security_remediation_available": false,
+    "hard_stop_active": true,
+    "architecture_amendment_approved": false,
+    "runtime_promotion_allowed": false,
+    "required_user_decision_only_if_unblocking_before_upstream": [
+      "AUTHORIZE_RESEARCH_ONLY_UPSTREAM_ALIGNED_LEAN_PATCH_EXPERIMENT",
+      "OR_KEEP_BLOCKED_AND_WAIT_FOR_OFFICIAL_LEAN_REMEDIATION"
+    ]
+  },
+  "root_cause_clusters": [
+    {
+      "cluster": "COMPRESSION",
+      "blocker_path": "QuantConnect.Common -> QuantConnect.Compression -> DotNetZip 1.16.0",
+      "blockers": [
+        "DotNetZip 1.16.0 / GHSA-xhg6-9j5j-w4vf / HIGH",
+        "System.Drawing.Common 4.7.0 / GHSA-rxg9-xrhp-64gj / CRITICAL"
+      ],
+      "transitive_detail": "DotNetZip -> System.Security.Permissions 4.7.0 -> System.Windows.Extensions 4.7.0 -> System.Drawing.Common 4.7.0",
+      "no_source_change_escape_path": false
+    },
+    {
+      "cluster": "MESSAGING",
+      "blocker_path": "QuantConnect.Messaging -> NetMQ 4.0.1.6",
+      "blockers": [
+        "System.ServiceModel.Primitives 4.4.0 / GHSA-jc8g-xhw5-6x46 / HIGH",
+        "System.Private.ServiceModel 4.4.0 / GHSA-jc8g-xhw5-6x46 / HIGH",
+        "System.Net.Http.WinHttpHandler 4.4.0 / GHSA-6xh7-4v2w-36q6 / HIGH"
+      ],
+      "additional_observed_advisory": "GHSA-p9wx-v264-q34p / MODERATE on ServiceModel 4.4.0",
+      "transitive_detail": "NetMQ 4.0.1.6 -> System.ServiceModel.Primitives 4.4.0 -> System.Private.ServiceModel 4.4.0 -> System.Net.Http.WinHttpHandler 4.4.0",
+      "no_source_change_escape_path": false
+    }
+  ],
+  "current_market_candidates": {
+    "netmq": {
+      "observed_latest_version": "4.0.4.3",
+      "observed_at": "2026-09-01",
+      "published": "2026-07-30",
+      "current_dependency_examples": [
+        "System.ServiceModel.Primitives >= 10.0.652802",
+        "System.Security.Cryptography.Xml >= 10.0.10"
+      ],
+      "license_observation": "LGPLv3 per upstream repository README",
+      "status": "RESEARCH_CANDIDATE_ONLY",
+      "qros_introduction_authorized": false,
+      "security_compatibility_verified": false,
+      "lean_api_compatibility_verified": false
+    }
+  }
+}

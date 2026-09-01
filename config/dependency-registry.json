@@ -102,7 +102,26 @@
       "runtime_scope": "QUANT_ENGINE",
       "introduction_authorized": true,
       "lock_required": true,
-      "notes": "Exact upstream gitlink at external/lean; no fork/copy."
+      "notes": "Exact upstream gitlink remains unchanged. QROS accepts only the deterministic Phase 3D checkout-time patched Launcher path for local Research/Backtest runtime. The unpatched upstream runtime remains DENY. No fork/copy, packaging, release, Yuanta, live trading, paid service, or warning suppression is authorized.",
+      "security_status": "ACCEPTED_PHASE3D_PATCHED_LOCAL_RESEARCH_RUNTIME",
+      "runtime_promotion_allowed": true,
+      "security_review": "config/lean-security-review.json",
+      "runtime_promotion_scope": "LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY_WITH_PHASE3D_PATCH",
+      "unpatched_upstream_runtime_allowed": false,
+      "patch_mode": "DETERMINISTIC_CHECKOUT_TIME_NO_FORK_NO_GITLINK_CHANGE",
+      "patch_script": "scripts/apply_lean_security_patch.py",
+      "patched_nuget_graph": "supply-chain/lean/launcher-patched-nuget-graph.json",
+      "patched_nuget_graph_sha256": "sha256:165ba17fec034b417f4ae91b86544cbe9b2002f1c561f4908b0d43a76875f235",
+      "patched_sbom": "supply-chain/lean/launcher-patched-bom.cdx.json",
+      "patched_license_evidence": "supply-chain/lean/launcher-patched-nuget-license-metadata.json",
+      "patched_license_dispositions": "config/lean-nuget-license-dispositions.json",
+      "acceptance_evidence": {
+        "exact_head": "4050b640f54fab9b0fda28c7d73145a0e44a4294",
+        "qros_gate_run_id": 33503647209,
+        "qros_gate_job_id": 99842494385,
+        "lean_integration_run_id": 33503647152,
+        "lean_integration_job_id": 99842494995
+      }
     },
     {
       "dependency_id": "tauri",

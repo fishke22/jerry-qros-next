@@ -1,0 +1,556 @@
+{
+  "package_count": 55,
+  "packages": [
+    {
+      "identity": "Accord.Fuzzy/3.6.0",
+      "license_file_sha256": null,
+      "license_kind": "URL",
+      "license_value": "http://accord-framework.net/license.txt",
+      "nuspec_sha256": "sha256:0a784400b050616b79a32456edddaff09a11e16453731ce1b464d92bacf71121",
+      "project_url": "http://accord-framework.net/",
+      "repository_url": null,
+      "requires_manual_review": true
+    },
+    {
+      "identity": "Accord.MachineLearning/3.6.0",
+      "license_file_sha256": null,
+      "license_kind": "URL",
+      "license_value": "http://accord-framework.net/license.txt",
+      "nuspec_sha256": "sha256:63a1383c0a76b074332e4cb5be12e006b02d60fdb3e6698619054c7092279bce",
+      "project_url": "http://accord-framework.net/",
+      "repository_url": null,
+      "requires_manual_review": true
+    },
+    {
+      "identity": "Accord.Math/3.6.0",
+      "license_file_sha256": null,
+      "license_kind": "URL",
+      "license_value": "http://accord-framework.net/license.txt",
+      "nuspec_sha256": "sha256:d17ea7c30292f5f104b69155273e7e78754a2809423f2bc8b6056bb7817f402a",
+      "project_url": "http://accord-framework.net/",
+      "repository_url": null,
+      "requires_manual_review": true
+    },
+    {
+      "identity": "Accord.Statistics/3.6.0",
+      "license_file_sha256": null,
+      "license_kind": "URL",
+      "license_value": "http://accord-framework.net/license.txt",
+      "nuspec_sha256": "sha256:6029aae2d5660c67fd48d045a81c39cd8cbfc0f34362d97d9f986ba9e25658c6",
+      "project_url": "http://accord-framework.net/",
+      "repository_url": null,
+      "requires_manual_review": true
+    },
+    {
+      "identity": "Accord/3.6.0",
+      "license_file_sha256": null,
+      "license_kind": "URL",
+      "license_value": "http://accord-framework.net/license.txt",
+      "nuspec_sha256": "sha256:3f433a77436fa69c74b196791ca3e98e06ff2ec4182a5ef561116d1d35c970a7",
+      "project_url": "http://accord-framework.net/",
+      "repository_url": null,
+      "requires_manual_review": true
+    },
+    {
+      "identity": "CloneExtensions/1.3.0",
+      "license_file_sha256": null,
+      "license_kind": "MISSING",
+      "license_value": null,
+      "nuspec_sha256": "sha256:9817def373cf40edab6bdeb1874ccb0caa758e6791094a02cbd9493ac0d3465b",
+      "project_url": "https://github.com/MarcinJuraszek/CloneExtensions",
+      "repository_url": null,
+      "requires_manual_review": true
+    },
+    {
+      "identity": "CsvHelper/19.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MS-PL OR Apache-2.0",
+      "nuspec_sha256": "sha256:776de2f7f4a226166cb92e379127454885be9f2e6bdd2df2736db870f4ab074f",
+      "project_url": "https://joshclose.github.io/CsvHelper/",
+      "repository_url": "https://github.com/JoshClose/CsvHelper",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "DynamicInterop/0.9.1",
+      "license_file_sha256": null,
+      "license_kind": "URL",
+      "license_value": "https://github.com/jmp75/dynamic-interop-dll/blob/feature/netstandard2/License.txt",
+      "nuspec_sha256": "sha256:0d2f00c136cc156a72bc9bccdf9d207e64762a1dba808f446720f77e8de8af77",
+      "project_url": "https://github.com/jmp75/dynamic-interop-dll",
+      "repository_url": "https://github.com/jmp75/dynamic-interop-dll",
+      "requires_manual_review": true
+    },
+    {
+      "identity": "DynamicObj/2.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:b7874118e8101384e48a3f28ba5151a79049f1fb2d4845ce35036343d52e6d2b",
+      "project_url": "https://csbiology.github.io/DynamicObj/",
+      "repository_url": "https://github.com/CSBiology/DynamicObj",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "fasterflect/3.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "Apache-2.0",
+      "nuspec_sha256": "sha256:2988b4b0e3ddd44102f09ea01c3effac7dd0376f6f55150a2f0bcaaf3b79ae05",
+      "project_url": "https://github.com/buunguyen/fasterflect",
+      "repository_url": null,
+      "requires_manual_review": false
+    },
+    {
+      "identity": "FSharp.Core/8.0.400",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:29b732a68f26acb1e6f327455a37e50f4a244707220dbf1e745daaddb8826e8f",
+      "project_url": "https://github.com/dotnet/fsharp",
+      "repository_url": "https://github.com/dotnet/fsharp",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Giraffe.ViewEngine.StrongName/2.0.0-alpha1",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "Apache-2.0",
+      "nuspec_sha256": "sha256:ee28f68a00d42276c63559e2e8d71fc88d6b245585a00265dbf4d21fbcbffb9d",
+      "project_url": "https://github.com/giraffe-fsharp/Giraffe.ViewEngine",
+      "repository_url": "https://github.com/giraffe-fsharp/Giraffe.ViewEngine",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Humanizer.Core/2.14.1",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:9233ebeabcf74461613f4d3a71d503d0bfa8a7754e62fab83ace72110daf77e7",
+      "project_url": "https://github.com/Humanizr/Humanizer",
+      "repository_url": "https://github.com/Humanizr/Humanizer",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "MathNet.Numerics/5.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:cff33be848d7e0e8066f96fee7980adad223c7eff6f586f1e8221ce07a95467d",
+      "project_url": "https://numerics.mathdotnet.com/",
+      "repository_url": "https://github.com/mathnet/mathnet-numerics",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "McMaster.Extensions.CommandLineUtils/2.6.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "Apache-2.0",
+      "nuspec_sha256": "sha256:f60b376864c7cf1a398c97b9e10fcc907171adad429189d3bae5e18336424fba",
+      "project_url": "https://github.com/natemcmaster/CommandLineUtils",
+      "repository_url": "https://github.com/natemcmaster/CommandLineUtils.git",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Microsoft.AspNetCore.Html.Abstractions/2.2.0",
+      "license_file_sha256": null,
+      "license_kind": "URL",
+      "license_value": "https://raw.githubusercontent.com/aspnet/AspNetCore/2.0.0/LICENSE.txt",
+      "nuspec_sha256": "sha256:036b420e2fd08833239fcb50846e4f97f7241c2087a992e21227b06db2b72823",
+      "project_url": "https://asp.net/",
+      "repository_url": "https://github.com/aspnet/HtmlAbstractions",
+      "requires_manual_review": true
+    },
+    {
+      "identity": "Microsoft.Bcl.AsyncInterfaces/8.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:a414ecfcf15d90be1f13152ad60651077c7511eec2857a7d6910f55df19af263",
+      "project_url": "https://dot.net/",
+      "repository_url": "https://github.com/dotnet/runtime",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Microsoft.Bcl.HashCode/1.1.1",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:02403b9ba6b8db960d3d1ba49b069b2d38299523ffb66baabebc9468743d2deb",
+      "project_url": "https://github.com/dotnet/corefx",
+      "repository_url": null,
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Microsoft.CodeAnalysis.Analyzers/3.3.4",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:cfbdf46a9f4efb7b98af9e46c4d98e9746e8ab2b979498ef21b2f1864799e749",
+      "project_url": "https://github.com/dotnet/roslyn-analyzers",
+      "repository_url": "https://github.com/dotnet/roslyn-analyzers",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Microsoft.CodeAnalysis.Common/4.8.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:e4fd91c91e17f4e35cbd96f8e69513326a27f50af4eade20a33c64deb60d6b48",
+      "project_url": "https://github.com/dotnet/roslyn",
+      "repository_url": "https://github.com/dotnet/roslyn",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Microsoft.CodeAnalysis.CSharp.Workspaces/4.8.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:bdb86c6da8371ccc0a29c52a816c5dbe9c9e834f8c27cd1cf3a7b80758f875cc",
+      "project_url": "https://github.com/dotnet/roslyn",
+      "repository_url": "https://github.com/dotnet/roslyn",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Microsoft.CodeAnalysis.CSharp/4.8.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:0bb9543bcbb528c3c414b5e7596b11fb839abcef01a1867a10a85eb76a9a1a83",
+      "project_url": "https://github.com/dotnet/roslyn",
+      "repository_url": "https://github.com/dotnet/roslyn",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Microsoft.CodeAnalysis.VisualBasic.Workspaces/4.8.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:7c4941cd97f633aae957735c2f736f56a242af630f687cc0f456dae48d311e47",
+      "project_url": "https://github.com/dotnet/roslyn",
+      "repository_url": "https://github.com/dotnet/roslyn",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Microsoft.CodeAnalysis.VisualBasic/4.8.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:e438a0cf34c3ba5331349c1a365c9957c489645586d847e03e312a6c6e025f95",
+      "project_url": "https://github.com/dotnet/roslyn",
+      "repository_url": "https://github.com/dotnet/roslyn",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Microsoft.CodeAnalysis.Workspaces.Common/4.8.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:e8aaf137e9e96d3054fee92e5c65251f0feb74933b3da6af254ec368837e8fc6",
+      "project_url": "https://github.com/dotnet/roslyn",
+      "repository_url": "https://github.com/dotnet/roslyn",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Microsoft.CodeAnalysis/4.8.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:6f48a553b8f5a87e9f45fd4547846106e65df5d225e8f51668a68591cf3826c3",
+      "project_url": "https://github.com/dotnet/roslyn",
+      "repository_url": "https://github.com/dotnet/roslyn",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Microsoft.DotNet.Interactive.Documents/1.0.0-beta.24229.4",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:a542464ae89bd4a4c4b1ede227cd7290b500427efa4c186311c453e958bd5125",
+      "project_url": "https://github.com/dotnet/interactive",
+      "repository_url": "https://github.com/dotnet/interactive",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Microsoft.DotNet.Interactive.Formatting/1.0.0-beta.24229.4",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:f83ff592fcd2fae9ae2bfe7689f76fd55d028fdc434b626755d15997a4509c2f",
+      "project_url": "https://github.com/dotnet/interactive",
+      "repository_url": "https://github.com/dotnet/interactive",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Microsoft.DotNet.Interactive/1.0.0-beta.24229.4",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:ebbe0a014d5ccdd44b430271b85a0333f6388eb079ec6da5a522ba0f65ec3c23",
+      "project_url": "https://github.com/dotnet/interactive",
+      "repository_url": "https://github.com/dotnet/interactive",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Microsoft.IO.RecyclableMemoryStream/3.0.1",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:fc55ca81055b708f2ed866249fc50fd343d4ad4f76a0550b51873df18273d771",
+      "project_url": "https://github.com/Microsoft/Microsoft.IO.RecyclableMemoryStream",
+      "repository_url": "https://github.com/Microsoft/Microsoft.IO.RecyclableMemoryStream",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Newtonsoft.Json/13.0.2",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:55826dff1646e4e19cc54f96f4b754d2972d500c3e8ef032df431f701d9968a8",
+      "project_url": "https://www.newtonsoft.com/json",
+      "repository_url": "https://github.com/JamesNK/Newtonsoft.Json",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "NodaTime/3.0.5",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "Apache-2.0",
+      "nuspec_sha256": "sha256:f888991fb053802428e0b4d3ae98cc7aee6c9a7d4a7028ad32d829fcbc57cb54",
+      "project_url": "https://nodatime.org/",
+      "repository_url": "https://github.com/nodatime/nodatime",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Plotly.NET.CSharp/0.13.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:5eb673746a7c7eb132593c32ccdb93682348081c5ad82021712021f9ae80e7d2",
+      "project_url": "https://plotly.net/",
+      "repository_url": "https://github.com/plotly/Plotly.NET/",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Plotly.NET.Interactive/5.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:45a9cfd922ca97cf70e26998587aa26bb2e218a9df0afea626b7ccacb92578ec",
+      "project_url": "https://plotly.net/",
+      "repository_url": "https://github.com/plotly/Plotly.NET/",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "Plotly.NET/5.1.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:fe12291454a53a50bc0222d4e3fad8a33518fd64b071c842fc8a7312e8fd33bd",
+      "project_url": "https://plotly.net/",
+      "repository_url": "https://github.com/plotly/Plotly.NET/",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "ProDotNetZip/1.20.0",
+      "license_file_sha256": "sha256:767eab1311d896cd51d27489c0a9d56b16c1d680532727b920e75079f0125ba1",
+      "license_kind": "FILE",
+      "license_value": "LICENSE.txt",
+      "nuspec_sha256": "sha256:3bb58555140c5abf432742da278c16dc1ae49b5e46df9231fb7eeeb1d8f11674",
+      "project_url": "https://github.com/mihula/ProDotNetZip",
+      "repository_url": "https://github.com/mihula/ProDotNetZip.git",
+      "requires_manual_review": true
+    },
+    {
+      "identity": "protobuf-net.Core/3.1.33",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "Apache-2.0",
+      "nuspec_sha256": "sha256:4b0b05c861e50c21b862bbea0b683ab6690a75c98e76affc15eba64c2d4ff5f5",
+      "project_url": "https://github.com/protobuf-net/protobuf-net",
+      "repository_url": "https://github.com/protobuf-net/protobuf-net",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "protobuf-net/3.1.33",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "Apache-2.0",
+      "nuspec_sha256": "sha256:b13536199ed5f04ca5ac2a5f0d4b89322f40488c70a5a49cb943f3937be9adbb",
+      "project_url": "https://github.com/protobuf-net/protobuf-net",
+      "repository_url": "https://github.com/protobuf-net/protobuf-net",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "QLNet/1.13.1",
+      "license_file_sha256": null,
+      "license_kind": "URL",
+      "license_value": "https://github.com/amaggiulli/QLNet/blob/develop/LICENSE",
+      "nuspec_sha256": "sha256:680623970c918180c8ff530f9362264a96d86acd53dce35b5fd1fdebd40f4d01",
+      "project_url": "http://github.com/amaggiulli/qlnet",
+      "repository_url": null,
+      "requires_manual_review": true
+    },
+    {
+      "identity": "QuantConnect.pythonnet/2.0.65",
+      "license_file_sha256": "sha256:b06e8c86c0291fde1ebc95cbaada18733e6bde658c3fe59bbf2f3f466535369b",
+      "license_kind": "FILE",
+      "license_value": "LICENSE",
+      "nuspec_sha256": "sha256:36cb7aff4daff66dbacd7a6c1a2f17e8ac77e42ee982618d3471329390f3fa56",
+      "project_url": "https://pythonnet.github.io/",
+      "repository_url": "https://github.com/pythonnet/pythonnet",
+      "requires_manual_review": true
+    },
+    {
+      "identity": "RestSharp/106.12.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "Apache-2.0",
+      "nuspec_sha256": "sha256:83b6dea533bb103b570a833a982a88f46eafd0b998fb68c8e41742c6f963a966",
+      "project_url": "http://restsharp.dev/",
+      "repository_url": "https://github.com/restsharp/RestSharp.git",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "SharpZipLib/1.3.3",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:3a797eb24e599a6462999de4facb474bf7d91ce5949be653bc0791e2d6e29bfd",
+      "project_url": "https://github.com/icsharpcode/SharpZipLib",
+      "repository_url": "https://github.com/icsharpcode/SharpZipLib",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "System.CommandLine.NamingConventionBinder/2.0.0-beta4.22272.1",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:d3015fdd4d978afba8ad62af38d06a79ad373321280222b61bc1571468055a3b",
+      "project_url": "https://github.com/dotnet/command-line-api",
+      "repository_url": "https://github.com/dotnet/command-line-api",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "System.CommandLine/2.0.0-beta4.22272.1",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:1af8ac9da46db8d6a09f37ae89d00179aca651a087d5b5c759c896a25f5c724f",
+      "project_url": "https://github.com/dotnet/command-line-api",
+      "repository_url": "https://github.com/dotnet/command-line-api",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "System.ComponentModel.Annotations/4.7.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:10d7abaf3ffba4af2f7c1a995dd4d74a1226a0053e1f2e8fca17150fd965805c",
+      "project_url": "https://github.com/dotnet/corefx",
+      "repository_url": null,
+      "requires_manual_review": false
+    },
+    {
+      "identity": "System.ComponentModel.Composition/6.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:1e71a5b7f6940ac6194aea94c554be7c1050421bc2ad53e225f800756d30bd5b",
+      "project_url": "https://dot.net/",
+      "repository_url": "https://github.com/dotnet/runtime",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "System.Composition.AttributedModel/7.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:f5ccc51f2e32219792c7682ca6376e76a8c139b9f33809e149cf7d45f6d4dd14",
+      "project_url": "https://dot.net/",
+      "repository_url": "https://github.com/dotnet/runtime",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "System.Composition.Convention/7.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:da80e9eed5151b5e2c096bb49d619f694e7478f0b5f93444676518df4aad796c",
+      "project_url": "https://dot.net/",
+      "repository_url": "https://github.com/dotnet/runtime",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "System.Composition.Hosting/7.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:53dfb1807c04c35ed942229debbef4170bea94a6cdf20e4efda19d7eb93f6e26",
+      "project_url": "https://dot.net/",
+      "repository_url": "https://github.com/dotnet/runtime",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "System.Composition.Runtime/7.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:fdff7f79fb511d11191f6e687ea5baf60e506f75cc175b01f8015521b4ce513d",
+      "project_url": "https://dot.net/",
+      "repository_url": "https://github.com/dotnet/runtime",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "System.Composition.TypedParts/7.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:40f720f38144e6155481395a477ce5f23508150fd9282a2044c896f64de40c70",
+      "project_url": "https://dot.net/",
+      "repository_url": "https://github.com/dotnet/runtime",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "System.Composition/7.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:4259535fa2c27de0f805140cbea365e429834610858e5eed477af248a5782476",
+      "project_url": "https://dot.net/",
+      "repository_url": "https://github.com/dotnet/runtime",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "System.Reactive/6.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:d972e06f45bf5a7dc931257f146460a844f50ce0eb69469c241bf66896be8d72",
+      "project_url": "https://github.com/dotnet/reactive",
+      "repository_url": "https://github.com/dotnet/reactive",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "System.Security.Permissions/8.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:411ed7c2edc00c0f175185db8a24698c04745cf65687438b0885a461d262632a",
+      "project_url": "https://dot.net/",
+      "repository_url": "https://github.com/dotnet/runtime",
+      "requires_manual_review": false
+    },
+    {
+      "identity": "System.Windows.Extensions/8.0.0",
+      "license_file_sha256": null,
+      "license_kind": "EXPRESSION",
+      "license_value": "MIT",
+      "nuspec_sha256": "sha256:e69c92f5c72150371890fc9569fea8ba724e7dbe8bb25615a247f52e59fcbaf3",
+      "project_url": "https://dot.net/",
+      "repository_url": "https://github.com/dotnet/runtime",
+      "requires_manual_review": false
+    }
+  ],
+  "schema_version": 1
+}

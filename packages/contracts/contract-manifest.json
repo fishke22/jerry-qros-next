@@ -44,6 +44,13 @@
       "schema_path": "packages/schemas/canonical-market-bar-row.v1.schema.json",
       "safety_class": "DATA",
       "status": "ACTIVE"
+    },
+    {
+      "contract_id": "lean-backtest-result",
+      "version": "1",
+      "schema_path": "packages/schemas/lean-backtest-result.v1.schema.json",
+      "safety_class": "RESEARCH_RESULT",
+      "status": "ACTIVE"
     }
   ]
 }
