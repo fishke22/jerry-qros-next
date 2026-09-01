@@ -8,6 +8,7 @@ from pathlib import Path
 LEAN_REVISION = "b692bf4788e8b54fc23bdcb5659666bf055ce89f"
 PATCH_MODE = "DETERMINISTIC_CHECKOUT_TIME_NO_FORK_NO_GITLINK_CHANGE"
 PATCH_SCRIPT_RELATIVE = "scripts/apply_lean_security_patch.py"
+PATCH_IMPLEMENTATION_RELATIVE = "src/qros_lean/runtime_overlay.py"
 PATCH_GRAPH_RELATIVE = "supply-chain/lean/launcher-patched-nuget-graph.json"
 COMPRESSION_RELATIVE = "Compression/QuantConnect.Compression.csproj"
 MESSAGING_RELATIVE = "Messaging/QuantConnect.Messaging.csproj"
@@ -46,6 +47,14 @@ def canonical_bytes(value: dict) -> bytes:
     return json.dumps(
         value, sort_keys=True, separators=(",", ":"), ensure_ascii=False
     ).encode("utf-8")
+
+
+def patch_implementation_hash(root: Path) -> str:
+    manifest = {
+        "wrapper": sha256_file(root / PATCH_SCRIPT_RELATIVE),
+        "implementation": sha256_file(root / PATCH_IMPLEMENTATION_RELATIVE),
+    }
+    return "sha256:" + hashlib.sha256(canonical_bytes(manifest)).hexdigest()
 
 
 def replace_exact_text(text: str, old: str, new: str, label: str) -> str:
@@ -180,7 +189,7 @@ def runtime_overlay_fingerprint(root: Path, launcher: Path) -> dict[str, str]:
     ).hexdigest()
     return {
         "mode": PATCH_MODE,
-        "patch_script_hash": sha256_file(root / PATCH_SCRIPT_RELATIVE),
+        "patch_script_hash": patch_implementation_hash(root),
         "patched_graph_hash": sha256_file(root / PATCH_GRAPH_RELATIVE),
         "launcher_assembly_hash": sha256_file(launcher),
         "runtime_assembly_manifest_hash": manifest_hash,
