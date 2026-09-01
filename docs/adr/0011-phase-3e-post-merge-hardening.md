@@ -66,6 +66,8 @@ PR #15 was squash-merged with expected-head protection.
 - tree equivalence: PASS.
 - post-merge main qros-gate run `33522024604`: PASS.
 - post-merge LEAN gitlink: `b692bf4788e8b54fc23bdcb5659666bf055ce89f`.
+- durable Phase 3E accepted-head ref: `refs/heads/evidence/phase-3e-accepted-head` → `968255313ff0bff9051d50d17da335bd9da10207`.
+- governance CI explicitly fetches this ref and resolves both accepted/integration Git trees before accepting closure evidence.
 
 ## Boundaries
 
