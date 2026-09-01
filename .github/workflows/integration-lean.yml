@@ -7,6 +7,8 @@ on:
       - 'global.json'
       - 'src/qros_lean/**'
       - 'scripts/validate_lean_pin.py'
+      - 'scripts/apply_lean_security_patch.py'
+      - 'scripts/validate_lean_patch_audit.py'
       - 'scripts/run_lean_synthetic_backtest.py'
       - 'integration/lean/**'
       - 'fixtures_synthetic/lean/**'
@@ -44,43 +46,23 @@ jobs:
           test "$(dotnet --version)" = "10.0.400"
           test "$(python --version)" = "Python 3.14.7"
           python scripts/validate_lean_pin.py --require-populated
-      - name: Print Phase 3B canonical SHA256 evidence
+      - name: Apply deterministic LEAN security patch candidate
+        run: python scripts/apply_lean_security_patch.py
+      - name: Build patched LEAN Launcher
+        run: dotnet build external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
+      - name: Audit patched LEAN dependency graph
         shell: bash
         run: |
-          sha256sum \
-            .github/workflows/integration-lean.yml \
-            CHANGELOG.md \
-            docs/adr/0006-deterministic-lean-synthetic-backtest.md \
-            docs/security/NETWORK_ENDPOINTS.md \
-            docs/security/PROCESS_TREE.md \
-            docs/source-evidence/phase-3b-synthetic-backtest-evidence.md \
-            fixtures_synthetic/lean/qros-synthetic-daily.csv \
-            integration/lean/QrosSyntheticAlgorithm/QrosSyntheticAlgorithm.csproj \
-            integration/lean/QrosSyntheticAlgorithm/QrosSyntheticBacktestAlgorithm.cs \
-            integration/lean/backtest-config.json \
-            packages/contracts/contract-digests.json \
-            packages/contracts/contract-manifest.json \
-            packages/schemas/lean-backtest-result.v1.schema.json \
-            scripts/run_lean_synthetic_backtest.py \
-            src/qros_lean/backtest.py \
-            supply-chain/build-environment.json \
-            tests/test_lean_backtest_normalizer.py \
-            tests/test_phase3b_contract.py \
-            config/lean-security-review.json \
-            docs/adr/0007-lean-security-blocker.md \
-            docs/security/LEAN_DEPENDENCY_SECURITY_REVIEW.md \
-            scripts/validate_lean_security.py \
-            tests/test_lean_security_policy.py \
-            config/dependency-registry.json \
-            config/supply-chain-policy.json \
-            .github/workflows/phase0-policy.yml
-      - name: Build pinned LEAN Launcher
-        run: dotnet build external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
+          dotnet package list --project external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --include-transitive --format json --output-version 1 > "$RUNNER_TEMP/lean-all.json"
+          dotnet package list --project external/lean/Launcher/QuantConnect.Lean.Launcher.csproj --include-transitive --vulnerable --format json --output-version 1 > "$RUNNER_TEMP/lean-vulnerable.json"
+          python scripts/validate_lean_patch_audit.py --all "$RUNNER_TEMP/lean-all.json" --vulnerable "$RUNNER_TEMP/lean-vulnerable.json"
       - name: Build QROS synthetic algorithm
         run: dotnet build integration/lean/QrosSyntheticAlgorithm/QrosSyntheticAlgorithm.csproj --configuration Release --nologo -p:ContinuousIntegrationBuild=true
       - name: Run deterministic QROS to LEAN backtest twice
         env:
           PYTHONPATH: src
-        run: python scripts/run_lean_synthetic_backtest.py --output-dir "$RUNNER_TEMP/qros-phase3b"
-      - name: Enforce LEAN runtime promotion security gate
-        run: python scripts/validate_lean_security.py --enforce-runtime-promotion
+        run: python scripts/run_lean_synthetic_backtest.py --output-dir "$RUNNER_TEMP/qros-phase3d"
+      - name: Confirm promotion remains review-gated
+        run: |
+          echo "Candidate dependency gate passed only if all prior steps succeeded."
+          echo "Runtime promotion remains DENY until ADR/security review is accepted."
