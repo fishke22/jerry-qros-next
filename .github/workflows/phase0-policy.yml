@@ -27,6 +27,10 @@ jobs:
         run: |
           git fetch --no-tags --depth=1 origin refs/heads/evidence/phase-3e-accepted-head:refs/remotes/origin/evidence/phase-3e-accepted-head
           test "$(git rev-parse refs/remotes/origin/evidence/phase-3e-accepted-head)" = "968255313ff0bff9051d50d17da335bd9da10207"
+      - name: Fetch durable Phase 3E accepted-head evidence
+        run: |
+          git fetch --no-tags --depth=1 origin refs/heads/evidence/phase-3e-accepted-head:refs/remotes/origin/evidence/phase-3e-accepted-head
+          test "$(git rev-parse refs/remotes/origin/evidence/phase-3e-accepted-head)" = "968255313ff0bff9051d50d17da335bd9da10207"
       - name: Setup Python
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
