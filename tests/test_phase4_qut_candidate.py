@@ -273,7 +273,7 @@ class Phase4QutCandidateTests(unittest.TestCase):
             "SELF_HOSTED_RUNNER_ON_PUBLIC_CANONICAL_REPO = REJECT", evidence
         )
         self.assertNotIn("-ExecutionPolicy Bypass -File", runbook)
-        self.assertIn("do not use \`-ExecutionPolicy Bypass\`", runbook)
+        self.assertIn("do not use `-ExecutionPolicy Bypass`", runbook)
         self.assertIn("MANUAL_LOCAL_HARNESS = ACCEPT_FOR_VALIDATION_ONLY", plan)
         self.assertIn(
             "SELF_HOSTED_RUNNER_ON_PUBLIC_CANONICAL_REPO = REJECT", plan
