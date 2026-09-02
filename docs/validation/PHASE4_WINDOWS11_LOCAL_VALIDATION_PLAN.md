@@ -1,6 +1,6 @@
 # Phase 4 — Windows 11 x64 Local Validation Plan
 
-Status: `PLANNED / EXECUTION DENIED UNTIL ZERO-COST REMOTE PATH IS VERIFIED`
+Status: `PLANNED / MANUAL LOCAL EXECUTION PATH ACCEPTED; REMOTE AUTOMATION DENIED`
 
 ## Scope
 
@@ -22,30 +22,39 @@ Hard gates remain:
 
 ## Current hosted evidence already closed
 
-Exact Phase 4 candidate head `06096a37f3cb324cd46a4bd2a3b35beec7d40f24` has successful:
+Exact Phase 4 candidate head `695220b746d217e716a9b964650e7694f041d773` has successful:
 - `qros-gate`
 - `phase4-qut-candidate`
 - `phase4-qut-cargo-sbom`
+- `lean-integration`
 
 Hosted Windows evidence is not a substitute for physical Windows 11 validation because GitHub hosted validation ran on Windows Server 2025.
 
-## Remote execution cost gate
+## Local execution path decision
 
-Remote Desktop Commander is a cloud-based Remote MCP service. Public documentation identifies the local Desktop Commander MCP as free/open-source, but does not provide a sufficiently explicit Remote MCP free quota, billing cap, or no-auto-overage guarantee for this project.
+The accepted zero-cost execution path for this phase is **manual execution of the repository-hosted PowerShell harness on the physical Windows 11 workstation**.
 
-The connected account exposes an authenticated online device but does not expose a verified plan, free quota, billing cap, or overage control in the account metadata available to QROS.
+The harness is source-controlled, reviewable, local-only, and does not require a paid SaaS/API/MCP or cloud compute.
+
+Accepted path:
+
+```text
+scripts/phase4/windows11-local-validation.ps1
+```
+
+Remote Desktop Commander remains denied because the hosted Remote MCP free quota / billing cap / no-auto-overage boundary is not sufficiently proven.
+
+GitHub self-hosted runners are monetarily free, but GitHub security guidance recommends against attaching self-hosted runners to public repositories. Canonical QROS is public, so the user's Windows workstation must not be registered as a self-hosted runner for this repository.
 
 Decision:
-- `REMOTE_DESKTOP_COMMANDER_REMOTE_MCP_COST = UNKNOWN`
-- `REMOTE_DESKTOP_COMMANDER_EXECUTION = DENY`
 
-Do not execute local commands through the hosted Remote MCP until cost status is explicitly verified as zero-cost with no automatic paid overage.
-
-References checked 2026-09-02:
-- https://desktopcommander.app/mcp/
-- https://desktopcommander.app/pricing/
-- https://github.com/desktop-commander/remote-desktop-commander
-- https://legal.desktopcommander.app/
+```text
+REMOTE_DESKTOP_COMMANDER_REMOTE_MCP_COST = UNKNOWN
+REMOTE_DESKTOP_COMMANDER_EXECUTION = DENY
+SELF_HOSTED_RUNNER_MONETARY_COST = ZERO
+SELF_HOSTED_RUNNER_ON_PUBLIC_CANONICAL_REPO = REJECT
+MANUAL_LOCAL_HARNESS = ACCEPT_FOR_VALIDATION_ONLY
+```
 
 ## Required local evidence
 
@@ -121,7 +130,20 @@ Forbidden during Phase 4 local validation:
 
 If local checkout state contains user changes, do not reset, clean, or overwrite them.
 
-### 7. Source build
+### 7. PowerShell execution boundary
+
+Use a visible local PowerShell session.
+
+Do not:
+- use hidden PowerShell;
+- use `-ExecutionPolicy Bypass`;
+- change machine/user execution policy;
+- weaken Defender/Norton;
+- create AV exclusions.
+
+If policy blocks the reviewed harness, stop and record the blocker.
+
+### 8. Source build
 
 Only after inventory gates pass:
 - exact lock verification
@@ -141,21 +163,29 @@ Forbidden:
 - signing
 - auto-update publication
 
-### 8. Runtime smoke
+### 9. Runtime smoke — separate gate
 
-Minimum smoke evidence:
+The existing inventory/source-build harness does not launch QUT and therefore does not satisfy runtime acceptance.
+
+Minimum runtime smoke evidence still required:
 - application launches on Windows 11 x64
 - main zh-TW shell renders
 - navigation/status surfaces render
 - disabled Phase 5 functions remain disabled
-- `get_shell_status` returns expected non-sensitive status
+- `get_shell_status` results in the expected connected UI state
 - no unexpected child process tree
-- no unexpected network endpoint
+- no unexplained application-owned network endpoint
 - clean exit
 
 No broker/Yuanta action is permitted.
 
-### 9. Endpoint security validation
+Until separate runtime evidence is captured:
+
+```text
+PHASE4_WINDOWS11_RUNTIME_SMOKE = UNKNOWN / DENY
+```
+
+### 10. Endpoint security validation
 
 Collect evidence separately for:
 - Windows Defender
@@ -173,7 +203,9 @@ Any AV detection is a blocker until independently reviewed.
 
 ## Evidence output schema
 
-Record only non-secret evidence:
+Inventory/source-build harness records sanitized JSON under ignored `local-only/`.
+
+Durable review must record only non-secret evidence such as:
 
 ```text
 PHASE4_LOCAL_VALIDATION_TIMESTAMP=
@@ -207,6 +239,7 @@ Never record:
 - certificate private material
 - broker account identifiers
 - Remote Desktop Commander auth/session identifiers
+- hostname or username unless separately required and explicitly approved
 
 ## Acceptance gate
 
