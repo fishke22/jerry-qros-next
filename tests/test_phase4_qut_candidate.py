@@ -48,9 +48,15 @@ class Phase4QutCandidateTests(unittest.TestCase):
             (QUT / "src-tauri" / "Cargo.toml").read_text(encoding="utf-8")
         )
         self.assertEqual(cargo["dependencies"]["tauri"]["version"], "=2.11.5")
+        self.assertFalse(cargo["dependencies"]["tauri"]["default-features"])
+        self.assertEqual(cargo["dependencies"]["tauri"]["features"], ["wry"])
         self.assertEqual(
             cargo["build-dependencies"]["tauri-build"]["version"], "=2.6.3"
         )
+        self.assertFalse(
+            cargo["build-dependencies"]["tauri-build"]["default-features"]
+        )
+        self.assertFalse(cargo["package"]["publish"])
 
     def test_vite_is_loopback_only(self):
         vite = (QUT / "vite.config.ts").read_text(encoding="utf-8")
