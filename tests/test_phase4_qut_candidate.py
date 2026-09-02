@@ -249,5 +249,37 @@ class Phase4QutCandidateTests(unittest.TestCase):
         self.assertIn("WINDOWS_11_PHYSICAL_TARGET = UNKNOWN / DENY", evidence)
 
 
+    def test_windows11_runner_and_execution_policy_boundaries(self):
+        evidence = (
+            ROOT
+            / "docs"
+            / "source-evidence"
+            / "phase-4b-windows11-local-validation-gate.md"
+        ).read_text(encoding="utf-8")
+        runbook = (
+            ROOT
+            / "docs"
+            / "runbooks"
+            / "phase4-windows11-local-validation.md"
+        ).read_text(encoding="utf-8")
+        plan = (
+            ROOT
+            / "docs"
+            / "validation"
+            / "PHASE4_WINDOWS11_LOCAL_VALIDATION_PLAN.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("SELF_HOSTED_RUNNER_MONETARY_COST = ZERO", evidence)
+        self.assertIn(
+            "SELF_HOSTED_RUNNER_ON_PUBLIC_CANONICAL_REPO = REJECT", evidence
+        )
+        self.assertNotIn("-ExecutionPolicy Bypass -File", runbook)
+        self.assertIn("do not use \`-ExecutionPolicy Bypass\`", runbook)
+        self.assertIn("MANUAL_LOCAL_HARNESS = ACCEPT_FOR_VALIDATION_ONLY", plan)
+        self.assertIn(
+            "SELF_HOSTED_RUNNER_ON_PUBLIC_CANONICAL_REPO = REJECT", plan
+        )
+        self.assertIn("PHASE4_WINDOWS11_RUNTIME_SMOKE = UNKNOWN / DENY", plan)
+
+
 if __name__ == "__main__":
     unittest.main()
