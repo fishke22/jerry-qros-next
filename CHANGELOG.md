@@ -9,7 +9,7 @@ All notable QROS Next engineering milestones are recorded here.
 - Proposed Tauri + React client SPA + Vite + TypeScript with system WebView2 Evergreen, Node LTS/npm, and Rust/MSVC as the first vertical slice.
 - Deferred workspace layout, charting, UI kit, query-state, i18n, and privileged Tauri plugins.
 - Added fail-closed controls for local-only content/capabilities, loopback-only Vite, no RSC/SSR, known malicious Rust crates, exact lockfiles, and Windows toolchain inventory.
-- Kept Phase 4 implementation and dependency introduction denied pending ADR-0012 design review.
+- Accepted ADR-0012 design for a minimal feature-branch implementation candidate only; dependency adoption and main runtime promotion remain denied pending exact lock/provenance/Windows evidence.
 
 ### Phase 3E
 - Completed post-merge fail-closed hardening for exact LEAN patched-worktree verification, runtime-bound versioned backtest/provenance identity, complete NuGet audit evidence, actual Git tree verification, and historical Phase 3C denial enforcement.

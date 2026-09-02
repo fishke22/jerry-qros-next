@@ -61,6 +61,11 @@ jobs:
             tests/test_phase3b_contract.py \
             .github/workflows/integration-lean.yml \
             docs/adr/0011-phase-3e-post-merge-hardening.md \
+            config/phase4-desktop-shell-design.json \
+            docs/adr/0012-phase-4-desktop-shell-foundation.md \
+            docs/roadmap/PHASES.md \
+            docs/source-evidence/phase-4-desktop-shell-design-review.md \
+            tests/test_phase4_desktop_shell_design.py \
             CHANGELOG.md
       - name: Validate SHA256SUMS
         run: python scripts/validate_sha256sums.py
