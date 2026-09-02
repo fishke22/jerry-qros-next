@@ -1,8 +1,9 @@
 # ADR-0011: Phase 3E Post-Merge Security and Provenance Hardening
 
-Status: PROPOSED / REVIEW REQUIRED
+Status: ACCEPTED
 
 Date: 2026-09-01
+Accepted: 2026-09-01
 
 ## Context
 
@@ -15,16 +16,16 @@ Post-merge review of PR #13 and PR #14 identified fail-closed gaps that were not
 - The historical Phase 3C nested runtime-promotion denial was not machine-enforced.
 - Historical PR #6 also identified integration path-trigger and evidence-overwrite weaknesses relevant to fail-closed operation.
 
-These findings block Phase 4.
+These findings blocked Phase 4 until Phase 3E acceptance.
 
-## Decision candidate
+## Decision
 
 1. Require the exact LEAN revision and a clean worktree before patching.
 2. Derive expected patched files from committed base files and verify the exact post-patch file set and contents.
 3. Preserve immutable `lean-backtest-result/v2` and `provenance-record/v2` exactly as issued; publish hardened `lean-backtest-result/v3` and `provenance-record/v3` for the stricter runtime identity.
 4. Bind normalized identity to the actual patch wrapper SHA-256, a separately named patch implementation SHA-256, patched-graph SHA-256, Launcher assembly SHA-256, and a canonical SHA-256 manifest over the complete Launcher output DLL closure; require Launcher, Compression, and Messaging assemblies to be present.
 5. Preserve the historical Phase 3B quantitative semantic hash through an explicit current-to-v1 semantic projection; full artifact identity remains runtime-bound.
-6. Reject incomplete NuGet audit evidence unless project/framework coverage is present and matches the all-packages audit.
+6. Reject incomplete NuGet audit evidence unless project/framework coverage is present and matches the all-packages audit; missing, null, malformed, or unknown vulnerability severity evidence is DENY.
 7. Preserve the Phase 3D accepted head under durable ref `refs/heads/evidence/phase-3d-accepted-head`, explicitly fetch that ref in governance CI, verify it still targets the recorded accepted commit, then resolve and compare the historical Git trees.
 8. Enforce `next_gate.runtime_promotion_allowed=false` in the historical Phase 3C snapshot.
 9. Refuse to overwrite an existing backtest evidence directory.
@@ -34,6 +35,7 @@ These findings block Phase 4.
 
 - LEAN gitlink remains `b692bf4788e8b54fc23bdcb5659666bf055ce89f`.
 - Unpatched upstream runtime remains DENY.
+- Accepted runtime scope remains `LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY_WITH_PHASE3D_PATCH`.
 - `PACKAGE_AUTHORIZED = false`.
 - `RELEASE_AUTHORIZED = false`.
 - `YUANTA_INTEGRATION_AUTHORIZED = false`.
@@ -41,8 +43,41 @@ These findings block Phase 4.
 - Incremental dependency/license cost = 0.
 - No Yuanta, broker credential, live trading, packaging, installer, release, paid service, or paid runner is introduced.
 
-## Acceptance gate
+## Acceptance evidence
 
-This ADR remains proposed until the exact candidate head passes qros-gate, lean-security-research and lean-integration; two independent same-head LEAN jobs reproduce the runtime-bound normalized result and historical semantic regression; material review findings are closed; and final main integration preserves hard gates and the exact LEAN gitlink.
+Exact sealed candidate head:
+
+`1598c320eeacf452519b8fd7ae8195d928ec74e5`
+
+Fresh exact-head workflows:
+
+- `qros-gate` run `33529365184` — SUCCESS.
+- `lean-security-research` run `33529365278` — SUCCESS.
+- `lean-integration` run `33529364975`, attempt 1 job `99928609619` — SUCCESS.
+- Independent same-head `lean-integration` attempt 2 job `99929572680` — SUCCESS.
+
+Both LEAN integration attempts produced the same runtime-bound evidence:
+
+- algorithm assembly: `sha256:8da207beca34d7caeea556a8b4ad61178275f18583ad59ef3dc998f2bc3dd60e`
+- normalized result: `sha256:43153f0cc229a6c55005581678cbcf02002e9377c4939115e92d4fd5c48e2881`
+- overlay identity: `sha256:cd78ab7cea3f10608989c44be1f9bd4c162c04895a21cca77de55ccee5901525`
+- patch wrapper: `sha256:0cdd79a6b9a88b8c9bb01f7451a8a1dee4e44efd4e8b9624354f6ec469a1338e`
+- patch implementation: `sha256:3880d38003443024458e060bba06fd06090c4fffa3e4698cfd7e5fab33a4fc3c`
+- patched graph: `sha256:4b9abb8a71d5197cb54994f5662c249d6ac157bc5239bf5facf8bc0e73d113a8`
+- Launcher assembly: `sha256:7338f2253306a45b0dd039c5e0d266102a9b38df79a5f411b636e75756a81c19`
+- runtime assembly manifest: `sha256:3a7b926de7e6420de31d942508662061c5e5717fa0df9de86743010374614355`
+- runtime assembly count: `191`
+- Phase 3B semantic regression: `sha256:d786b5911e0f9e9d2c4959cf3aa7f87d92891c1370fbb276cbf7fff3bc2d15c1`
+- statistics: rows `5`, sum `510.0000`, last `104.0000`, total orders `0`.
+
+Final review of sealed head had no unresolved material P1/P2 findings. PR #18 was squash-merged as `6b08e0cd0bb3536e2f01d88e2bf540d20db54a23`. The accepted head and merge commit share Git tree `dee4a39e3bc4caf937755768d2ed7278191415ff`. Post-merge `qros-gate` push run `33530330017` succeeded.
+
+## Outcome
+
+`PHASE_3E = ACCEPTED_MERGED`
+
+The hardened patched local Research/Backtest runtime may proceed only within its already-approved restricted scope. This acceptance does not authorize packaging, release, Yuanta integration, live trading, or production readiness.
+
+Next gate: Phase 4 `RESEARCH → DESIGN`. Phase 4 dependencies remain DENY until independently researched, licensed, cost-checked, security-reviewed, and exactly pinned.
 
 Passing tests alone is not production readiness.
