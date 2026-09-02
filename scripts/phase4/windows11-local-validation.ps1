@@ -80,12 +80,49 @@ if (-not $isX64) {
     throw "x64 target required; detected OSArchitecture=$($os.OSArchitecture), PROCESSOR_ARCHITECTURE=$($env:PROCESSOR_ARCHITECTURE)"
 }
 
+$nodeVersion = Invoke-NativeText -FilePath "node" -ArgumentList @("--version")
+$npmVersion = Invoke-NativeText -FilePath "npm" -ArgumentList @("--version")
+$rustcVerbose = Invoke-NativeText -FilePath "rustc" -ArgumentList @("-Vv")
+$cargoVersion = Invoke-NativeText -FilePath "cargo" -ArgumentList @("-V")
+$rustupActive = Invoke-NativeText -FilePath "rustup" -ArgumentList @("show", "active-toolchain")
+
+$rustcVersionLine = (($rustcVerbose -split "\r?\n")[0]).Trim()
+$rustHostLine = @($rustcVerbose -split "\r?\n" | Where-Object { $_ -like "host:*" }) | Select-Object -First 1
+if (-not $rustHostLine) {
+    throw "Unable to determine Rust host triple"
+}
+$rustHost = ($rustHostLine -replace "^host:\s*", "").Trim()
+
+if ($nodeVersion -ne "v24.20.0") {
+    throw "Unexpected Node version: $nodeVersion"
+}
+if ($npmVersion -ne "11.19.0") {
+    throw "Unexpected npm version: $npmVersion"
+}
+if (($rustcVersionLine -split " ")[1] -ne "1.98.0") {
+    throw "Unexpected Rust version: $rustcVersionLine"
+}
+if ($rustHost -ne "x86_64-pc-windows-msvc") {
+    throw "Unexpected Rust host target: $rustHost"
+}
+if (-not $rustupActive.StartsWith("1.98.0-x86_64-pc-windows-msvc")) {
+    throw "Unexpected active Rust toolchain: $rustupActive"
+}
+
+$toolchain = [ordered]@{
+    node_version = $nodeVersion
+    npm_version = $npmVersion
+    rustc_version = $rustcVersionLine
+    cargo_version = $cargoVersion
+    rust_host = $rustHost
+    rustup_active_toolchain = $rustupActive
+}
+
 $vswhere = Join-Path ${env:ProgramFiles(x86)} "Microsoft Visual Studio\Installer\vswhere.exe"
 if (-not (Test-Path -LiteralPath $vswhere -PathType Leaf)) {
     throw "vswhere.exe missing from the standard Visual Studio Installer location"
 }
 $vsJson = Invoke-NativeText -FilePath $vswhere -ArgumentList @(
-    "-latest",
     "-products", "*",
     "-requires", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
     "-format", "json"
@@ -94,7 +131,28 @@ $vsInstances = @($vsJson | ConvertFrom-Json)
 if ($vsInstances.Count -eq 0) {
     throw "No Visual Studio installation with VC.Tools.x86.x64 was found"
 }
-$vs = $vsInstances[0]
+
+$communityInstances = @(
+    $vsInstances |
+        Where-Object { $_.productId -eq "Microsoft.VisualStudio.Product.Community" } |
+        Sort-Object { [version]$_.installationVersion } -Descending
+)
+if ($communityInstances.Count -eq 0) {
+    $detectedProducts = @($vsInstances | ForEach-Object { "$($_.productId)" }) -join ", "
+    throw "No Visual Studio Community instance with VC.Tools.x86.x64 was found. Non-Community product(s) require separate license evidence: $detectedProducts"
+}
+$vs = $communityInstances[0]
+
+$vcToolsVersionFile = Join-Path $vs.installationPath "VC\Auxiliary\Build\Microsoft.VCToolsVersion.default.txt"
+if (-not (Test-Path -LiteralPath $vcToolsVersionFile -PathType Leaf)) {
+    throw "Visual C++ toolset version file missing"
+}
+$vcToolsVersion = (Get-Content -LiteralPath $vcToolsVersionFile -Raw -ErrorAction Stop).Trim()
+$clExe = Join-Path $vs.installationPath "VC\Tools\MSVC\$vcToolsVersion\bin\Hostx64\x64\cl.exe"
+if (-not (Test-Path -LiteralPath $clExe -PathType Leaf)) {
+    throw "x64 MSVC compiler executable missing for toolset $vcToolsVersion"
+}
+$clProductVersion = (Get-Item -LiteralPath $clExe -ErrorAction Stop).VersionInfo.ProductVersion
 
 $webViewClientId = "{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}"
 $webViewRegistryPaths = @(
@@ -178,9 +236,9 @@ $build = [ordered]@{
     performed = $false
     package_lock_sha256 = Get-Sha256 -Path $PackageLock
     cargo_lock_sha256 = Get-Sha256 -Path $CargoLock
-    node_version = $null
-    npm_version = $null
-    rustc_version = $null
+    node_version = $nodeVersion
+    npm_version = $npmVersion
+    rustc_version = $rustcVersionLine
     development_exe_sha256 = $null
     installer_artifacts_found = @()
 }
@@ -197,20 +255,6 @@ if ($BuildSmoke) {
     }
     if ($build.cargo_lock_sha256 -ne $expectedCargoLockSha) {
         throw "Cargo.lock SHA-256 drift"
-    }
-
-    $build.node_version = Invoke-NativeText -FilePath "node" -ArgumentList @("--version")
-    $build.npm_version = Invoke-NativeText -FilePath "npm" -ArgumentList @("--version")
-    $build.rustc_version = Invoke-NativeText -FilePath "rustc" -ArgumentList @("--version")
-
-    if ($build.node_version -ne "v24.20.0") {
-        throw "Unexpected Node version: $($build.node_version)"
-    }
-    if ($build.npm_version -ne "11.19.0") {
-        throw "Unexpected npm version: $($build.npm_version)"
-    }
-    if (($build.rustc_version -split " ")[1] -ne "1.98.0") {
-        throw "Unexpected Rust version: $($build.rustc_version)"
     }
 
     Invoke-NativeVisible -FilePath "npm" -ArgumentList @("ci", "--ignore-scripts", "--no-audit", "--no-fund") -WorkingDirectory $QutRoot
@@ -274,11 +318,15 @@ $evidence = [ordered]@{
         build_number = "$($os.BuildNumber)"
         os_architecture = "$($os.OSArchitecture)"
     }
+    toolchain = $toolchain
     visual_studio = [ordered]@{
         display_name = "$($vs.displayName)"
         installation_version = "$($vs.installationVersion)"
         product_id = "$($vs.productId)"
+        license_basis = "COMMUNITY_INDIVIDUAL_SCOPE_CANDIDATE"
         vc_tools_x86_x64_required_component_resolved = $true
+        vc_tools_version = "$vcToolsVersion"
+        cl_product_version = "$clProductVersion"
     }
     webview2 = [ordered]@{
         evergreen_runtime_present = $true
