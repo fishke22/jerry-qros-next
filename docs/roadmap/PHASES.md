@@ -7,7 +7,7 @@ Execution model: RESEARCH → DESIGN → IMPLEMENT → TEST → REVIEW → ACCEP
 3. Phase 2 — Data receipt / QA / Parquet / DuckDB vertical slice
 4. Phase 3 — Pinned LEAN integration — **ACCEPTED / MERGED** for local Research/Backtest only through the deterministic Phase 3D runtime overlay
 5. Phase 3E — Post-merge security/provenance hardening — **ACCEPTED / MERGED**
-6. Phase 4 — QUT Tauri/React zh-TW shell — **RESEARCH COMPLETE / CURRENT GATE: DESIGN REVIEW**
+6. Phase 4 — QUT Tauri/React zh-TW shell — **DESIGN ACCEPTED / CURRENT GATE: IMPLEMENTATION CANDIDATE**
 7. Phase 5 — Research / Backtest / Data QA workspace
 8. Phase 6 — Internal AI API + one zero-cost local provider
 9. Phase 7 — Mock/Paper Broker + deterministic Safety
@@ -21,6 +21,8 @@ Phase 3E closure: sealed head `1598c320eeacf452519b8fd7ae8195d928ec74e5` passed 
 
 Phase 4 research has identified a minimal Tauri + React SPA + Vite + TypeScript candidate for Windows 11 x64, with system WebView2 Evergreen and Node/Rust/MSVC toolchains. This research does not authorize dependency introduction. TypeScript 7 integration, exact MSVC/WebView2 inventory, and resolved npm/Cargo graphs remain unverified.
 
-Next executable gate: **Phase 4 DESIGN REVIEW**. All Phase 4 dependency-registry entries remain `PLANNED_DENY_USE_UNTIL_PINNED` and introduction remains DENY until a separate implementation candidate produces exact lockfiles, license/security closure, and Windows source-build evidence.
+Phase 4 design review accepts only a minimal Windows 11 x64 implementation candidate. Feature-branch dependency resolution and source-build validation are authorized; dependency adoption and main runtime promotion remain DENY until exact lockfiles, license/security/SBOM closure, TypeScript 7 compile validation, CSP/capability review, and Windows MSVC/WebView2 source-build evidence pass.
+
+Next executable gate: **Phase 4 IMPLEMENTATION CANDIDATE**.
 
 Yuanta, live trading and packaging are independent optional future gates and are not scheduled.
