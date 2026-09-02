@@ -60,6 +60,14 @@ class Phase4DesktopShellRevalidationTests(unittest.TestCase):
         ):
             self.assertFalse(inv[key], key)
 
+    def test_webview2_version_stays_unknown_until_windows_inventory(self):
+        decisions = {x["name"]: x for x in self.review["decisions"]}
+        webview = decisions["Microsoft Edge WebView2 Runtime"]
+        self.assertEqual(
+            webview["current_version"], "UNKNOWN_LOCAL_INVENTORY_REQUIRED"
+        )
+        self.assertIsNone(webview["candidate_exact_pin"])
+
     def test_visual_studio_license_boundary_is_fail_closed(self):
         decisions = {x["name"]: x for x in self.review["decisions"]}
         community = decisions["Visual Studio Community 2026"]
