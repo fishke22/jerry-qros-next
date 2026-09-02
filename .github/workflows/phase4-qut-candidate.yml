@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - "apps/qut/**"
+      - "config/phase4-qut-rustsec-dispositions.json"
       - "tests/test_phase4_qut_candidate.py"
       - ".github/workflows/phase4-qut-candidate.yml"
   workflow_dispatch:
@@ -93,7 +94,7 @@ jobs:
           PY
           npm sbom --package-lock-only --sbom-format cyclonedx > phase4-npm-sbom.cdx.json
           echo "QROS_NPM_SBOM_SHA256=$(sha256sum phase4-npm-sbom.cdx.json | cut -d' ' -f1)"
-      - name: Install exact RustSec audit and evaluate Windows resolved graph
+      - name: Install exact RustSec audit and enforce Windows dispositions
         shell: bash
         run: |
           cargo install --locked cargo-audit --version 0.22.2
@@ -108,9 +109,16 @@ jobs:
           meta=json.loads(Path("phase4-cargo-metadata.json").read_text(encoding="utf-8"))
           windows={(p["name"],p["version"]) for p in meta["packages"] if p.get("source")}
           report=json.loads(Path("phase4-rustsec-audit.json").read_text(encoding="utf-8"))
+          policy=json.loads(Path("config/phase4-qut-rustsec-dispositions.json").read_text(encoding="utf-8"))
           if not isinstance(report,dict) or "vulnerabilities" not in report or "warnings" not in report:
               raise SystemExit("RustSec JSON schema missing expected vulnerabilities/warnings fields")
+          if policy.get("target") != "x86_64-pc-windows-msvc":
+              raise SystemExit("RustSec disposition target mismatch")
 
+          allowed={
+              (x["crate"],x["version"],x["advisory"],x["classification"])
+              for x in policy["temporary_unmaintained_dispositions"]
+          }
           findings=[]
           def walk(node,path=()):
               if isinstance(node,dict):
@@ -125,26 +133,41 @@ jobs:
                       walk(value,path+(str(idx),))
           walk(report)
 
-          windows_findings=[]
           excluded=[]
+          observed_allowed=set()
+          blockers=[]
           for path,pkg,adv in findings:
               item=(str(pkg["name"]),str(pkg["version"]))
               advisory=str(adv.get("id") or adv.get("url") or "UNKNOWN_ADVISORY")
-              record=f"{item[0]}@{item[1]}:{advisory}:{'/'.join(path)}"
-              if item in windows:
-                  windows_findings.append(record)
-              else:
+              path_text="/".join(path)
+              record=f"{item[0]}@{item[1]}:{advisory}:{path_text}"
+              if item not in windows:
                   excluded.append(record)
+                  continue
+              if path and path[0] == "vulnerabilities":
+                  blockers.append("WINDOWS_VULNERABILITY:"+record)
+                  continue
+              warning_class=path[1] if len(path) > 1 and path[0] == "warnings" else "unknown"
+              key=(item[0],item[1],advisory,warning_class)
+              if warning_class == "unmaintained" and key in allowed:
+                  observed_allowed.add(key)
+                  print("QROS_RUSTSEC_EXACT_DISPOSITION="+record)
+              else:
+                  blockers.append("WINDOWS_UNDISPOSITIONED_WARNING:"+record)
 
+          stale=allowed-observed_allowed
           print("QROS_RUSTSEC_TOTAL_FINDINGS="+str(len(findings)))
           print("QROS_RUSTSEC_NONWINDOWS_EXCLUDED="+str(len(excluded)))
+          print("QROS_RUSTSEC_EXACT_DISPOSITION_COUNT="+str(len(observed_allowed)))
           for record in sorted(excluded):
               print("QROS_RUSTSEC_TARGET_EXCLUDED="+record)
-          if windows_findings:
-              raise SystemExit("RustSec finding(s) intersect Windows resolved graph: "+", ".join(sorted(windows_findings)))
+          if blockers:
+              raise SystemExit("RustSec Windows blocker(s): "+", ".join(sorted(blockers)))
+          if stale:
+              raise SystemExit("Stale RustSec disposition(s) must be removed/reviewed: "+", ".join(sorted(f"{n}@{v}:{a}:{c}" for n,v,a,c in stale)))
           if int(os.environ["AUDIT_RC"]) != 0:
-              raise SystemExit("cargo audit returned non-zero without a classified Windows finding; evidence incomplete")
-          print("Phase 4 Windows-resolved RustSec gate: PASS")
+              raise SystemExit("cargo audit returned non-zero without a classified blocker; evidence incomplete")
+          print("Phase 4 Windows-resolved RustSec disposition gate: PASS")
           PY
 
   windows-source-build:
@@ -181,7 +204,7 @@ jobs:
           if (-not (Test-Path $exe)) { throw "Development executable missing" }
           $hash = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLowerInvariant()
           Write-Host "QROS_QUT_DEV_EXE_SHA256=$hash"
-      - name: Record hosted Windows build environment
+      - name: Record hosted Windows build environment and WebView2
         shell: pwsh
         run: |
           rustc -Vv
@@ -195,6 +218,24 @@ jobs:
             & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -format json
           } else {
             throw "vswhere.exe missing"
+          }
+          $clientId = "{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}"
+          $registryPaths = @(
+            "HKLM:\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\$clientId",
+            "HKCU:\Software\Microsoft\EdgeUpdate\Clients\$clientId"
+          )
+          $webViewVersions = @()
+          foreach ($path in $registryPaths) {
+            if (Test-Path $path) {
+              $pv = (Get-ItemProperty -Path $path -Name pv -ErrorAction Stop).pv
+              if ($pv -and $pv -ne "0.0.0.0") {
+                $webViewVersions += [PSCustomObject]@{ Path = $path; Version = $pv }
+              }
+            }
+          }
+          if ($webViewVersions.Count -eq 0) { throw "WebView2 Evergreen Runtime registry inventory missing" }
+          foreach ($entry in $webViewVersions) {
+            Write-Host "QROS_WEBVIEW2_RUNTIME_VERSION=$($entry.Version) SOURCE=$($entry.Path)"
           }
       - name: Confirm no installer or release artifact was produced
         shell: pwsh
