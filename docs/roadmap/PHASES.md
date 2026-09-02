@@ -6,8 +6,8 @@ Execution model: RESEARCH → DESIGN → IMPLEMENT → TEST → REVIEW → ACCEP
 2. Phase 1 — Repository foundation + versioned contracts
 3. Phase 2 — Data receipt / QA / Parquet / DuckDB vertical slice
 4. Phase 3 — Pinned LEAN integration — **ACCEPTED / MERGED** for local Research/Backtest only through the deterministic Phase 3D runtime overlay
-5. Phase 3E — Post-merge security/provenance hardening — **CURRENT GATE**
-6. Phase 4 — QUT Tauri/React zh-TW shell
+5. Phase 3E — Post-merge security/provenance hardening — **ACCEPTED / MERGED**
+6. Phase 4 — QUT Tauri/React zh-TW shell — **NEXT GATE: RESEARCH → DESIGN**
 7. Phase 5 — Research / Backtest / Data QA workspace
 8. Phase 6 — Internal AI API + one zero-cost local provider
 9. Phase 7 — Mock/Paper Broker + deterministic Safety
@@ -17,6 +17,8 @@ Execution model: RESEARCH → DESIGN → IMPLEMENT → TEST → REVIEW → ACCEP
 
 Phase 3 closure: PR #13 integrated the accepted Phase 3B → 3C → 3D stack into `main`. The exact upstream LEAN gitlink remains pinned at `b692bf4788e8b54fc23bdcb5659666bf055ce89f`. The unpatched upstream runtime remains DENY; only `LOCAL_RESEARCH_BACKTEST_RUNTIME_ONLY_WITH_PHASE3D_PATCH` is allowed.
 
-Next executable gate: **Phase 3E IMPLEMENT → TEST → REVIEW**. Phase 3E closes post-merge P1/P2 findings around exact patched-worktree verification, runtime-bound result/provenance identity, NuGet audit completeness, historical merge-tree verification, and historical Phase 3C denial enforcement. Phase 4 remains blocked until Phase 3E is accepted. All Phase 4 dependencies remain denied until separately researched and pinned.
+Phase 3E closure: sealed head `1598c320eeacf452519b8fd7ae8195d928ec74e5` passed fresh governance/security/integration workflows and independent same-head LEAN reproducibility, then merged through PR #18 as `6b08e0cd0bb3536e2f01d88e2bf540d20db54a23`. The accepted head and merge commit share tree `dee4a39e3bc4caf937755768d2ed7278191415ff`; post-merge `qros-gate` passed. Packaging, release, Yuanta integration, live trading, and unpatched upstream runtime remain DENY.
+
+Next executable gate: **Phase 4 RESEARCH → DESIGN**. No Phase 4 dependency is authorized by this roadmap transition. Every candidate dependency must remain DENY until its current official version, license, zero-cost suitability, Windows 11 x64 suitability, security posture, and exact pin are independently verified.
 
 Yuanta, live trading and packaging are independent optional future gates and are not scheduled.
