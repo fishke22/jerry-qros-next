@@ -20,6 +20,8 @@ jobs:
   lock-and-web:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    outputs:
+      locks_committed: ${{ steps.locks.outputs.committed }}
     steps:
       - name: Checkout candidate
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -58,6 +60,13 @@ jobs:
         if: steps.locks.outputs.committed != 'true'
         shell: bash
         run: cargo +1.98.0 generate-lockfile --manifest-path apps/desktop/src-tauri/Cargo.toml
+      - name: Validate generated lock candidates
+        if: steps.locks.outputs.committed != 'true'
+        run: python scripts/validate_phase4_desktop_candidate.py
+      - name: Audit generated npm lock candidate
+        if: steps.locks.outputs.committed != 'true'
+        working-directory: apps/desktop
+        run: npm audit --package-lock-only --audit-level=high
       - name: Print generated lock evidence
         if: steps.locks.outputs.committed != 'true'
         shell: bash
@@ -91,7 +100,8 @@ jobs:
         run: cargo +1.98.0 metadata --manifest-path apps/desktop/src-tauri/Cargo.toml --locked --format-version 1 > /dev/null
 
   windows-source-build:
-    if: ${{ hashFiles('apps/desktop/package-lock.json', 'apps/desktop/src-tauri/Cargo.lock') != '' }}
+    needs: lock-and-web
+    if: ${{ needs.lock-and-web.outputs.locks_committed == 'true' }}
     runs-on: windows-latest
     timeout-minutes: 20
     steps:
