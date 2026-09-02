@@ -77,7 +77,7 @@ Microsoft `vswhere` is MIT-licensed, is included with Visual Studio Installer si
 - https://github.com/microsoft/vswhere
 - https://github.com/microsoft/vswhere/wiki/Installing
 
-The harness requires `Microsoft.VisualStudio.Component.VC.Tools.x86.x64`.
+The harness requires `Microsoft.VisualStudio.Component.VC.Tools.x86.x64` and currently accepts only a `Microsoft.VisualStudio.Product.Community` instance for the physical workstation. Enterprise, Professional, and standalone Build Tools remain fail-closed until their local license basis is separately verified. The harness also reads the installed MSVC toolset version and x64 `cl.exe` product version without recording installation paths.
 
 ### Build dependency endpoints
 
