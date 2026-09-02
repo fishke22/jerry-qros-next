@@ -1,0 +1,319 @@
+{
+  "research_version": 1,
+  "phase": "Phase 4",
+  "title": "Windows desktop shell foundation research",
+  "researched_at": "2026-09-02",
+  "status": "RESEARCH_COMPLETE_DESIGN_PROPOSED",
+  "target": {
+    "desktop_os": "Windows 11",
+    "architecture": "x64",
+    "rust_target": "x86_64-pc-windows-msvc",
+    "cross_platform_desktop_targets_authorized": false
+  },
+  "authorization": {
+    "implementation_authorized": false,
+    "dependency_introduction_authorized": false,
+    "package_authorized": false,
+    "release_authorized": false,
+    "yuanta_integration_authorized": false,
+    "live_trading_authorized": false,
+    "unknown_is_deny": true
+  },
+  "design_candidate": {
+    "frontend_model": "LOCAL_STATIC_SPA_ONLY",
+    "backend_model": "TAURI_RUST_SHELL_MINIMAL_NO_DOMAIN_LOGIC",
+    "package_manager": "npm",
+    "system_webview": "WEBVIEW2_EVERGREEN_SYSTEM_RUNTIME",
+    "remote_content_allowed": false,
+    "ssr_allowed": false,
+    "react_server_components_allowed": false,
+    "server_functions_allowed": false,
+    "outbound_network_required": false,
+    "auto_download_or_update_allowed": false,
+    "plugin_introduction_allowed": false,
+    "csp_required": true,
+    "vite_loopback_only": true,
+    "vite_strict_port": true,
+    "vite_network_host_allowed": false,
+    "broad_tauri_env_prefix_allowed": false
+  },
+  "candidate_components": [
+    {
+      "id": "tauri",
+      "component": "tauri",
+      "ecosystem": "crates.io",
+      "version": "2.11.5",
+      "license_spdx": "MIT OR Apache-2.0",
+      "use_authorized": false,
+      "security_floor": ">=2.11.1",
+      "notes": "Candidate core runtime; CVE-2026-42184/GHSA-7gmj-67g7-phm9 patched from 2.11.1."
+    },
+    {
+      "id": "tauri-cli-rust",
+      "component": "tauri-cli",
+      "ecosystem": "crates.io",
+      "version": "2.11.4",
+      "license_spdx": "MIT OR Apache-2.0",
+      "use_authorized": false
+    },
+    {
+      "id": "tauri-cli-npm",
+      "component": "@tauri-apps/cli",
+      "ecosystem": "npm",
+      "version": "2.11.4",
+      "license_spdx": "MIT OR Apache-2.0",
+      "use_authorized": false
+    },
+    {
+      "id": "tauri-api",
+      "component": "@tauri-apps/api",
+      "ecosystem": "npm",
+      "version": "2.11.1",
+      "license_spdx": "MIT OR Apache-2.0",
+      "use_authorized": false
+    },
+    {
+      "id": "tauri-build",
+      "component": "tauri-build",
+      "ecosystem": "crates.io",
+      "version": "2.6.3",
+      "license_spdx": "MIT OR Apache-2.0",
+      "use_authorized": false
+    },
+    {
+      "id": "react",
+      "component": "react",
+      "ecosystem": "npm",
+      "version": "19.2.8",
+      "license_spdx": "MIT",
+      "use_authorized": false,
+      "notes": "Client SPA only; do not install react-server-dom-* packages."
+    },
+    {
+      "id": "react-dom",
+      "component": "react-dom",
+      "ecosystem": "npm",
+      "version": "19.2.8",
+      "license_spdx": "MIT",
+      "use_authorized": false
+    },
+    {
+      "id": "typescript",
+      "component": "typescript",
+      "ecosystem": "npm",
+      "version": "7.0.2",
+      "license_spdx": "Apache-2.0",
+      "use_authorized": false,
+      "compatibility_status": "UNVERIFIED_FOR_QROS_TAURI_REACT_BUILD",
+      "compile_validation_required": true,
+      "notes": "Native Go compiler candidate only; do not promote before exact compile/build validation."
+    },
+    {
+      "id": "vite",
+      "component": "vite",
+      "ecosystem": "npm",
+      "version": "8.2.2",
+      "license_spdx": "MIT",
+      "use_authorized": false,
+      "security_floor": ">=8.0.16",
+      "notes": "Windows dev-server file exposure advisories require loopback-only dev server and patched version."
+    },
+    {
+      "id": "vite-react",
+      "component": "@vitejs/plugin-react",
+      "ecosystem": "npm",
+      "version": "6.1.1",
+      "license_spdx": "MIT",
+      "use_authorized": false
+    },
+    {
+      "id": "types-react",
+      "component": "@types/react",
+      "ecosystem": "npm",
+      "version": "19.2.18",
+      "license_spdx": "MIT",
+      "use_authorized": false
+    },
+    {
+      "id": "types-react-dom",
+      "component": "@types/react-dom",
+      "ecosystem": "npm",
+      "version": "19.2.5",
+      "license_spdx": "MIT",
+      "use_authorized": false,
+      "compatibility_status": "TS7_NOT_EXPLICITLY_TAGGED_BY_DEFINITELYTYPED",
+      "compile_validation_required": true
+    }
+  ],
+  "toolchain_candidates": [
+    {
+      "id": "node",
+      "component": "Node.js",
+      "version": "24.20.0",
+      "channel": "LTS_KRYPTON",
+      "license_spdx": "MIT_WITH_THIRD_PARTY_NOTICES",
+      "use_authorized": false,
+      "windows_x64_artifact_available": true
+    },
+    {
+      "id": "npm",
+      "component": "npm",
+      "version": "11.19.0",
+      "source": "bundled_with_node_24.20.0",
+      "use_authorized": false
+    },
+    {
+      "id": "rust",
+      "component": "Rust",
+      "version": "1.98.0",
+      "license_spdx": "MIT OR Apache-2.0 WITH_THIRD_PARTY_NOTICES",
+      "use_authorized": false,
+      "target": "x86_64-pc-windows-msvc"
+    },
+    {
+      "id": "msvc",
+      "component": "Microsoft C++ Build Tools / Visual Studio Community C++ workload",
+      "version": "UNKNOWN_LOCAL_INVENTORY_REQUIRED",
+      "license_class": "MICROSOFT_PROPRIETARY_FREE_FOR_CURRENT_INDIVIDUAL_USE_CASE",
+      "use_authorized": false
+    },
+    {
+      "id": "webview2",
+      "component": "Microsoft Edge WebView2 Runtime",
+      "version": "UNKNOWN_LOCAL_INVENTORY_REQUIRED",
+      "distribution": "EVERGREEN_SYSTEM_RUNTIME",
+      "redistribute": false,
+      "exact_pin_possible": false,
+      "use_authorized": false,
+      "notes": "Preinstalled on Windows 11; record observed version during Windows validation. No Fixed Version bundling."
+    }
+  ],
+  "security_controls": {
+    "tauri_capabilities": "LOCAL_WINDOW_ONLY_MINIMAL_EXPLICIT_PERMISSIONS",
+    "remote_capability_urls": [],
+    "forbidden_tauri_plugins": [
+      "shell",
+      "fs",
+      "http",
+      "updater",
+      "opener",
+      "process"
+    ],
+    "forbidden_frontend_features": [
+      "remote_scripts",
+      "remote_cdns",
+      "SSR",
+      "React Server Components",
+      "React Server Functions"
+    ],
+    "vite": {
+      "host": "127.0.0.1",
+      "strict_port": true,
+      "expose_to_network": false,
+      "tauri_env_prefix": false
+    },
+    "webview2": {
+      "runtime_mode": "EVERGREEN_SYSTEM",
+      "auto_download": false,
+      "fixed_version_bundle": false,
+      "missing_runtime_action": "FAIL_CLOSED_WITH_USER_VISIBLE_ERROR"
+    },
+    "antivirus": {
+      "no_hidden_powershell": true,
+      "no_download_and_execute": true,
+      "no_runtime_unpack_and_execute": true,
+      "no_process_injection": true,
+      "no_dll_injection": true
+    }
+  },
+  "rust_supply_chain_deny": [
+    {
+      "crate": "arrayref",
+      "versions": [
+        "0.3.10"
+      ]
+    },
+    {
+      "crate": "append-only-vec",
+      "versions": [
+        "0.1.9"
+      ]
+    },
+    {
+      "crate": "internment",
+      "versions": [
+        "0.8.7"
+      ]
+    },
+    {
+      "crate": "proc-macro1",
+      "versions": [
+        "*"
+      ]
+    },
+    {
+      "crate": "proc-macro-en",
+      "versions": [
+        "*"
+      ]
+    },
+    {
+      "crate": "aovine",
+      "versions": [
+        "*"
+      ]
+    },
+    {
+      "crate": "arone",
+      "versions": [
+        "*"
+      ]
+    },
+    {
+      "crate": "aronenao",
+      "versions": [
+        "*"
+      ]
+    },
+    {
+      "crate": "tinymember",
+      "versions": [
+        "*"
+      ]
+    }
+  ],
+  "deferred_dependencies": [
+    "FlexLayout",
+    "Lightweight Charts",
+    "ECharts",
+    "shadcn/ui",
+    "TanStack Query",
+    "i18next",
+    "Tauri shell plugin",
+    "Tauri fs plugin",
+    "Tauri http plugin",
+    "Tauri updater plugin",
+    "Tauri opener plugin",
+    "Tauri process plugin"
+  ],
+  "implementation_gate_requirements": [
+    "reverify all candidate versions immediately before introduction",
+    "verify exact npm package integrity and generate package-lock.json with no floating ranges",
+    "pin Rust with rust-toolchain.toml and commit Cargo.lock",
+    "deny known malicious Rust crates/versions in resolved Cargo.lock",
+    "run npm audit and Rust advisory/supply-chain checks with missing evidence treated as DENY",
+    "compile TypeScript 7.0.2 with React types and Vite candidate on exact toolchain",
+    "source-build Tauri development executable only; no installer or bundle targets",
+    "inventory exact local MSVC and WebView2 versions on authorized Windows 11 x64 environment",
+    "validate CSP and minimal capability configuration",
+    "verify no network endpoint is required by production shell",
+    "run Windows smoke test and antivirus compatibility review before Phase 4 acceptance"
+  ],
+  "unresolved": [
+    "Exact installed MSVC/Visual Studio C++ toolset version is UNKNOWN until Windows inventory.",
+    "Exact installed WebView2 Evergreen version is intentionally unpinned and UNKNOWN until Windows inventory.",
+    "TypeScript 7.0.2 compatibility with the exact React/Vite/Tauri dependency graph is UNVERIFIED until compile validation.",
+    "Exact npm and Cargo transitive dependency graphs are UNKNOWN until implementation lockfiles are generated and audited."
+  ],
+  "decision": "DESIGN_CANDIDATE_ONLY_DEPENDENCIES_REMAIN_DENY"
+}
