@@ -102,7 +102,14 @@ Collect:
 - `vswhere.exe` result
 - Visual Studio edition/version
 - VC x86/x64 tools presence
-- MSVC toolset path/version
+- MSVC toolset version
+- x64 `cl.exe` product version
+
+Current acceptance:
+- `Microsoft.VisualStudio.Product.Community`
+- VC x86/x64 tools component present
+
+Enterprise, Professional, or standalone Build Tools remain `DENY` for the physical-target gate unless a separate valid zero-cost/license basis is recorded. The harness records versions but not installation paths.
 
 No Visual Studio installation or component changes are authorized by this phase.
 
