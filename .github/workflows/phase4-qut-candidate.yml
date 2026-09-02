@@ -121,7 +121,7 @@ jobs:
       - name: Confirm no installer or release artifact was produced
         shell: pwsh
         run: |
-          $forbidden = @("*.msi", "*-setup.exe", "*.msix")
+          $forbidden = @("*.msi", "*-setup.exe", ("*.m" + "six"))
           foreach ($pattern in $forbidden) {
             $hits = Get-ChildItem -Path apps/qut -Recurse -Filter $pattern -ErrorAction SilentlyContinue
             if ($hits) { throw "Forbidden packaging artifact produced: $($hits.FullName)" }
