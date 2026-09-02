@@ -2,7 +2,15 @@
 
 All notable QROS Next engineering milestones are recorded here.
 
-## Unreleased\n\n### Phase 4 (research candidate)\n- Researched the minimum Windows 11 x64 desktop-shell stack without introducing runtime dependencies.\n- Proposed Tauri + React client SPA + Vite + TypeScript with system WebView2 Evergreen, Node LTS/npm, and Rust/MSVC as the first vertical slice.\n- Deferred workspace layout, charting, UI kit, query-state, i18n, and privileged Tauri plugins.\n- Added fail-closed controls for local-only content/capabilities, loopback-only Vite, no RSC/SSR, known malicious Rust crates, exact lockfiles, and Windows toolchain inventory.\n- Kept Phase 4 implementation and dependency introduction denied pending ADR-0012 design review.\n
+## Unreleased
+
+### Phase 4 (research candidate)
+- Researched the minimum Windows 11 x64 desktop-shell stack without introducing runtime dependencies.
+- Proposed Tauri + React client SPA + Vite + TypeScript with system WebView2 Evergreen, Node LTS/npm, and Rust/MSVC as the first vertical slice.
+- Deferred workspace layout, charting, UI kit, query-state, i18n, and privileged Tauri plugins.
+- Added fail-closed controls for local-only content/capabilities, loopback-only Vite, no RSC/SSR, known malicious Rust crates, exact lockfiles, and Windows toolchain inventory.
+- Kept Phase 4 implementation and dependency introduction denied pending ADR-0012 design review.
+
 ### Phase 3E
 - Completed post-merge fail-closed hardening for exact LEAN patched-worktree verification, runtime-bound versioned backtest/provenance identity, complete NuGet audit evidence, actual Git tree verification, and historical Phase 3C denial enforcement.
 - Preserved issued v2 contracts unchanged and introduced hardened v3 runtime contracts so stricter assembly-count and patch-implementation identity rules do not rewrite historical v2 semantics.
