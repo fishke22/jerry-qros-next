@@ -1,0 +1,4 @@
+[[permission]]
+identifier = "allow-get-shell-status"
+description = "Allows the local main window to query non-sensitive Phase 4 shell status."
+commands.allow = ["get_shell_status"]
