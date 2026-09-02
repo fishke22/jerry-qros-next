@@ -4,6 +4,10 @@ on:
     paths:
       - "apps/qut/**"
       - "config/phase4-qut-rustsec-dispositions.json"
+      - "scripts/phase4/windows11-local-validation.ps1"
+      - "docs/security/NETWORK_ENDPOINTS.md"
+      - "docs/source-evidence/phase-4b-windows11-local-validation-gate.md"
+      - "docs/runbooks/phase4-windows11-local-validation.md"
       - "tests/test_phase4_qut_candidate.py"
       - ".github/workflows/phase4-qut-candidate.yml"
   workflow_dispatch:
@@ -180,6 +184,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Parse local Windows validation harness without executing it
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $parseErrors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path "scripts/phase4/windows11-local-validation.ps1"),
+            [ref]$tokens,
+            [ref]$parseErrors
+          ) | Out-Null
+          if ($parseErrors.Count -ne 0) {
+            $parseErrors | ForEach-Object { Write-Error $_.Message }
+            throw "PowerShell parse errors detected in local Windows validation harness"
+          }
+          Write-Host "Phase 4 local Windows validation harness parse-only gate: PASS"
       - name: Setup exact Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
