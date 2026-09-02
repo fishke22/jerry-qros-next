@@ -178,5 +178,74 @@ class Phase4QutCandidateTests(unittest.TestCase):
         self.assertNotIn("npm run tauri build", workflow)
 
 
+    def test_windows11_local_validation_harness_is_read_only_and_fail_closed(self):
+        script = (
+            ROOT / "scripts" / "phase4" / "windows11-local-validation.ps1"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Get-CimInstance -ClassName Win32_OperatingSystem", script)
+        self.assertIn("Microsoft.VisualStudio.Component.VC.Tools.x86.x64", script)
+        self.assertIn("Get-MpComputerStatus", script)
+        self.assertIn('root/SecurityCenter2', script)
+        self.assertIn("F3017226-FE2A-4295-8BDF-00C3A9A7E4C5", script)
+        self.assertIn("local-only\\phase4\\windows11-validation.json", script)
+        self.assertIn("npm", script)
+        self.assertIn('"ci", "--ignore-scripts", "--no-audit", "--no-fund"', script)
+        self.assertIn('"build",', script)
+        self.assertIn('"--locked",', script)
+        self.assertIn(
+            "e8c023a29dbbbc9fbaff86769998e05635ab140594eb53caff5bd082624ee4b8",
+            script,
+        )
+        self.assertIn(
+            "c9abfa64e57be2dd18efa91d8ae4abf43944bdbae75af94555ff28daa7601adb",
+            script,
+        )
+        for forbidden in (
+            "cargo tauri build",
+            "npm run tauri build",
+            "Invoke-WebRequest",
+            "Start-BitsTransfer",
+            "Start-Process",
+            "Set-MpPreference",
+            "Add-MpPreference",
+            "Remove-MpPreference",
+            "Start-MpScan",
+            "Update-MpSignature",
+            "pathToSignedProductExe",
+            "COMPUTERNAME",
+            "USERNAME",
+            "YUANTA_AUTOPILOT",
+        ):
+            self.assertNotIn(forbidden, script)
+        self.assertIn("package_authorized = $false", script)
+        self.assertIn("release_authorized = $false", script)
+        self.assertIn("yuanta_integration_authorized = $false", script)
+        self.assertIn("live_trading_authorized = $false", script)
+        self.assertIn("broad_filesystem_scan_performed = $false", script)
+
+    def test_phase4_local_build_network_endpoints_are_explicit(self):
+        endpoints = (
+            ROOT / "docs" / "security" / "NETWORK_ENDPOINTS.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("registry.npmjs.org", endpoints)
+        self.assertIn("index.crates.io", endpoints)
+        self.assertIn("static.crates.io", endpoints)
+        self.assertIn("inventory-only validation mode performs no dependency bootstrap", endpoints)
+        self.assertIn("Packaging, updater, signing, release, Yuanta and broker endpoints remain absent", endpoints)
+
+    def test_remote_desktop_cost_unknown_is_denied(self):
+        evidence = (
+            ROOT
+            / "docs"
+            / "source-evidence"
+            / "phase-4b-windows11-local-validation-gate.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("UNVERIFIED_ZERO_COST_REMOTE_SERVICE = DENY", evidence)
+        self.assertIn("hosted/cloud relay", evidence)
+        self.assertIn("proprietary", evidence)
+        self.assertIn("local DesktopCommanderMCP implementation is open source under MIT", evidence)
+        self.assertIn("WINDOWS_11_PHYSICAL_TARGET = UNKNOWN / DENY", evidence)
+
+
 if __name__ == "__main__":
     unittest.main()
