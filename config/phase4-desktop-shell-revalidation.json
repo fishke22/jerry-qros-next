@@ -1,0 +1,232 @@
+{
+  "revalidation_version": 1,
+  "phase": "Phase 4A",
+  "evidence_date": "2026-09-02",
+  "baseline_main_sha": "aa2f149e916e5a3d47114ed2e0d3df6a9f5542ae",
+  "status": "REVALIDATED_WITH_TOOLCHAIN_LICENSE_BOUNDARY_HARDENING",
+  "repository": {
+    "visibility": "public",
+    "visibility_governance": "ADR-0002_ACCEPTED",
+    "phase4_research_pr": 23,
+    "phase4_design_pr": 24,
+    "current_gate": "IMPLEMENTATION_CANDIDATE"
+  },
+  "lean": {
+    "gitlink": "b692bf4788e8b54fc23bdcb5659666bf055ce89f",
+    "change_authorized": false
+  },
+  "decisions": [
+    {
+      "name": "Tauri",
+      "purpose": "Windows desktop shell and least-privilege IPC boundary",
+      "current_version": "2.11.5",
+      "candidate_exact_pin": "2.11.5",
+      "license": "MIT OR Apache-2.0",
+      "license_verified": true,
+      "zero_cost": true,
+      "commercial_use": true,
+      "windows_11_x64_support": true,
+      "runtime_or_build_only": "runtime",
+      "decision": "ACCEPT_IMPLEMENTATION_CANDIDATE"
+    },
+    {
+      "name": "React",
+      "purpose": "client-only local SPA UI",
+      "current_version": "19.2.8",
+      "candidate_exact_pin": "19.2.8",
+      "license": "MIT",
+      "license_verified": true,
+      "zero_cost": true,
+      "commercial_use": true,
+      "windows_11_x64_support": true,
+      "runtime_or_build_only": "frontend-runtime-assets",
+      "decision": "ACCEPT_IMPLEMENTATION_CANDIDATE"
+    },
+    {
+      "name": "TypeScript",
+      "purpose": "frontend compile/type-check tooling",
+      "current_version": "7.0.2",
+      "candidate_exact_pin": "7.0.2",
+      "license": "Apache-2.0",
+      "license_verified": true,
+      "zero_cost": true,
+      "commercial_use": true,
+      "windows_11_x64_support": true,
+      "runtime_or_build_only": "build-only",
+      "decision": "DEFER_ADOPTION_PENDING_EXACT_GRAPH_COMPILE"
+    },
+    {
+      "name": "Vite",
+      "purpose": "frontend dev server and static production build",
+      "current_version": "8.2.2",
+      "candidate_exact_pin": "8.2.2",
+      "license": "MIT",
+      "license_verified": true,
+      "zero_cost": true,
+      "commercial_use": true,
+      "windows_11_x64_support": true,
+      "runtime_or_build_only": "build-dev-only",
+      "decision": "ACCEPT_IMPLEMENTATION_CANDIDATE"
+    },
+    {
+      "name": "Node.js",
+      "purpose": "frontend build tool host only",
+      "current_version": "24.20.0",
+      "candidate_exact_pin": "24.20.0",
+      "license": "MIT_WITH_THIRD_PARTY_NOTICES",
+      "license_verified": true,
+      "zero_cost": true,
+      "commercial_use": true,
+      "windows_11_x64_support": true,
+      "runtime_or_build_only": "build-dev-only",
+      "decision": "ACCEPT_BUILD_TOOL_ONLY"
+    },
+    {
+      "name": "npm",
+      "purpose": "minimal package manager using committed package-lock.json",
+      "current_version": "11.19.0",
+      "candidate_exact_pin": "11.19.0",
+      "license": "Artistic-2.0",
+      "license_verified": true,
+      "zero_cost": true,
+      "commercial_use": true,
+      "windows_11_x64_support": true,
+      "runtime_or_build_only": "build-dev-only",
+      "decision": "ACCEPT_BUILD_TOOL_ONLY"
+    },
+    {
+      "name": "Rust",
+      "purpose": "Tauri native shell compiler/toolchain",
+      "current_version": "1.98.0",
+      "candidate_exact_pin": "1.98.0",
+      "license": "MIT OR Apache-2.0 WITH THIRD_PARTY_NOTICES",
+      "license_verified": true,
+      "zero_cost": true,
+      "commercial_use": true,
+      "windows_11_x64_support": true,
+      "runtime_or_build_only": "build-toolchain",
+      "decision": "ACCEPT_IMPLEMENTATION_CANDIDATE"
+    },
+    {
+      "name": "Microsoft Edge WebView2 Runtime",
+      "purpose": "system web rendering runtime",
+      "current_version": "EVERGREEN_ENVIRONMENT_OBSERVED",
+      "candidate_exact_pin": null,
+      "license": "MICROSOFT_REDISTRIBUTABLE_RUNTIME_TERMS",
+      "license_verified": true,
+      "zero_cost": true,
+      "commercial_use": true,
+      "windows_11_x64_support": true,
+      "runtime_or_build_only": "system-runtime",
+      "decision": "ACCEPT_SYSTEM_EVERGREEN_NO_REDISTRIBUTION"
+    },
+    {
+      "name": "Visual Studio Community 2026",
+      "purpose": "MSVC/C++ workload for individual Windows development",
+      "current_version": "2026",
+      "candidate_exact_pin": "ENVIRONMENT_INVENTORY_REQUIRED",
+      "license": "MICROSOFT_VISUAL_STUDIO_COMMUNITY_2026",
+      "license_verified": true,
+      "zero_cost": true,
+      "commercial_use": true,
+      "windows_11_x64_support": true,
+      "runtime_or_build_only": "build-toolchain",
+      "decision": "ACCEPT_CURRENT_INDIVIDUAL_USE_SCOPE"
+    },
+    {
+      "name": "Build Tools for Visual Studio 2026",
+      "purpose": "headless MSVC/C++ build toolchain alternative",
+      "current_version": "2026",
+      "candidate_exact_pin": "ENVIRONMENT_INVENTORY_REQUIRED",
+      "license": "MICROSOFT_DIAGNOSTIC_AND_BUILD_TOOLS_2026",
+      "license_verified": false,
+      "zero_cost": "CONDITIONAL_ON_VALID_VISUAL_STUDIO_LICENSE_BASIS",
+      "commercial_use": "CONDITIONAL",
+      "windows_11_x64_support": true,
+      "runtime_or_build_only": "build-toolchain",
+      "decision": "DENY_UNLESS_VALID_LICENSE_BASIS_VERIFIED"
+    },
+    {
+      "name": "Electron",
+      "purpose": "alternative desktop web shell",
+      "decision": "REJECT_PHASE4_FIRST_SLICE",
+      "reason": "Ships Chromium/Node architecture and requires a Node main process; larger production runtime and privilege surface without demonstrated QROS value."
+    },
+    {
+      "name": "Wails v3",
+      "purpose": "alternative Go/WebView2 shell",
+      "decision": "DEFER",
+      "reason": "Officially beta as of evidence date; would add Go toolchain without demonstrated advantage."
+    },
+    {
+      "name": "Wails v2",
+      "purpose": "alternative stable Go/WebView2 shell",
+      "decision": "NOT_SELECTED",
+      "reason": "Credible zero-cost alternative, but adds a second native toolchain and provides no proven security or maintenance advantage over accepted Tauri design."
+    },
+    {
+      "name": "Avalonia",
+      "purpose": "alternative C#/XAML native UI stack",
+      "decision": "NOT_SELECTED",
+      "reason": "Credible permissive alternative but would replace the accepted web UI stack and add .NET/XAML UI complexity without demonstrated Phase 4 benefit."
+    },
+    {
+      "name": "Neutralinojs",
+      "purpose": "alternative lightweight web shell",
+      "decision": "REJECT_PHASE4_FIRST_SLICE",
+      "reason": "Native API model uses a local HTTP/WebSocket router, adding a local network endpoint boundary the accepted Tauri IPC design avoids."
+    },
+    {
+      "name": "pnpm",
+      "purpose": "alternative package manager",
+      "decision": "DEFER",
+      "reason": "Capable and permissive, but Node-bundled npm plus frozen package-lock/npm ci is the smaller required toolchain."
+    },
+    {
+      "name": "Tailwind CSS",
+      "purpose": "utility CSS framework",
+      "decision": "DEFER",
+      "reason": "No first-slice value that justifies added dependency/configuration surface."
+    },
+    {
+      "name": "shadcn/ui",
+      "purpose": "UI component source distribution",
+      "decision": "DEFER",
+      "reason": "First slice needs only navigation/status surfaces; native CSS is sufficient."
+    },
+    {
+      "name": "i18next",
+      "purpose": "i18n framework",
+      "decision": "DEFER",
+      "reason": "Phase 4 can use a typed local zh-TW message catalog; adopt a library only when pluralization, runtime language switching, or namespaces are required."
+    }
+  ],
+  "architecture_invariants": {
+    "production_node_process_allowed": false,
+    "production_vite_process_allowed": false,
+    "remote_webview_content_allowed": false,
+    "arbitrary_network_access_allowed": false,
+    "arbitrary_filesystem_access_allowed": false,
+    "arbitrary_shell_execution_allowed": false,
+    "broker_frontend_access_allowed": false,
+    "credential_frontend_access_allowed": false,
+    "privileged_tauri_plugins_allowed": false,
+    "webview2_child_processes_expected": true,
+    "phase5_workspace_functionality_allowed_in_phase4": false
+  },
+  "hard_gates": {
+    "zero_cost_required": true,
+    "package_authorized": false,
+    "release_authorized": false,
+    "yuanta_integration_authorized": false,
+    "live_trading_authorized": false
+  },
+  "blockers": [
+    "TypeScript 7.0.2 exact resolved graph compatibility remains UNVERIFIED until compile validation.",
+    "Exact npm/Cargo transitive graphs remain UNKNOWN until lockfiles are generated and audited.",
+    "Exact installed MSVC and WebView2 versions remain UNKNOWN until authorized Windows inventory.",
+    "Standalone Visual Studio Build Tools zero-cost license basis remains DENY unless tied to a valid Visual Studio license or another verified license basis."
+  ],
+  "decision": "KEEP_TAURI_REACT_ARCHITECTURE_WITH_TOOLCHAIN_LICENSE_HARDENING",
+  "next_gate": "PHASE_4_IMPLEMENTATION_CANDIDATE"
+}
