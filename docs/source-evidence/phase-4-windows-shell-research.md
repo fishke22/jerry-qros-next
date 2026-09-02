@@ -44,6 +44,11 @@ Microsoft's 2026 download page states Visual Studio Community is free for indivi
 
 ## Security design constraints
 
+Tauri 2.11.5 resolves `tauri-runtime-wry 2.11.4`, which declares `wry 0.55.0`. Current WRY Windows source injects `--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection` into WebView2 by default. QROS therefore must not treat WebView SmartScreen as a security control; the Phase 4A shell must keep remote content disabled and rely on local assets, CSP, ACL/capability denial, dependency review, and endpoint AV. This does not change the separate Windows executable reputation/signing gate.
+
+The full Cargo/npm transitive vulnerability graph has not yet been generated for the QROS lockfiles. Under fail-closed policy this remains `UNKNOWN = DENY`; Tauri/WRY is a research candidate, not an adopted runtime.
+
+
 Tauri 2 capability ACLs can leave a window with no IPC access if no capability matches it. The first vertical slice should exploit this:
 
 - one main window only;
