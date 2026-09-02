@@ -126,6 +126,57 @@ class Phase4QutCandidateTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, lib)
 
+    def test_rustsec_dispositions_are_exact_candidate_only_and_fail_closed(self):
+        policy = json.loads(
+            (ROOT / "config" / "phase4-qut-rustsec-dispositions.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(policy["target"], "x86_64-pc-windows-msvc")
+        self.assertEqual(
+            policy["status"], "CANDIDATE_ONLY_NOT_ADOPTION_AUTHORIZATION"
+        )
+        rules = policy["rules"]
+        self.assertFalse(rules["windows_vulnerability_allowed"])
+        self.assertFalse(rules["windows_unsound_warning_allowed"])
+        self.assertFalse(rules["unknown_warning_allowed"])
+        self.assertFalse(rules["unlisted_unmaintained_warning_allowed"])
+        expected = {
+            ("RUSTSEC-2025-0075", "unic-char-range", "0.9.0"),
+            ("RUSTSEC-2025-0080", "unic-common", "0.9.0"),
+            ("RUSTSEC-2025-0081", "unic-char-property", "0.9.0"),
+            ("RUSTSEC-2025-0100", "unic-ucd-ident", "0.9.0"),
+            ("RUSTSEC-2025-0098", "unic-ucd-version", "0.9.0"),
+        }
+        actual = {
+            (x["advisory"], x["crate"], x["version"])
+            for x in policy["temporary_unmaintained_dispositions"]
+        }
+        self.assertEqual(actual, expected)
+        self.assertTrue(
+            all(
+                x["classification"] == "unmaintained" and x["patched_version"] is None
+                for x in policy["temporary_unmaintained_dispositions"]
+            )
+        )
+        scope = policy["acceptance_scope"]
+        self.assertTrue(scope["candidate_ci_may_pass_with_exact_list_only"])
+        self.assertFalse(scope["dependency_registry_promotion_authorized"])
+        self.assertFalse(scope["main_runtime_promotion_authorized"])
+        self.assertFalse(scope["production_readiness_authorized"])
+        self.assertTrue(scope["must_revalidate_each_audit_run"])
+
+    def test_candidate_ci_requires_webview2_inventory_and_no_packaging(self):
+        workflow = (
+            ROOT / ".github" / "workflows" / "phase4-qut-candidate.yml"
+        ).read_text(encoding="utf-8")
+        self.assertIn("QROS_WEBVIEW2_RUNTIME_VERSION", workflow)
+        self.assertIn("F3017226-FE2A-4295-8BDF-00C3A9A7E4C5", workflow)
+        self.assertIn("WebView2 Evergreen Runtime registry inventory missing", workflow)
+        self.assertIn("bundle.active=false", (QUT / "src-tauri" / "tauri.conf.json").read_text(encoding="utf-8").replace('"bundle": {\n    "active": false\n  }', "bundle.active=false"))
+        self.assertNotIn("cargo tauri build", workflow)
+        self.assertNotIn("npm run tauri build", workflow)
+
 
 if __name__ == "__main__":
     unittest.main()
