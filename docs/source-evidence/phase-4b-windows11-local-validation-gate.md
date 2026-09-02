@@ -38,6 +38,30 @@ remote hosted connector = DENY_FOR_QROS_UNTIL_ZERO_COST_LIMIT_IS_EXPLICITLY_VERI
 local open-source MCP = MIT, but no current direct ChatGPT-local transport is proven
 ```
 
+### GitHub self-hosted runner alternative
+
+GitHub official billing documentation states that GitHub Actions usage is free for self-hosted runners. This satisfies the direct monetary-cost test for the runner service itself.
+
+However, GitHub official security guidance states that self-hosted runners should almost never be used for public repositories because pull requests or workflow changes can compromise the persistent machine environment. GitHub also explicitly recommends using self-hosted runners with private repositories rather than public repositories.
+
+Canonical QROS is currently a public repository. The physical Windows 11 target is a user workstation and may contain unrelated local data. Registering that workstation as a runner for the public canonical repository would therefore enlarge the attack surface beyond the Phase 4 need.
+
+Official references checked 2026-09-02:
+
+- https://docs.github.com/en/billing/concepts/product-billing/github-actions
+- https://docs.github.com/en/actions/reference/security/secure-use
+- https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/add-runners
+
+Disposition:
+
+```text
+SELF_HOSTED_RUNNER_MONETARY_COST = ZERO
+SELF_HOSTED_RUNNER_ON_PUBLIC_CANONICAL_REPO = REJECT
+EPHEMERAL_SELF_HOSTED_RUNNER_ON_USER_WORKSTATION = NOT_SELECTED
+```
+
+The zero-cost property is not sufficient to override the public-repository security warning. QROS will not attach the user's Windows workstation to the public canonical repository as a self-hosted runner.
+
 ### Windows Defender inventory
 
 Microsoft documents `Get-MpComputerStatus` as the Defender cmdlet that gets antimalware status.
@@ -87,16 +111,25 @@ The harness:
 - writes sanitized evidence only under ignored `local-only/`;
 - keeps all package/release/Yuanta/live-trading gates false.
 
+The harness intentionally stops at inventory/source-build evidence. It does not claim runtime UI, process-tree, network, Defender detection, or Norton compatibility acceptance.
+
+## PowerShell execution-policy boundary
+
+The local runbook must not use `-ExecutionPolicy Bypass`.
+
+If script execution is blocked by local policy, QROS does not alter machine policy and does not weaken endpoint protection. The result remains a blocker until the user has an already-approved local execution method.
+
 ## Acceptance rule
 
 The existence of the harness does not close the Phase 4 physical-target gate.
 
-Promotion requires actual evidence from a physical Windows 11 x64 execution, review of the generated sanitized JSON, and explicit ACCEPT / REJECT.
+Promotion requires actual evidence from a physical Windows 11 x64 execution, review of the generated sanitized JSON, and a separate runtime/AV smoke review.
 
 Until then:
 
 ```text
 WINDOWS_11_PHYSICAL_TARGET = UNKNOWN / DENY
+WINDOWS_11_RUNTIME_SMOKE = UNKNOWN / DENY
 DEFENDER_LOCAL_VALIDATION = UNKNOWN / DENY
 NORTON_LOCAL_VALIDATION = UNKNOWN / DENY
 DEPENDENCY_ADOPTION = DENY
