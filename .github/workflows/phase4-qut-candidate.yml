@@ -1,0 +1,129 @@
+name: phase4-qut-candidate
+on:
+  pull_request:
+    paths:
+      - "apps/qut/**"
+      - "tests/test_phase4_qut_candidate.py"
+      - ".github/workflows/phase4-qut-candidate.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: phase4-qut-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  resolve-and-web-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Setup exact Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24.20.0"
+          check-latest: false
+      - name: Verify Node and npm
+        shell: bash
+        run: |
+          test "$(node --version)" = "v24.20.0"
+          test "$(npm --version)" = "11.19.0"
+      - name: Resolve npm lock and compile TypeScript 7 candidate
+        shell: bash
+        working-directory: apps/qut
+        run: |
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build
+          npm audit --audit-level=high
+      - name: Install exact Rust
+        shell: bash
+        run: |
+          rustup toolchain install 1.98.0 --profile minimal --no-self-update
+          rustup default 1.98.0
+          test "$(rustc --version | awk '{print $2}')" = "1.98.0"
+      - name: Resolve Cargo lock and enforce malicious-crate deny set
+        shell: bash
+        run: |
+          cargo generate-lockfile --manifest-path apps/qut/src-tauri/Cargo.toml
+          cargo metadata --locked --format-version=1 --manifest-path apps/qut/src-tauri/Cargo.toml > phase4-cargo-metadata.json
+          python - <<'PY'
+          import tomllib
+          from pathlib import Path
+          lock=tomllib.loads(Path("apps/qut/src-tauri/Cargo.lock").read_text(encoding="utf-8"))
+          pkgs={(p["name"],p["version"]) for p in lock["package"]}
+          denied={("arrayref","0.3.10"),("append-only-vec","0.1.9"),("internment","0.8.7")}
+          denied_names={"proc-macro1","proc-macro-en","aovine","arone","aronenao","tinymember"}
+          hits=sorted([f"{n}@{v}" for n,v in pkgs if (n,v) in denied or n in denied_names])
+          if hits:
+              raise SystemExit("Denied malicious/compromised crate(s): "+", ".join(hits))
+          print("Phase 4 malicious-crate deny gate: PASS")
+          PY
+      - name: Print deterministic candidate locks for review
+        shell: bash
+        run: |
+          echo "QROS_PACKAGE_LOCK_SHA256=$(sha256sum apps/qut/package-lock.json | cut -d' ' -f1)"
+          echo "QROS_CARGO_LOCK_SHA256=$(sha256sum apps/qut/src-tauri/Cargo.lock | cut -d' ' -f1)"
+          echo "QROS_PACKAGE_LOCK_BEGIN"
+          cat apps/qut/package-lock.json
+          echo "QROS_PACKAGE_LOCK_END"
+          echo "QROS_CARGO_LOCK_BEGIN"
+          cat apps/qut/src-tauri/Cargo.lock
+          echo "QROS_CARGO_LOCK_END"
+
+  windows-source-build:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Setup exact Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24.20.0"
+          check-latest: false
+      - name: Resolve frontend and build static assets
+        shell: pwsh
+        working-directory: apps/qut
+        run: |
+          if ((node --version) -ne "v24.20.0") { throw "Unexpected Node version" }
+          if ((npm --version) -ne "11.19.0") { throw "Unexpected npm version" }
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build
+      - name: Install exact Rust and resolve candidate lock
+        shell: pwsh
+        run: |
+          rustup toolchain install 1.98.0 --profile minimal --no-self-update
+          rustup default 1.98.0
+          if ((rustc --version).Split(" ")[1] -ne "1.98.0") { throw "Unexpected Rust version" }
+          cargo generate-lockfile --manifest-path apps/qut/src-tauri/Cargo.toml
+      - name: Build development executable only
+        shell: pwsh
+        run: |
+          cargo build --locked --manifest-path apps/qut/src-tauri/Cargo.toml
+      - name: Record hosted Windows build environment
+        shell: pwsh
+        run: |
+          rustc -Vv
+          cargo -V
+          Write-Host "RUNNER_OS=$env:RUNNER_OS"
+          Write-Host "RUNNER_ARCH=$env:RUNNER_ARCH"
+          Write-Host "ImageOS=$env:ImageOS"
+          Write-Host "ImageVersion=$env:ImageVersion"
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          if (Test-Path $vswhere) {
+            & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -format json
+          } else {
+            throw "vswhere.exe missing"
+          }
+      - name: Confirm no installer or release artifact was produced
+        shell: pwsh
+        run: |
+          $forbidden = @("*.msi", "*-setup.exe", "*.msix")
+          foreach ($pattern in $forbidden) {
+            $hits = Get-ChildItem -Path apps/qut -Recurse -Filter $pattern -ErrorAction SilentlyContinue
+            if ($hits) { throw "Forbidden packaging artifact produced: $($hits.FullName)" }
+          }
+          Write-Host "Phase 4 source-build boundary: PASS"
