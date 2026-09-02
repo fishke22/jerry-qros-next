@@ -1,0 +1,6 @@
+{
+  "identifier": "qut-main-local",
+  "description": "Least-privilege capability for the local QUT main window.",
+  "windows": ["main"],
+  "permissions": ["allow-get-shell-status"]
+}
