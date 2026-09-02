@@ -13,9 +13,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  resolve-and-web-build:
+  locked-web-and-supply-chain:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -24,53 +24,80 @@ jobs:
         with:
           node-version: "24.20.0"
           check-latest: false
-      - name: Verify Node and npm
-        shell: bash
-        run: |
-          test "$(node --version)" = "v24.20.0"
-          test "$(npm --version)" = "11.19.0"
-      - name: Resolve npm lock and compile TypeScript 7 candidate
+      - name: Verify exact frontend lock and TypeScript 7 build
         shell: bash
         working-directory: apps/qut
         run: |
-          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+          test "$(node --version)" = "v24.20.0"
+          test "$(npm --version)" = "11.19.0"
+          test "$(sha256sum package-lock.json | cut -d' ' -f1)" = "e8c023a29dbbbc9fbaff86769998e05635ab140594eb53caff5bd082624ee4b8"
           npm ci --ignore-scripts --no-audit --no-fund
           npm run build
           npm audit --audit-level=high
+          git diff --exit-code -- package-lock.json
       - name: Install exact Rust
         shell: bash
         run: |
           rustup toolchain install 1.98.0 --profile minimal --no-self-update
           rustup default 1.98.0
           test "$(rustc --version | awk '{print $2}')" = "1.98.0"
-      - name: Resolve Cargo lock and enforce malicious-crate deny set
+          test "$(sha256sum apps/qut/src-tauri/Cargo.lock | cut -d' ' -f1)" = "c9abfa64e57be2dd18efa91d8ae4abf43944bdbae75af94555ff28daa7601adb"
+      - name: Validate locked Windows-target Rust graph
         shell: bash
         run: |
-          cargo generate-lockfile --manifest-path apps/qut/src-tauri/Cargo.toml
-          cargo metadata --locked --format-version=1 --manifest-path apps/qut/src-tauri/Cargo.toml > phase4-cargo-metadata.json
+          cargo metadata --locked --filter-platform x86_64-pc-windows-msvc --format-version=1 --manifest-path apps/qut/src-tauri/Cargo.toml > phase4-cargo-metadata.json
           python - <<'PY'
-          import tomllib
+          import json, tomllib
           from pathlib import Path
           lock=tomllib.loads(Path("apps/qut/src-tauri/Cargo.lock").read_text(encoding="utf-8"))
           pkgs={(p["name"],p["version"]) for p in lock["package"]}
           denied={("arrayref","0.3.10"),("append-only-vec","0.1.9"),("internment","0.8.7")}
           denied_names={"proc-macro1","proc-macro-en","aovine","arone","aronenao","tinymember"}
-          hits=sorted([f"{n}@{v}" for n,v in pkgs if (n,v) in denied or n in denied_names])
+          hits=sorted(f"{n}@{v}" for n,v in pkgs if (n,v) in denied or n in denied_names)
           if hits:
               raise SystemExit("Denied malicious/compromised crate(s): "+", ".join(hits))
-          print("Phase 4 malicious-crate deny gate: PASS")
+          meta=json.loads(Path("phase4-cargo-metadata.json").read_text(encoding="utf-8"))
+          missing=sorted(f'{p["name"]}@{p["version"]}' for p in meta["packages"] if p.get("source") and not p.get("license"))
+          if missing:
+              raise SystemExit("Cargo license metadata missing: "+", ".join(missing))
+          summary={}
+          for p in meta["packages"]:
+              if p.get("source"):
+                  summary[p["license"]]=summary.get(p["license"],0)+1
+          print("QROS_CARGO_LICENSE_SUMMARY="+json.dumps(summary,sort_keys=True,separators=(",",":")))
+          print("QROS_CARGO_WINDOWS_PACKAGE_COUNT="+str(sum(summary.values())))
+          print("Phase 4 malicious-crate and license-presence gate: PASS")
           PY
-      - name: Print deterministic candidate locks for review
+      - name: Validate npm license metadata and generate npm SBOM evidence
+        shell: bash
+        working-directory: apps/qut
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          lock=json.loads(Path("package-lock.json").read_text(encoding="utf-8"))
+          summary={}
+          missing=[]
+          for path,p in lock["packages"].items():
+              if not path:
+                  continue
+              lic=p.get("license")
+              if not lic:
+                  missing.append(path)
+              else:
+                  summary[lic]=summary.get(lic,0)+1
+          if missing:
+              raise SystemExit("npm license metadata missing: "+", ".join(sorted(missing)))
+          print("QROS_NPM_LICENSE_SUMMARY="+json.dumps(summary,sort_keys=True,separators=(",",":")))
+          print("QROS_NPM_LOCK_PACKAGE_COUNT="+str(sum(summary.values())))
+          PY
+          npm sbom --package-lock-only --sbom-format cyclonedx > phase4-npm-sbom.cdx.json
+          echo "QROS_NPM_SBOM_SHA256=$(sha256sum phase4-npm-sbom.cdx.json | cut -d' ' -f1)"
+      - name: Install and run exact RustSec audit
         shell: bash
         run: |
-          echo "QROS_PACKAGE_LOCK_SHA256=$(sha256sum apps/qut/package-lock.json | cut -d' ' -f1)"
-          echo "QROS_CARGO_LOCK_SHA256=$(sha256sum apps/qut/src-tauri/Cargo.lock | cut -d' ' -f1)"
-          echo "QROS_PACKAGE_LOCK_BEGIN"
-          cat apps/qut/package-lock.json
-          echo "QROS_PACKAGE_LOCK_END"
-          echo "QROS_CARGO_LOCK_BEGIN"
-          cat apps/qut/src-tauri/Cargo.lock
-          echo "QROS_CARGO_LOCK_END"
+          cargo install --locked cargo-audit --version 0.22.2
+          cargo audit --deny warnings --target-arch x86_64 --target-os windows --file apps/qut/src-tauri/Cargo.lock
 
   windows-source-build:
     runs-on: windows-latest
@@ -83,26 +110,29 @@ jobs:
         with:
           node-version: "24.20.0"
           check-latest: false
-      - name: Resolve frontend and build static assets
+      - name: Build locked frontend assets
         shell: pwsh
         working-directory: apps/qut
         run: |
           if ((node --version) -ne "v24.20.0") { throw "Unexpected Node version" }
           if ((npm --version) -ne "11.19.0") { throw "Unexpected npm version" }
-          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
           npm ci --ignore-scripts --no-audit --no-fund
           npm run build
-      - name: Install exact Rust and resolve candidate lock
+      - name: Install exact Rust and validate lock
         shell: pwsh
         run: |
           rustup toolchain install 1.98.0 --profile minimal --no-self-update
           rustup default 1.98.0
           if ((rustc --version).Split(" ")[1] -ne "1.98.0") { throw "Unexpected Rust version" }
-          cargo generate-lockfile --manifest-path apps/qut/src-tauri/Cargo.toml
+          cargo metadata --locked --filter-platform x86_64-pc-windows-msvc --format-version=1 --manifest-path apps/qut/src-tauri/Cargo.toml | Out-Null
       - name: Build development executable only
         shell: pwsh
         run: |
           cargo build --locked --manifest-path apps/qut/src-tauri/Cargo.toml
+          $exe = "apps/qut/src-tauri/target/debug/qros-qut.exe"
+          if (-not (Test-Path $exe)) { throw "Development executable missing" }
+          $hash = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLowerInvariant()
+          Write-Host "QROS_QUT_DEV_EXE_SHA256=$hash"
       - name: Record hosted Windows build environment
         shell: pwsh
         run: |
