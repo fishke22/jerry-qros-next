@@ -156,6 +156,8 @@ jobs:
                   blockers.append("WINDOWS_UNDISPOSITIONED_WARNING:"+record)
 
           stale=allowed-observed_allowed
+          audit_rc=int(os.environ["AUDIT_RC"])
+          print("QROS_RUSTSEC_AUDIT_RC="+str(audit_rc))
           print("QROS_RUSTSEC_TOTAL_FINDINGS="+str(len(findings)))
           print("QROS_RUSTSEC_NONWINDOWS_EXCLUDED="+str(len(excluded)))
           print("QROS_RUSTSEC_EXACT_DISPOSITION_COUNT="+str(len(observed_allowed)))
@@ -165,8 +167,10 @@ jobs:
               raise SystemExit("RustSec Windows blocker(s): "+", ".join(sorted(blockers)))
           if stale:
               raise SystemExit("Stale RustSec disposition(s) must be removed/reviewed: "+", ".join(sorted(f"{n}@{v}:{a}:{c}" for n,v,a,c in stale)))
-          if int(os.environ["AUDIT_RC"]) != 0:
-              raise SystemExit("cargo audit returned non-zero without a classified blocker; evidence incomplete")
+          if audit_rc not in (0,1):
+              raise SystemExit(f"Unexpected cargo audit exit code {audit_rc}")
+          if audit_rc != 0 and not findings:
+              raise SystemExit("cargo audit returned non-zero with no classifiable findings")
           print("Phase 4 Windows-resolved RustSec disposition gate: PASS")
           PY
 
