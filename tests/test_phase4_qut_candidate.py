@@ -227,7 +227,7 @@ class Phase4QutCandidateTests(unittest.TestCase):
         self.assertIn("Microsoft.VisualStudio.Product.Community", script)
         self.assertIn("COMMUNITY_INDIVIDUAL_SCOPE_CANDIDATE", script)
         self.assertIn("Microsoft.VCToolsVersion.default.txt", script)
-        self.assertIn("Hostx64\\\\x64\\\\cl.exe", script)
+        self.assertIn("Hostx64\\x64\\cl.exe", script)
         self.assertIn('Invoke-NativeText -FilePath "rustc" -ArgumentList @("-Vv")', script)
         self.assertIn('x86_64-pc-windows-msvc', script)
         self.assertIn("toolchain = $toolchain", script)
