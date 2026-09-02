@@ -31,8 +31,9 @@ local-only/phase4/windows11-validation.json
 7. Exact Node/npm/Rust versions must already be installed:
    - Node 24.20.0
    - npm 11.19.0
-   - Rust 1.98.0
-8. Do not bypass local PowerShell execution policy. If policy blocks the script, stop and record the blocker.
+   - Rust 1.98.0 with host `x86_64-pc-windows-msvc`
+8. The currently accepted zero-cost local MSVC license path is Visual Studio Community with the VC x86/x64 tools component. Enterprise, Professional, or standalone Build Tools require separate license evidence and fail closed in this harness.
+9. Do not bypass local PowerShell execution policy. If policy blocks the script, stop and record the blocker.
 
 ## Step A — inventory only
 
@@ -45,7 +46,8 @@ powershell.exe -NoProfile -File .\scripts\phase4\windows11-local-validation.ps1
 Review:
 
 - Windows 11 / x64 result;
-- Visual Studio / VC x86+x64 tools;
+- exact Node/npm/Rust versions and Rust host triple;
+- Visual Studio Community / VC x86+x64 tools and MSVC toolset version;
 - WebView2 Evergreen version;
 - Defender status;
 - SecurityCenter2 antivirus product names/states;
@@ -103,7 +105,14 @@ Required review fields include:
 ```text
 target.windows_11
 target.x64
+toolchain.node_version
+toolchain.npm_version
+toolchain.rustc_version
+toolchain.rust_host
+visual_studio.product_id
+visual_studio.license_basis
 visual_studio.vc_tools_x86_x64_required_component_resolved
+visual_studio.vc_tools_version
 webview2.evergreen_runtime_present
 defender.query_succeeded
 security_center.query_succeeded
