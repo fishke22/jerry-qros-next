@@ -50,7 +50,7 @@ Review:
 - SecurityCenter2 antivirus product names/states;
 - whether Norton/Symantec is detected.
 
-`ExecutionPolicy Bypass` is process-scoped for this explicit visible invocation and does not modify machine policy. If local policy forbids it, use the environment approved script execution method instead.
+If local execution policy blocks the script, do not bypass the policy. Use the environment approved script execution method or stop and record the blocker.
 
 ## Step B — source-build smoke
 
