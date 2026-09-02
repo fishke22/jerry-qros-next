@@ -1,0 +1,102 @@
+{
+  "research_version": 1,
+  "researched_at": "2026-09-02",
+  "phase": "Phase 4",
+  "scope": "WINDOWS_11_X64_MINIMAL_QUT_SHELL",
+  "unknown_is_deny": true,
+  "implementation_authorized": false,
+  "package_authorized": false,
+  "release_authorized": false,
+  "yuanta_integration_authorized": false,
+  "live_trading_authorized": false,
+  "candidates": {
+    "tauri": {
+      "version": "2.11.5",
+      "tauri_build": "2.6.3",
+      "cli": "2.11.4",
+      "api": "2.11.1",
+      "source_commit": "7cd71369c00978a3783b6ae3e9972358abbe4ae6",
+      "license": "Apache-2.0 OR MIT",
+      "cost": "ZERO_LICENSE_COST"
+    },
+    "react": {
+      "version": "19.2.8",
+      "source_commit": "1dd4ecbdabf826f527fc9a58c05ea70375b7d170",
+      "license": "MIT",
+      "cost": "ZERO_LICENSE_COST"
+    },
+    "typescript": {
+      "version": "7.0.2",
+      "source_commit": "1e4744d68260a7cb91b62b12edc3f6a2187faaf1",
+      "license": "Apache-2.0",
+      "cost": "ZERO_LICENSE_COST",
+      "risk": "RECENT_MAJOR_REQUIRE_WINDOWS_VALIDATION"
+    },
+    "vite": {
+      "version": "8.2.2",
+      "source_commit": "de1111ab0be00879b404e7ed3b2a80e264edddc1",
+      "license": "MIT",
+      "cost": "ZERO_LICENSE_COST"
+    },
+    "node": {
+      "version": "24.20.0",
+      "channel": "LTS",
+      "source_commit": "71b8b174857e25106d39b61a9e6f30d927da8b01",
+      "license": "MIT",
+      "cost": "ZERO_LICENSE_COST"
+    },
+    "pnpm": {
+      "version": "11.25.0",
+      "source_commit": "6d90c71efdffbc909b499490b64c66badc720327",
+      "license": "MIT",
+      "cost": "ZERO_LICENSE_COST",
+      "reason": "MATURE_MAJOR_PREFERRED_OVER_NEW_PNPM_12"
+    },
+    "rust": {
+      "version": "1.98.0",
+      "target": "x86_64-pc-windows-msvc",
+      "source_commit": "88d9e12ae178fab0fb5cc050a94da85685d449ea",
+      "license": "MIT OR Apache-2.0",
+      "cost": "ZERO_LICENSE_COST"
+    }
+  },
+  "host_prerequisites": {
+    "webview2": {
+      "mode": "EVERGREEN_OS_MANAGED",
+      "windows11_included": true,
+      "repo_pin": false,
+      "required_action": "DETECT_AND_RECORD_VERSION_FAIL_CLOSED_IF_MISSING"
+    },
+    "visual_studio": {
+      "product": "Visual Studio Community 2026",
+      "license_scope": "FREE_FOR_INDIVIDUAL_DEVELOPERS",
+      "repo_pin": false,
+      "required_action": "INVENTORY_EXACT_MSVC_AND_WINDOWS_SDK_BEFORE_ACCEPTANCE"
+    },
+    "github_windows_runner": {
+      "label_candidate": "windows-2025-vs2026",
+      "cost": "FREE_UNLIMITED_STANDARD_RUNNER_FOR_PUBLIC_REPO",
+      "larger_runner": false
+    }
+  },
+  "first_slice_security": {
+    "windows": 1,
+    "local_assets_only": true,
+    "remote_content_allowed": false,
+    "tauri_plugins_allowed": false,
+    "custom_commands_allowed": false,
+    "ipc_capabilities": "NONE_UNLESS_EXPLICITLY_REVIEWED",
+    "csp_required": true,
+    "updater_allowed": false,
+    "bundle_allowed": false
+  },
+  "deferred": [
+    "flexlayout",
+    "lightweight-charts",
+    "echarts",
+    "shadcn-ui",
+    "tanstack-query",
+    "i18next"
+  ],
+  "next_gate": "PHASE4A_MINIMAL_SHELL_IMPLEMENTATION_AFTER_REVIEW"
+}
