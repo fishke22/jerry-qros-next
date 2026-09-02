@@ -32,13 +32,14 @@ local-only/phase4/windows11-validation.json
    - Node 24.20.0
    - npm 11.19.0
    - Rust 1.98.0
+8. Do not bypass local PowerShell execution policy. If policy blocks the script, stop and record the blocker.
 
 ## Step A — inventory only
 
 No QROS dependency bootstrap is performed.
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\phase4\windows11-local-validation.ps1
+powershell.exe -NoProfile -File .\scripts\phase4\windows11-local-validation.ps1
 ```
 
 Review:
@@ -50,14 +51,14 @@ Review:
 - SecurityCenter2 antivirus product names/states;
 - whether Norton/Symantec is detected.
 
-If local execution policy blocks the script, do not bypass the policy. Use the environment approved script execution method or stop and record the blocker.
+If local execution policy blocks the script, do not use `-ExecutionPolicy Bypass`, change machine policy, or weaken endpoint security. Use an already-approved script execution method or stop and record the blocker.
 
 ## Step B — source-build smoke
 
 Only after Step A is understood:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\phase4\windows11-local-validation.ps1 -BuildSmoke
+powershell.exe -NoProfile -File .\scripts\phase4\windows11-local-validation.ps1 -BuildSmoke
 ```
 
 This additionally:
@@ -75,6 +76,23 @@ This additionally:
 It does **not** run `cargo tauri build`, packaging, signing, release, updater, broker, or live-trading commands.
 
 Dependency restoration may access only the documented npm/crates.io build endpoints if the local caches do not already contain the exact lock graph.
+
+## Step C — runtime smoke is a separate gate
+
+The current harness does **not** launch the QUT executable and does not claim runtime/UI/AV acceptance.
+
+Runtime acceptance still requires separate evidence that:
+
+- the development executable launches on physical Windows 11 x64;
+- the zh-TW shell renders;
+- the Rust bridge reaches the expected connected state;
+- Phase 5 navigation remains disabled;
+- process tree and network observations are explainable;
+- the application exits cleanly;
+- Defender produces no blocking detection;
+- Norton is separately reviewed when installed.
+
+Until that evidence exists, runtime smoke remains `UNKNOWN / DENY`.
 
 ## Evidence review
 
@@ -100,10 +118,11 @@ Norton absence is not silently converted to PASS. It remains an unresolved compa
 
 ## Fail-closed result
 
-Until physical-target evidence is captured and reviewed:
+Until physical-target runtime evidence is captured and reviewed:
 
 ```text
 PHASE4_WINDOWS11_LOCAL_VALIDATION = DENY
+PHASE4_WINDOWS11_RUNTIME_SMOKE = DENY
 DEPENDENCY_ADOPTION = DENY
 MAIN_RUNTIME_PROMOTION = DENY
 PRODUCTION_READINESS = DENY
