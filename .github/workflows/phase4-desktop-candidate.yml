@@ -1,0 +1,157 @@
+name: phase4-desktop-candidate
+
+on:
+  pull_request:
+    paths:
+      - "apps/desktop/**"
+      - "config/phase4-desktop-shell-design.json"
+      - "scripts/validate_phase4_desktop_candidate.py"
+      - "tests/test_phase4_desktop_candidate.py"
+      - ".github/workflows/phase4-desktop-candidate.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase4-desktop-candidate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lock-and-web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Setup exact Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24.20.0"
+          check-latest: false
+      - name: Verify Node and npm
+        shell: bash
+        run: |
+          test "$(node --version)" = "v24.20.0"
+          test "$(npm --version)" = "11.19.0"
+      - name: Install exact Rust toolchain for lock resolution
+        shell: bash
+        run: |
+          rustup toolchain install 1.98.0 --profile minimal
+          rustc +1.98.0 --version | grep '^rustc 1\.98\.0 '
+          cargo +1.98.0 --version
+      - name: Validate static candidate boundary
+        run: python scripts/validate_phase4_desktop_candidate.py --allow-missing-locks
+      - name: Detect committed lockfiles
+        id: locks
+        shell: bash
+        run: |
+          if [[ -f apps/desktop/package-lock.json && -f apps/desktop/src-tauri/Cargo.lock ]]; then
+            echo "committed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Generate npm lock candidate
+        if: steps.locks.outputs.committed != 'true'
+        working-directory: apps/desktop
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+      - name: Generate Cargo lock candidate
+        if: steps.locks.outputs.committed != 'true'
+        shell: bash
+        run: cargo +1.98.0 generate-lockfile --manifest-path apps/desktop/src-tauri/Cargo.toml
+      - name: Print generated lock evidence
+        if: steps.locks.outputs.committed != 'true'
+        shell: bash
+        run: |
+          base64 -w 120 apps/desktop/package-lock.json | sed 's/^/QROS_PACKAGE_LOCK_B64:/'
+          base64 -w 120 apps/desktop/src-tauri/Cargo.lock | sed 's/^/QROS_CARGO_LOCK_B64:/'
+      - name: Require reviewed committed lockfiles
+        if: steps.locks.outputs.committed != 'true'
+        shell: bash
+        run: |
+          echo "DENY: generated lockfiles must be reviewed and committed before build validation"
+          exit 2
+      - name: Validate committed lockfiles
+        if: steps.locks.outputs.committed == 'true'
+        run: python scripts/validate_phase4_desktop_candidate.py
+      - name: Install exact npm graph without lifecycle scripts
+        if: steps.locks.outputs.committed == 'true'
+        working-directory: apps/desktop
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Audit npm graph
+        if: steps.locks.outputs.committed == 'true'
+        working-directory: apps/desktop
+        run: npm audit --package-lock-only --audit-level=high
+      - name: Compile TypeScript 7 and build static SPA
+        if: steps.locks.outputs.committed == 'true'
+        working-directory: apps/desktop
+        run: npm run build
+      - name: Verify Cargo lock remains exact
+        if: steps.locks.outputs.committed == 'true'
+        shell: bash
+        run: cargo +1.98.0 metadata --manifest-path apps/desktop/src-tauri/Cargo.toml --locked --format-version 1 > /dev/null
+
+  windows-source-build:
+    if: ${{ hashFiles('apps/desktop/package-lock.json', 'apps/desktop/src-tauri/Cargo.lock') != '' }}
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Setup exact Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24.20.0"
+          check-latest: false
+      - name: Verify Node and npm
+        shell: bash
+        run: |
+          test "$(node --version)" = "v24.20.0"
+          test "$(npm --version)" = "11.19.0"
+      - name: Install exact Rust toolchain
+        shell: bash
+        run: |
+          rustup toolchain install 1.98.0 --profile minimal --target x86_64-pc-windows-msvc
+          rustc +1.98.0 --version | grep '^rustc 1\.98\.0 '
+          cargo +1.98.0 --version
+      - name: Validate committed candidate evidence
+        run: python scripts/validate_phase4_desktop_candidate.py
+      - name: Inventory MSVC and WebView2
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          if (-not (Test-Path $vswhere)) { throw "MSVC inventory unavailable: vswhere missing" }
+          $vs = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (-not $vs) { throw "MSVC C++ toolset not found" }
+          $vcVersionFile = Join-Path $vs "VC\Auxiliary\Build\Microsoft.VCToolsVersion.default.txt"
+          if (-not (Test-Path $vcVersionFile)) { throw "MSVC toolset version file missing" }
+          $vcVersion = (Get-Content $vcVersionFile -Raw).Trim()
+          Write-Host "QROS_MSVC_INSTALLATION=$vs"
+          Write-Host "QROS_MSVC_TOOLSET_VERSION=$vcVersion"
+
+          $roots = @(
+            "${env:ProgramFiles(x86)}\Microsoft\EdgeWebView\Application",
+            "$env:ProgramFiles\Microsoft\EdgeWebView\Application"
+          )
+          $versions = @()
+          foreach ($root in $roots) {
+            if (Test-Path $root) {
+              $versions += Get-ChildItem $root -Directory |
+                Where-Object { $_.Name -match '^\d+\.\d+\.\d+\.\d+$' } |
+                Select-Object -ExpandProperty Name
+            }
+          }
+          $versions = $versions | Sort-Object -Unique
+          if (-not $versions) { throw "WebView2 Evergreen runtime inventory unavailable" }
+          Write-Host "QROS_WEBVIEW2_VERSIONS=$($versions -join ',')"
+      - name: Install exact npm graph without lifecycle scripts
+        working-directory: apps/desktop
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Audit npm graph
+        working-directory: apps/desktop
+        run: npm audit --package-lock-only --audit-level=high
+      - name: Compile TypeScript 7 and build static SPA
+        working-directory: apps/desktop
+        run: npm run build
+      - name: Build Tauri Rust source without packaging
+        shell: bash
+        run: cargo +1.98.0 build --manifest-path apps/desktop/src-tauri/Cargo.toml --locked
