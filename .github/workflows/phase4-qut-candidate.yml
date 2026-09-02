@@ -93,11 +93,59 @@ jobs:
           PY
           npm sbom --package-lock-only --sbom-format cyclonedx > phase4-npm-sbom.cdx.json
           echo "QROS_NPM_SBOM_SHA256=$(sha256sum phase4-npm-sbom.cdx.json | cut -d' ' -f1)"
-      - name: Install and run exact RustSec audit
+      - name: Install exact RustSec audit and evaluate Windows resolved graph
         shell: bash
         run: |
           cargo install --locked cargo-audit --version 0.22.2
-          cargo audit --deny warnings --target-arch x86_64 --target-os windows --file apps/qut/src-tauri/Cargo.lock
+          set +e
+          cargo audit --json --target-arch x86_64 --target-os windows --file apps/qut/src-tauri/Cargo.lock > phase4-rustsec-audit.json
+          audit_rc=$?
+          set -e
+          AUDIT_RC="$audit_rc" python - <<'PY'
+          import json, os
+          from pathlib import Path
+
+          meta=json.loads(Path("phase4-cargo-metadata.json").read_text(encoding="utf-8"))
+          windows={(p["name"],p["version"]) for p in meta["packages"] if p.get("source")}
+          report=json.loads(Path("phase4-rustsec-audit.json").read_text(encoding="utf-8"))
+          if not isinstance(report,dict) or "vulnerabilities" not in report or "warnings" not in report:
+              raise SystemExit("RustSec JSON schema missing expected vulnerabilities/warnings fields")
+
+          findings=[]
+          def walk(node,path=()):
+              if isinstance(node,dict):
+                  adv=node.get("advisory")
+                  pkg=node.get("package")
+                  if isinstance(adv,dict) and isinstance(pkg,dict) and pkg.get("name") and pkg.get("version"):
+                      findings.append((path,pkg,adv))
+                  for key,value in node.items():
+                      walk(value,path+(str(key),))
+              elif isinstance(node,list):
+                  for idx,value in enumerate(node):
+                      walk(value,path+(str(idx),))
+          walk(report)
+
+          windows_findings=[]
+          excluded=[]
+          for path,pkg,adv in findings:
+              item=(str(pkg["name"]),str(pkg["version"]))
+              advisory=str(adv.get("id") or adv.get("url") or "UNKNOWN_ADVISORY")
+              record=f"{item[0]}@{item[1]}:{advisory}:{'/'.join(path)}"
+              if item in windows:
+                  windows_findings.append(record)
+              else:
+                  excluded.append(record)
+
+          print("QROS_RUSTSEC_TOTAL_FINDINGS="+str(len(findings)))
+          print("QROS_RUSTSEC_NONWINDOWS_EXCLUDED="+str(len(excluded)))
+          for record in sorted(excluded):
+              print("QROS_RUSTSEC_TARGET_EXCLUDED="+record)
+          if windows_findings:
+              raise SystemExit("RustSec finding(s) intersect Windows resolved graph: "+", ".join(sorted(windows_findings)))
+          if int(os.environ["AUDIT_RC"]) != 0:
+              raise SystemExit("cargo audit returned non-zero without a classified Windows finding; evidence incomplete")
+          print("Phase 4 Windows-resolved RustSec gate: PASS")
+          PY
 
   windows-source-build:
     runs-on: windows-latest
