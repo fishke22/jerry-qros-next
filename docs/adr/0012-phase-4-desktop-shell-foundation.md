@@ -1,6 +1,6 @@
 # ADR-0012: Phase 4 Windows Desktop Shell Foundation
 
-Status: PROPOSED / REVIEW REQUIRED
+Status: ACCEPTED / IMPLEMENTATION CANDIDATE ONLY
 
 Date: 2026-09-02
 
@@ -15,9 +15,9 @@ Research evidence is recorded in:
 - `config/phase4-desktop-shell-research.json`
 - `docs/source-evidence/phase-4-desktop-shell-research.md`
 
-This ADR does not authorize implementation.
+This ADR was proposed without implementation authority. The design review recorded in `config/phase4-desktop-shell-design.json` now authorizes only construction and validation of a minimal implementation candidate on a feature branch; dependency adoption and main runtime promotion remain denied.
 
-## Decision candidate
+## Decision
 
 ### 1. Keep the first vertical slice deliberately small
 
@@ -122,7 +122,7 @@ Research candidates:
 - @types/react 19.2.18
 - @types/react-dom 19.2.5
 
-Every item remains `use_authorized=false`.
+Every research item remains `use_authorized=false` in the immutable research record. Design acceptance permits exact candidate resolution only on a feature branch; it does not promote any item to `ADOPTED`.
 
 TypeScript 7.0.2 is especially conditional because the exact QROS React/Vite/Tauri graph has not yet been compile-validated with the native TypeScript 7 compiler.
 
@@ -195,30 +195,26 @@ Still prohibited:
 
 MSI-specific VBSCRIPT setup is therefore not part of Phase 4.
 
-## Acceptance gate for this ADR
+## Design review acceptance
 
-This ADR may be accepted only after:
+Design review accepted the architecture because:
 
-1. research config and source evidence pass repository governance tests;
-2. dependency registry remains deny-only for Phase 4 candidates;
-3. no material P1/P2 review finding remains;
-4. all research files and policy changes are SHA-256 sealed;
-5. implementation remains explicitly unauthorized.
+1. PR #23 research evidence passed qros-gate, lean-integration, post-merge qros-gate, and final review with no major issue;
+2. current package/source re-checks remained consistent with the research candidate;
+3. the minimal slice defers nonessential UI/chart/query/i18n and privileged Tauri plugins;
+4. exact npm/Cargo graphs, TypeScript 7 compile compatibility, MSVC inventory, WebView2 inventory, and final CSP remain explicit fail-closed promotion gates;
+5. dependency-registry entries remain deny-only and are not promoted by design acceptance.
 
-Acceptance of this ADR authorizes only the next implementation-design gate. It does not itself authorize dependencies or code introduction.
+## Authorized next gate
 
-## Proposed next gate
+`Phase 4 DESIGN = ACCEPTED`
 
-If this ADR is accepted:
+`Phase 4 IMPLEMENTATION_CANDIDATE = AUTHORIZED_ON_FEATURE_BRANCH`
 
-`Phase 4 DESIGN REVIEW → IMPLEMENTATION CANDIDATE`
+`Phase 4 DEPENDENCY_ADOPTION = DENY_PENDING_IMPLEMENTATION_EVIDENCE`
 
-The implementation candidate must begin on a new feature branch and must first prove exact lockfiles, source-build compatibility, supply-chain/license closure, Windows toolchain inventory, CSP/capability boundaries, and zero-cost compliance.
+`Phase 4 MAIN_RUNTIME_PROMOTION = DENY_PENDING_IMPLEMENTATION_REVIEW`
 
-Until then:
+The implementation candidate must begin on a new feature branch and prove exact lockfiles, source-build compatibility, supply-chain/license closure, Windows toolchain inventory, CSP/capability boundaries, and zero-cost compliance.
 
-`PHASE_4_IMPLEMENTATION = DENY`
-
-`PHASE_4_DEPENDENCY_INTRODUCTION = DENY`
-
-Passing research tests alone is not production readiness.
+Passing design or implementation tests alone is not production readiness.
