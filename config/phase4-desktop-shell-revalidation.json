@@ -110,7 +110,7 @@
     {
       "name": "Microsoft Edge WebView2 Runtime",
       "purpose": "system web rendering runtime",
-      "current_version": "EVERGREEN_ENVIRONMENT_OBSERVED",
+      "current_version": "UNKNOWN_LOCAL_INVENTORY_REQUIRED",
       "candidate_exact_pin": null,
       "license": "MICROSOFT_REDISTRIBUTABLE_RUNTIME_TERMS",
       "license_verified": true,
