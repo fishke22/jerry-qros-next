@@ -198,6 +198,17 @@ jobs:
           out1=convert_once()
           out2=convert_once()
           if out1 != out2:
+              j1=json.loads(out1)
+              j2=json.loads(out2)
+              keys=sorted(set(j1)|set(j2))
+              top_diff={}
+              for key in keys:
+                  if j1.get(key) != j2.get(key):
+                      top_diff[key]={"out1":j1.get(key),"out2":j2.get(key)}
+              print(
+                  "QROS_PHASE4C_NONDETERMINISM_TOP_LEVEL_DIFF="
+                  + json.dumps(top_diff,sort_keys=True,separators=(",",":"))
+              )
               raise SystemExit(
                   "Conversion not byte deterministic: "
                   + hashlib.sha256(out1.encode()).hexdigest()
