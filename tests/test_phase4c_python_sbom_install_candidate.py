@@ -38,7 +38,20 @@ class Phase4CPythonInstallCandidateTests(unittest.TestCase):
         self.assertTrue(i["no_deps_during_install"])
         self.assertTrue(i["require_hashes"])
         self.assertFalse(i["pth_files_allowed"])
-        self.assertFalse(i["unlisted_wheel_data_scripts_allowed"])\n        self.assertEqual(len(i["allowed_wheel_data_scripts"]), 1)\n        allowed=i["allowed_wheel_data_scripts"][0]\n        self.assertEqual(allowed["path"], "jsonpointer-3.1.1.data/scripts/jsonpointer")\n        self.assertEqual(\n            allowed["sha256"],\n            "4c9bda8829e436ce6c732194421f645240695bf647a75eb210f17256215f7b22",\n        )\n        self.assertEqual(\n            allowed["upstream_source_sha256"],\n            "0922c792b58faecab05e9010713eb5345b964848abeecd62d901a0f10ff1a0c6",\n        )\n        self.assertIn("ONLY_SHEBANG_CHANGED", allowed["wheel_transformation"])\n        self.assertIn("QROS_PHASE4C_WHEEL_DATA_SCRIPTS_EXACT_ALLOWLIST=PASS", self.workflow)
+        self.assertFalse(i["unlisted_wheel_data_scripts_allowed"])
+        self.assertEqual(len(i["allowed_wheel_data_scripts"]), 1)
+        allowed=i["allowed_wheel_data_scripts"][0]
+        self.assertEqual(allowed["path"], "jsonpointer-3.1.1.data/scripts/jsonpointer")
+        self.assertEqual(
+            allowed["sha256"],
+            "4c9bda8829e436ce6c732194421f645240695bf647a75eb210f17256215f7b22",
+        )
+        self.assertEqual(
+            allowed["upstream_source_sha256"],
+            "0922c792b58faecab05e9010713eb5345b964848abeecd62d901a0f10ff1a0c6",
+        )
+        self.assertIn("ONLY_SHEBANG_CHANGED", allowed["wheel_transformation"])
+        self.assertIn("QROS_PHASE4C_WHEEL_DATA_SCRIPTS_EXACT_ALLOWLIST=PASS", self.workflow)
         self.assertIn("--no-index", self.workflow)
         self.assertIn("--no-deps", self.workflow)
         self.assertIn("--require-hashes", self.workflow)
