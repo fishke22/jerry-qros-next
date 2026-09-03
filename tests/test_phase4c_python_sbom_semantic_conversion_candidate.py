@@ -46,7 +46,14 @@ class Phase4CPythonSemanticConversionCandidateTests(unittest.TestCase):
         )
         self.assertIn('d.pop("$schema",None)',self.workflow)
         self.assertIn('d.pop("specVersion",None)',self.workflow)
-        self.assertIn("if a != b:",self.workflow)\n        serial=self.policy["fidelity"]["serial_number_policy"]\n        self.assertFalse(serial["cyclonedx_1_7_required"])\n        self.assertIn("IF_INPUT_ABSENT",serial["rule"])\n        self.assertIn('doc.pop("serialNumber")',self.workflow)\n        self.assertIn("UUID(serial.removeprefix",self.workflow)\n        self.assertIn("QROS_PHASE4C_SERIALNUMBER_ABSENCE_PRESERVATION=PASS",self.workflow)\n
+        self.assertIn("if a != b:",self.workflow)
+        serial=self.policy["fidelity"]["serial_number_policy"]
+        self.assertFalse(serial["cyclonedx_1_7_required"])
+        self.assertIn("IF_INPUT_ABSENT",serial["rule"])
+        self.assertIn('doc.pop("serialNumber")',self.workflow)
+        self.assertIn("UUID(serial.removeprefix",self.workflow)
+        self.assertIn("QROS_PHASE4C_SERIALNUMBER_ABSENCE_PRESERVATION=PASS",self.workflow)
+
     def test_converter_execution_is_candidate_only(self):
         s=self.policy["scope"]
         self.assertTrue(s["bom_from_json_execution_authorized"])
