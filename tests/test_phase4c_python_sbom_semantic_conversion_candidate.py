@@ -42,7 +42,7 @@ class Phase4CPythonSemanticConversionCandidateTests(unittest.TestCase):
         self.assertTrue(f["byte_deterministic_output_required"])
         self.assertEqual(
             f["semantic_rule"],
-            "CANONICAL_JSON_DEEP_EQUAL_EXCEPT_$schema_AND_specVersion",
+            "CANONICAL_JSON_DEEP_EQUAL_AFTER_SERIALNUMBER_ABSENCE_PRESERVATION_AND_EXACT_SET_COLLECTION_ORDER_NORMALIZATION_EXCEPT_$schema_AND_specVersion",
         )
         self.assertIn('d.pop("$schema",None)',self.workflow)
         self.assertIn('d.pop("specVersion",None)',self.workflow)
@@ -53,6 +53,24 @@ class Phase4CPythonSemanticConversionCandidateTests(unittest.TestCase):
         self.assertIn('doc.pop("serialNumber")',self.workflow)
         self.assertIn("UUID(serial.removeprefix",self.workflow)
         self.assertIn("QROS_PHASE4C_SERIALNUMBER_ABSENCE_PRESERVATION=PASS",self.workflow)
+        order=f["order_insensitive_collections"]
+        self.assertEqual(
+            set(order),
+            {"components","externalReferences"},
+        )
+        self.assertTrue(f["all_other_arrays_order_sensitive"])
+        self.assertIn(
+            'if key=="components"',
+            self.workflow,
+        )
+        self.assertIn(
+            'elif key=="externalReferences"',
+            self.workflow,
+        )
+        self.assertIn(
+            "QROS_PHASE4C_SET_COLLECTION_ORDER_NORMALIZATION=PASS",
+            self.workflow,
+        )
 
     def test_converter_execution_is_candidate_only(self):
         s=self.policy["scope"]
