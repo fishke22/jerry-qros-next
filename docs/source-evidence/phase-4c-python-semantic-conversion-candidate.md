@@ -140,3 +140,44 @@ top-level metadata.timestamp:
 ```
 
 Canonical 1.7 output remains the library output (after the separately reviewed serialNumber absence-preservation rule). Input non-canonical PURL spelling is not copied back into the output.
+
+
+## Successful semantic-fidelity evidence
+
+Workflow run `33756884807`, job `100653599007` completed successfully.
+
+Exact evidence:
+
+```text
+INPUT_CYCLONEDX_SPEC = 1.5
+INPUT_SHA256 = 50e315c02680106ff3004e6e194f58d4cbbd8732fab33aff08ff122972da3623
+INPUT_COMPONENT_COUNT = 253
+INPUT_STRICT_VALIDATION = PASS
+
+SERIALNUMBER_ABSENCE_PRESERVATION = PASS
+CANONICAL_OUTPUT_BYTE_DETERMINISM = PASS
+OUTPUT_STRICT_VALIDATION = PASS
+
+COMPONENTS_EXTERNALREFERENCES_ORDER_NORMALIZATION = PASS
+DEPENDSON_ORDER_NORMALIZATION = PASS
+PURL_CANONICALIZATION = PASS
+METADATA_TIMESTAMP_NORMALIZATION = PASS
+
+SEMANTIC_EQUALITY = PASS
+
+OUTPUT_CYCLONEDX_SPEC = 1.7
+OUTPUT_COMPONENT_COUNT = 253
+OUTPUT_SHA256 = b1bee226f7df007a243b6114c13fe1e22f5e0e2083f26ae261a68357b419d668
+```
+
+The output hash is now a sealed expectation for subsequent exact-head candidate CI. A future converter/library/input-lock change must not silently replace this value; it requires a new review.
+
+This closes the semantic-fidelity candidate gate only.
+
+```text
+SEMANTIC_FIDELITY_CONVERSION = PASS_CANDIDATE_EVIDENCE_ONLY
+PERMANENT_PYTHON_CONVERTER_ADOPTION = DENY
+PERMANENT_CARGO_CYCLONEDX_ADOPTION = DENY
+DEPENDENCY_REGISTRY_PROMOTION = DENY
+CANONICAL_SBOM_1_7_PROMOTION = DENY
+```
