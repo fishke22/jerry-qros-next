@@ -24,6 +24,7 @@ jobs:
       CYCLONEDX_CLI_SHA: b3cfa4b0edc356dad07e0b6e7ab6da0a94af0246
       CYCLONEDX_CLI_VERSION: 0.33.1
       DOTNET_SDK_VERSION: 10.0.400
+      QROS_TOOL_RUNTIME: linux-x64
     steps:
       - name: Checkout QROS
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -179,7 +180,8 @@ jobs:
           lock_path = ev / "packages.lock.json"
           lock = json.loads(lock_path.read_text(encoding="utf-8"))
           deps = lock.get("dependencies", {})
-          if set(deps) != {"net10.0"}:
+          expected_frameworks = {"net10.0", "net10.0/linux-x64"}
+          if set(deps) != expected_frameworks:
               raise SystemExit(f"Unexpected lock frameworks: {sorted(deps)}")
           graph = deps["net10.0"]
 
@@ -220,9 +222,21 @@ jobs:
               )
 
           packages_root = Path(os.environ["NUGET_PACKAGES"])
+          combined = {}
+          for framework, framework_graph in deps.items():
+              for name, entry in framework_graph.items():
+                  version = str(entry["resolved"])
+                  prior = combined.get(name)
+                  if prior is not None and str(prior["resolved"]) != version:
+                      raise SystemExit(
+                          f"Package version differs across lock targets for {name}: "
+                          f"{prior['resolved']} vs {version}"
+                      )
+                  combined[name] = entry
+
           inventory = []
           missing_license = []
-          for name, entry in sorted(graph.items(), key=lambda x: x[0].lower()):
+          for name, entry in sorted(combined.items(), key=lambda x: x[0].lower()):
               version = str(entry["resolved"])
               pkg_dir = packages_root / name.lower() / version.lower()
               nuspecs = list(pkg_dir.glob("*.nuspec"))
@@ -267,14 +281,18 @@ jobs:
               encoding="utf-8",
           )
 
-          edges = []
-          for name, entry in graph.items():
-              for dep_name, dep_range in (entry.get("dependencies") or {}).items():
-                  edges.append((name, dep_name, dep_range))
+          edges = set()
+          for framework, framework_graph in deps.items():
+              for name, entry in framework_graph.items():
+                  for dep_name, dep_range in (entry.get("dependencies") or {}).items():
+                      edges.add((framework, name, dep_name, dep_range))
           graph_summary = {
-              "package_count": len(graph),
+              "frameworks": sorted(deps),
+              "package_count_unique": len(combined),
+              "base_package_count": len(graph),
+              "runtime_package_count": len(deps["net10.0/linux-x64"]),
               "direct_count": sum(1 for x in graph.values() if x.get("type") == "Direct"),
-              "transitive_count": sum(1 for x in graph.values() if x.get("type") == "Transitive"),
+              "transitive_count_base": sum(1 for x in graph.values() if x.get("type") == "Transitive"),
               "edge_count": len(edges),
           }
           print("QROS_PHASE4C_GRAPH_SUMMARY=" + json.dumps(graph_summary, sort_keys=True, separators=(",", ":")))
