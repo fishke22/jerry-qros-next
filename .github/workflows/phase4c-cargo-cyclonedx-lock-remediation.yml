@@ -61,7 +61,17 @@ jobs:
         run: |
           set -euo pipefail
           qros_lock="$GITHUB_WORKSPACE/supply-chain/tool-locks/cargo-cyclonedx-0.5.9-qros.lock"
-          test "$(sha256sum "$qros_lock" | cut -d' ' -f1)" = "f24c56121784fe36ee9f14868b7f6386f1dd3fe640a3d2ee3e5aed4fea986e7a"
+          committed_sha="$(sha256sum "$qros_lock" | cut -d' ' -f1)"
+          echo "QROS_PHASE4C_COMMITTED_PATCHED_LOCK_ACTUAL_SHA256=$committed_sha"
+          if [ "$committed_sha" != "f24c56121784fe36ee9f14868b7f6386f1dd3fe640a3d2ee3e5aed4fea986e7a" ]; then
+            cp .phase4c-remediation/upstream/Cargo.lock "$RUNNER_TEMP/cargo-cyclonedx-resolver.lock"
+            cargo update --manifest-path .phase4c-remediation/upstream/Cargo.toml -p xml-rs --precise 0.8.27
+            resolver_sha="$(sha256sum .phase4c-remediation/upstream/Cargo.lock | cut -d' ' -f1)"
+            echo "QROS_PHASE4C_RESOLVER_PATCHED_LOCK_SHA256=$resolver_sha"
+            git diff --no-index -- "$qros_lock" .phase4c-remediation/upstream/Cargo.lock || true
+            cp "$RUNNER_TEMP/cargo-cyclonedx-resolver.lock" .phase4c-remediation/upstream/Cargo.lock
+            exit 1
+          fi
           cp .phase4c-remediation/upstream/Cargo.lock "$RUNNER_TEMP/cargo-cyclonedx-upstream.lock"
           cp "$qros_lock" .phase4c-remediation/upstream/Cargo.lock
           BEFORE="$RUNNER_TEMP/cargo-cyclonedx-upstream.lock" AFTER="$qros_lock" python - <<'PY'
