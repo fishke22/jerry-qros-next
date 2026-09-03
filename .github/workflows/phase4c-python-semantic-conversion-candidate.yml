@@ -258,11 +258,44 @@ jobs:
           if len(output_obj.get("components") or []) != 253:
               raise SystemExit("Output component count changed")
 
+          def canonicalize_set_collections(value):
+              if isinstance(value,dict):
+                  out={}
+                  for key,item in value.items():
+                      normalized=canonicalize_set_collections(item)
+                      if key=="components" and isinstance(normalized,list):
+                          if not all(
+                              isinstance(x,dict) and isinstance(x.get("bom-ref"),str)
+                              for x in normalized
+                          ):
+                              raise SystemExit(
+                                  "components ordering normalization requires bom-ref on every item"
+                              )
+                          normalized=sorted(
+                              normalized,
+                              key=lambda x:x["bom-ref"],
+                          )
+                      elif key=="externalReferences" and isinstance(normalized,list):
+                          normalized=sorted(
+                              normalized,
+                              key=lambda x:json.dumps(
+                                  x,sort_keys=True,separators=(",",":")
+                              ),
+                          )
+                      out[key]=normalized
+                  return out
+              if isinstance(value,list):
+                  return [
+                      canonicalize_set_collections(x)
+                      for x in value
+                  ]
+              return value
+
           def projection(doc):
               d=copy.deepcopy(doc)
               d.pop("$schema",None)
               d.pop("specVersion",None)
-              return d
+              return canonicalize_set_collections(d)
 
           a=projection(input_obj)
           b=projection(output_obj)
@@ -297,7 +330,7 @@ jobs:
               )
 
           Path(sys.argv[2]).write_text(out1,encoding="utf-8")
-          print("QROS_PHASE4C_SEMANTIC_EQUALITY_EXCEPT_VERSION_FIELDS=PASS")
+          print("QROS_PHASE4C_SET_COLLECTION_ORDER_NORMALIZATION=PASS")\n          print("QROS_PHASE4C_SEMANTIC_EQUALITY_EXCEPT_VERSION_FIELDS=PASS")
           print("QROS_PHASE4C_OUTPUT_COMPONENT_COUNT=253")
           print("QROS_PHASE4C_OUTPUT_SHA256="+hashlib.sha256(out1.encode()).hexdigest())
           print("QROS_PHASE4C_OUTPUT_TOP_LEVEL_KEYS="+json.dumps(sorted(output_obj),separators=(",",":")))
