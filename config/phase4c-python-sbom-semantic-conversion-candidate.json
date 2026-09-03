@@ -28,7 +28,7 @@
     "output_spec_version": "1.7",
     "two_fresh_deserializations_required": true,
     "byte_deterministic_output_required": true,
-    "semantic_rule": "CANONICAL_JSON_DEEP_EQUAL_AFTER_SERIALNUMBER_ABSENCE_PRESERVATION_AND_EXACT_SET_COLLECTION_ORDER_NORMALIZATION_EXCEPT_$schema_AND_specVersion",
+    "semantic_rule": "CANONICAL_DEEP_EQUAL_AFTER_EXACT_REVIEWED_SERIALNUMBER_SET_ORDER_PURL_AND_METADATA_TIMESTAMP_NORMALIZATIONS_EXCEPT_$schema_AND_specVersion",
     "component_count_must_remain": 253,
     "input_hash_must_match_prior_evidence": true,
     "raw_library_output_byte_determinism_required": false,
@@ -54,6 +54,10 @@
       "externalReferences": {
         "rule": "SORT_BY_CANONICAL_JSON_AFTER_RECURSIVE_CANONICALIZATION",
         "evidence": "cyclonedx-python-lib component.external_references uses SortedSet"
+      },
+      "dependsOn": {
+        "rule": "SORT_STRING_BOM_REFS",
+        "evidence": "cyclonedx-python-lib Dependency.dependencies uses SortedSet; CycloneDX 1.5 and 1.7 schemas set uniqueItems=true"
       }
     },
     "all_other_arrays_order_sensitive": true,
@@ -65,6 +69,28 @@
         "component.externalReferences ordering"
       ],
       "value_loss_observed": false
+    },
+    "semantic_string_normalizations": {
+      "purl": {
+        "rule": "PackageURL.from_string(value).to_string()",
+        "scope": "dictionary field named purl only",
+        "evidence": "Package URL canonical encoded form does not permit unencoded plus; output percent-encodes + as %2B"
+      },
+      "metadata_timestamp": {
+        "rule": "PARSE_RFC3339_AND_NORMALIZE_TO_UTC_ISOFORMAT",
+        "scope": "top-level metadata.timestamp only",
+        "observed_input": "1970-01-01T00:00:00.000000000Z",
+        "observed_output": "1970-01-01T00:00:00+00:00",
+        "evidence": "cyclonedx-python-lib BomMetaData.timestamp is datetime mapped through XsdDateTime"
+      }
+    },
+    "additional_reviewed_differences": {
+      "observed_run": 33756396707,
+      "observed_job": 100651776224,
+      "purl_plus_encoding_components": 6,
+      "dependsOn_order_only": true,
+      "metadata_timestamp_same_utc_instant": true,
+      "other_value_changes_observed": false
     }
   },
   "scope": {
