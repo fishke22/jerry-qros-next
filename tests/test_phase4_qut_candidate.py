@@ -178,6 +178,8 @@ class Phase4QutCandidateTests(unittest.TestCase):
         self.assertNotIn("npm run tauri build", workflow)
         self.assertIn("Parse local Windows validation harness without executing it", workflow)
         self.assertIn("[System.Management.Automation.Language.Parser]::ParseFile", workflow)
+        self.assertIn("docs/validation/PHASE4_WINDOWS11_LOCAL_VALIDATION_PLAN.md", workflow)
+        self.assertIn("supply-chain/SHA256SUMS", workflow)
 
 
     def test_windows11_local_validation_harness_is_read_only_and_fail_closed(self):
