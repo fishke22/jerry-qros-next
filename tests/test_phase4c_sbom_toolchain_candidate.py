@@ -87,6 +87,8 @@ class Phase4CSbomToolchainCandidateTests(unittest.TestCase):
         self.assertIn('{"Exec", "UsingTask"}', self.workflow)
         self.assertIn("RestoreAdditionalProjectSources", self.workflow)
         self.assertIn("RemoteImport", self.workflow)
+        self.assertIn("NonEmptyDirectory.Build.targets", self.workflow)
+        self.assertIn("if xml_root.attrib or list(xml_root)", self.workflow)
 
     def test_hard_gates_remain_closed(self):
         gates = self.policy["hard_gates"]
