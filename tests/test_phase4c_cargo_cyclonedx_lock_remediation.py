@@ -41,10 +41,32 @@ class Phase4CCargoCycloneDxLockRemediationTests(unittest.TestCase):
         self.assertFalse(r["source_code_change_authorized"])
         self.assertTrue(r["only_lock_entry_change_authorized"])
         self.assertTrue(r["all_other_locked_packages_must_match"])
-        self.assertIn("-p xml-rs",self.workflow)
-        self.assertIn("--precise 0.8.27",self.workflow)
+        self.assertEqual(
+            r["patched_lock_path"],
+            "supply-chain/tool-locks/cargo-cyclonedx-0.5.9-qros.lock",
+        )
+        self.assertEqual(
+            r["patched_lock_sha256"],
+            "f24c56121784fe36ee9f14868b7f6386f1dd3fe640a3d2ee3e5aed4fea986e7a",
+        )
+        self.assertIn("Committed lock changes packages other than xml-rs", self.workflow)
+        self.assertNotIn("cargo update", self.workflow)
+
+    def test_committed_lock_and_security_gate_are_required(self):
         self.assertIn(
-            "Lock remediation changed packages other than xml-rs",
+            "supply-chain/tool-locks/cargo-cyclonedx-0.5.9-qros.lock",
+            self.workflow,
+        )
+        self.assertIn(
+            "cargo-audit --version 0.22.2",
+            self.workflow,
+        )
+        self.assertIn(
+            "QROS_PHASE4C_TOOL_RUSTSEC_GATE=PASS",
+            self.workflow,
+        )
+        self.assertIn(
+            "QROS_PHASE4C_TOOL_LICENSE_METADATA_GATE=PASS",
             self.workflow,
         )
 
@@ -79,6 +101,10 @@ class Phase4CCargoCycloneDxLockRemediationTests(unittest.TestCase):
         self.assertFalse(l["external_distribution_authorized"])
 
     def test_hard_gates_and_adoption_remain_closed(self):
+        self.assertEqual(
+            self.policy["status"],
+            "PATCHED_LOCK_PRESERVED_SECURITY_REVIEW_PENDING",
+        )
         s=self.policy["scope"]
         self.assertTrue(s["lock_remediation_research_authorized"])
         self.assertTrue(s["patched_tool_build_test_authorized"])
