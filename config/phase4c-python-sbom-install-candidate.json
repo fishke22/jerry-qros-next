@@ -3,7 +3,7 @@
   "verified_parent_head": "336f4b3eacd70d3ab2ac1392fe5e58463fae9c20",
   "parent_pr": 30,
   "issue": 27,
-  "status": "HASH_LOCKED_INSTALL_IMPORT_COMPATIBILITY_CANDIDATE",
+  "status": "HASH_LOCKED_INSTALL_IMPORT_COMPATIBILITY_PASS",
   "python": {
     "version": "3.14.7",
     "setup_action_revision": "a309ff8b426b58ec0e2a45f0f869d46889d02405",
@@ -78,5 +78,33 @@
     "release_authorized": false,
     "yuanta_integration_authorized": false,
     "live_trading_authorized": false
+  },
+  "outcome": {
+    "evidence_run": 33743936003,
+    "evidence_job": 100612043832,
+    "activation_surfaces_sha256": "f38359daa01e72c90c13130ff00e772e377d96c27d8374e85edda696d4ff9ef5",
+    "pth_gate": "PASS",
+    "wheel_data_scripts_exact_allowlist": "PASS",
+    "entry_points_inventory": "PASS",
+    "hash_locked_install": "PASS",
+    "installed_distribution_set": "PASS",
+    "installed_distribution_count": 26,
+    "cyclonedx_python_lib_version": "11.12.0",
+    "bom_from_json_symbol": "PASS",
+    "json_v1_7_symbol": "PASS",
+    "json_validator_symbols": "PASS",
+    "limited_import": "PASS",
+    "bom_from_json_execution": "NOT_PERFORMED",
+    "json_v1_7_generation": "NOT_PERFORMED",
+    "schema_validation_execution": "NOT_PERFORMED",
+    "semantic_fidelity_test": "NOT_PERFORMED",
+    "canonical_sbom_1_7_promotion": "DENY"
+  },
+  "next_gate": {
+    "name": "SEMANTIC_FIDELITY_CONVERSION_CANDIDATE",
+    "authorized_to_create_separate_candidate_branch": true,
+    "converter_execution_in_current_pr_authorized": false,
+    "permanent_tool_adoption_authorized": false,
+    "canonical_sbom_1_7_promotion_authorized": false
   }
 }
