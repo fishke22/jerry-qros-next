@@ -28,9 +28,24 @@
     "output_spec_version": "1.7",
     "two_fresh_deserializations_required": true,
     "byte_deterministic_output_required": true,
-    "semantic_rule": "JSON_DEEP_EQUAL_EXCEPT_$schema_AND_specVersion",
+    "semantic_rule": "CANONICAL_JSON_DEEP_EQUAL_EXCEPT_$schema_AND_specVersion",
     "component_count_must_remain": 253,
-    "input_hash_must_match_prior_evidence": true
+    "input_hash_must_match_prior_evidence": true,
+    "raw_library_output_byte_determinism_required": false,
+    "raw_library_nondeterminism_review": {
+      "observed_run": 33755577669,
+      "observed_job": 100649075398,
+      "only_observed_field": "serialNumber",
+      "cause": "cyclonedx-python-lib Bom constructor generates uuid4 when serial number is absent",
+      "disposition": "NORMALIZE_ONLY_WHEN_INPUT_FIELD_ABSENT"
+    },
+    "serial_number_policy": {
+      "rule": "IF_INPUT_ABSENT_REQUIRE_VALID_LIBRARY_UUID_THEN_REMOVE_FROM_CANONICAL_OUTPUT",
+      "if_input_present": "OUTPUT_MUST_EQUAL_INPUT",
+      "reason": "preserve input absence and avoid inventing unstable BOM identity",
+      "cyclonedx_1_7_required": false,
+      "canonical_output_byte_determinism_required": true
+    }
   },
   "scope": {
     "bom_from_json_execution_authorized": true,
