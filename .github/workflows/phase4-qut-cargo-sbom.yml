@@ -4,6 +4,7 @@ on:
     paths:
       - "apps/qut/src-tauri/**"
       - ".github/workflows/phase4-qut-cargo-sbom.yml"
+      - "supply-chain/SHA256SUMS"
   workflow_dispatch:
 permissions:
   contents: read
