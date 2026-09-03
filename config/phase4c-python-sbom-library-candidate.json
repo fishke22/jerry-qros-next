@@ -1,7 +1,7 @@
 {
   "research_version": 1,
   "verified_at": "2026-09-03",
-  "status": "WHEEL_METADATA_RESOLUTION_ONLY",
+  "status": "EXACT_WHEEL_LOCK_CANDIDATE",
   "base_research_pr": 28,
   "issue": 27,
   "candidate": {
@@ -27,7 +27,8 @@
     "package_import_allowed": false,
     "build_allowed": false,
     "hash_lock_required": true,
-    "license_metadata_inventory_required": true
+    "license_metadata_inventory_required": true,
+    "committed_lock": "requirements/candidates/phase4c-cyclonedx-python.lock"
   },
   "rejected_predecessor": {
     "component": "CycloneDX CLI 0.33.1 via NuGet binary packages",
@@ -48,5 +49,17 @@
     "release_authorized": false,
     "yuanta_integration_authorized": false,
     "live_trading_authorized": false
+  },
+  "outcome": {
+    "evidence_run": 33740441528,
+    "evidence_job": 100600847832,
+    "wheel_count": 26,
+    "wheel_inventory_sha256": "d8e12dffcb25026a2ff493deca400880b7a2aa4111a2b6baf6790e6de7b98d3a",
+    "wheel_lock_sha256": "bd9df0ad87b54e5bb0d03e25572ac23d02d4fd41acc35631dad4b67b61b0dee1",
+    "hash_reresolution": "PASS",
+    "package_install": "NOT_PERFORMED",
+    "package_import": "NOT_PERFORMED",
+    "conversion": "NOT_PERFORMED",
+    "vulnerability_gate": "PENDING_EXACT_PYPI_RELEASE_JSON"
   }
 }
