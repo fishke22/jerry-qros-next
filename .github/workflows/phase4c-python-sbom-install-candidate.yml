@@ -47,7 +47,7 @@ jobs:
           c=json.loads(Path("config/phase4c-python-sbom-install-candidate.json").read_text(encoding="utf-8"))
           p=json.loads(Path("config/phase4c-python-sbom-library-candidate.json").read_text(encoding="utf-8"))
           l=json.loads(Path("config/phase4c-python-sbom-library-license-dispositions.json").read_text(encoding="utf-8"))
-          assert c["status"] == "HASH_LOCKED_INSTALL_IMPORT_COMPATIBILITY_CANDIDATE"
+          assert c["status"] == "HASH_LOCKED_INSTALL_IMPORT_COMPATIBILITY_PASS"
           assert p["outcome"]["license_gate"] == "PASS_FOR_CANDIDATE_INSTALL_TEST_ONLY"
           assert p["outcome"]["zero_cost_gate"] == "PASS_FOR_CANDIDATE_INSTALL_TEST_ONLY"
           assert p["outcome"]["vulnerability_gate"] == "PASS_EXACT_PYPI_RELEASE_JSON"
