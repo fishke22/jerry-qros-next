@@ -17,7 +17,10 @@ class Phase4CSbomToolchainCandidateTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
 
     def test_restore_inventory_scope_only(self):
-        self.assertEqual(\n            self.policy["status"],\n            "REJECTED_ZERO_COST_AFTER_RESTORE_INVENTORY",\n        )
+        self.assertEqual(
+            self.policy["status"],
+            "REJECTED_ZERO_COST_AFTER_RESTORE_INVENTORY",
+        )
         scope = self.policy["scope"]
         self.assertTrue(scope["restore_and_inventory_authorized"])
         for key in (
