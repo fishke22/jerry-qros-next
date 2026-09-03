@@ -34,11 +34,14 @@
       {
         "wheel": "jsonpointer-3.1.1-py3-none-any.whl",
         "path": "jsonpointer-3.1.1.data/scripts/jsonpointer",
-        "sha256": "0922c792b58faecab05e9010713eb5345b964848abeecd62d901a0f10ff1a0c6",
+        "sha256": "4c9bda8829e436ce6c732194421f645240695bf647a75eb210f17256215f7b22",
         "upstream_repository": "stefankoegl/python-json-pointer",
         "upstream_release_commit": "5998f951dcc5ace60f67f35afe6778c445401a07",
         "upstream_path": "bin/jsonpointer",
-        "reviewed_as": "NON_EXECUTED_CLI_SCRIPT_COPIED_BY_WHEEL_INSTALLER"
+        "reviewed_as": "NON_EXECUTED_CLI_SCRIPT_COPIED_BY_WHEEL_INSTALLER",
+        "upstream_source_sha256": "0922c792b58faecab05e9010713eb5345b964848abeecd62d901a0f10ff1a0c6",
+        "wheel_transformation": "ONLY_SHEBANG_CHANGED_FROM_#!/usr/bin/env python3_TO_#!python",
+        "wheel_spec": "https://packaging.python.org/en/latest/specifications/binary-distribution-format/"
       }
     ]
   },
