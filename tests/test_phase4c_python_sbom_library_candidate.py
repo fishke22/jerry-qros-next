@@ -1,4 +1,6 @@
+import hashlib
 import json
+import re
 import unittest
 from pathlib import Path
 
@@ -52,6 +54,50 @@ class Phase4CPythonSbomLibraryCandidateTests(unittest.TestCase):
             "JsonV1Dot7(",
         ):
             self.assertNotIn(forbidden, self.workflow)
+
+    def test_exact_committed_wheel_lock(self):
+        self.assertEqual(self.policy["status"], "EXACT_WHEEL_LOCK_CANDIDATE")
+        lock = (
+            ROOT / "requirements" / "candidates" / "phase4c-cyclonedx-python.lock"
+        )
+        data = lock.read_bytes()
+        self.assertEqual(
+            hashlib.sha256(data).hexdigest(),
+            "bd9df0ad87b54e5bb0d03e25572ac23d02d4fd41acc35631dad4b67b61b0dee1",
+        )
+        lines = lock.read_text(encoding="utf-8").splitlines()
+        self.assertEqual(len(lines), 26)
+        self.assertTrue(
+            all(
+                re.fullmatch(
+                    r".+==[^ ]+ --hash=sha256:[0-9a-f]{64}",
+                    line,
+                )
+                for line in lines
+            )
+        )
+        self.assertIn("cyclonedx-python-lib==11.12.0", "\n".join(lines))
+        self.assertIn("jsonschema==4.26.0", "\n".join(lines))
+        self.assertIn("referencing==0.37.0", "\n".join(lines))
+
+    def test_pypi_exact_release_security_gate_is_nonexecuting(self):
+        self.assertIn(
+            "https://pypi.org/pypi/",
+            self.workflow,
+        )
+        self.assertIn(
+            "QROS_PHASE4C_PYPI_VULNERABILITY_GATE=PASS",
+            self.workflow,
+        )
+        self.assertIn(
+            "QROS_PHASE4C_PYPI_YANKED_GATE=PASS",
+            self.workflow,
+        )
+        self.assertIn(
+            "requirements/candidates/phase4c-cyclonedx-python.lock",
+            self.workflow,
+        )
+        self.assertNotIn("pip install", self.workflow)
 
     def test_rejected_dotnet_route_does_not_become_allowed(self):
         rejected = self.policy["rejected_predecessor"]
