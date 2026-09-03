@@ -33,13 +33,13 @@ The workflow must:
 - download only exact hash-locked wheels;
 - reject non-wheel artifacts;
 - reject any `.pth` files;
-- reject all unlisted wheel `.data/scripts/` payloads;\n- allow only `jsonpointer-3.1.1.data/scripts/jsonpointer` when its SHA-256 is exactly `0922c792b58faecab05e9010713eb5345b964848abeecd62d901a0f10ff1a0c6`;
+- reject all unlisted wheel `.data/scripts/` payloads;\n- allow only `jsonpointer-3.1.1.data/scripts/jsonpointer` when its SHA-256 is exactly `4c9bda8829e436ce6c732194421f645240695bf647a75eb210f17256215f7b22`;
 - create a dedicated venv;
 - install with `--no-index --no-deps --require-hashes`;
 - run `pip check`;
 - compare installed distribution names and versions against the 26-entry lock.
 
-`entry_points.txt` may be inventoried, but entry points are not executed.\n\nThe one allowed wheel data script was reviewed against upstream `stefankoegl/python-json-pointer` release commit `5998f951dcc5ace60f67f35afe6778c445401a07`, path `bin/jsonpointer`. It is a command-line JSON Pointer utility. PyPA's Wheel specification defines `.data/scripts/` as files moved to the environment's scripts destination during install; QROS does not execute this script. Any additional script or content-hash drift fails closed.
+`entry_points.txt` may be inventoried, but entry points are not executed.\n\nThe one allowed wheel data script was reviewed against upstream `stefankoegl/python-json-pointer` release commit `5998f951dcc5ace60f67f35afe6778c445401a07`, path `bin/jsonpointer`. It is a command-line JSON Pointer utility. PyPA's Wheel specification defines `.data/scripts/` as files moved to the environment's scripts destination during install; QROS does not execute this script. Upstream source SHA-256 is `0922c792b58faecab05e9010713eb5345b964848abeecd62d901a0f10ff1a0c6`. The wheel-contained script SHA-256 is `4c9bda8829e436ce6c732194421f645240695bf647a75eb210f17256215f7b22`; the byte-level difference is only the first-line normalization from `#!/usr/bin/env python3` to `#!python`, which matches the PyPA Wheel specification for packaged scripts. Any additional script or content-hash drift fails closed.
 
 ## Import controls
 
