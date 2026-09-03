@@ -1,0 +1,309 @@
+{
+  "review_version": 1,
+  "verified_at": "2026-09-03",
+  "candidate": "cyclonedx-python-lib[json-validation]==11.12.0",
+  "exact_wheel_lock": "requirements/candidates/phase4c-cyclonedx-python.lock",
+  "wheel_count": 26,
+  "evidence": {
+    "wheel_inventory": "docs/source-evidence/phase-4c-python-wheel-inventory.json",
+    "wheel_inventory_sha256": "d8e12dffcb25026a2ff493deca400880b7a2aa4111a2b6baf6790e6de7b98d3a",
+    "wheel_lock_sha256": "bd9df0ad87b54e5bb0d03e25572ac23d02d4fd41acc35631dad4b67b61b0dee1",
+    "pypi_security_sha256": "16aa7c55f7eb40dccf930927354ea021574611cc4630a01467fd81a6c8579695",
+    "exact_head_security_run": 33740927392,
+    "exact_head_qros_gate_run": 33740927397
+  },
+  "policy": {
+    "current_use": "CI_RESEARCH_TOOL_CANDIDATE_ONLY",
+    "external_distribution_authorized": false,
+    "package_authorized": false,
+    "release_authorized": false,
+    "permanent_tool_adoption_authorized": false,
+    "dependency_registry_promotion_authorized": false,
+    "canonical_sbom_1_7_promotion_authorized": false
+  },
+  "dispositions": [
+    {
+      "name": "arrow",
+      "version": "1.4.0",
+      "normalized_license": "Apache-2.0",
+      "basis": "wheel classifier + official PyPI exact release",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "attrs",
+      "version": "26.1.0",
+      "normalized_license": "MIT",
+      "basis": "wheel License-Expression",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "boolean.py",
+      "version": "5.0",
+      "normalized_license": "BSD-2-Clause",
+      "basis": "wheel License field",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "cyclonedx-python-lib",
+      "version": "11.12.0",
+      "normalized_license": "Apache-2.0",
+      "basis": "wheel License field + LICENSE/NOTICE",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "defusedxml",
+      "version": "0.7.1",
+      "normalized_license": "PSF-2.0",
+      "basis": "wheel PSFL field + PSF classifier",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "fqdn",
+      "version": "1.5.1",
+      "normalized_license": "MPL-2.0",
+      "basis": "wheel MPL field/classifier + official PyPI/upstream repository",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_MPL_SOURCE_AND_NOTICE_COMPLIANCE_REVIEW"
+    },
+    {
+      "name": "idna",
+      "version": "3.19",
+      "normalized_license": "BSD-3-Clause",
+      "basis": "wheel License-Expression",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "isoduration",
+      "version": "20.11.0",
+      "normalized_license": "ISC",
+      "basis": "official PyPI exact release classifier",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "jsonpointer",
+      "version": "3.1.1",
+      "normalized_license": "BSD-3-Clause",
+      "basis": "wheel Modified BSD field + BSD classifier",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "jsonschema",
+      "version": "4.26.0",
+      "normalized_license": "MIT",
+      "basis": "wheel License-Expression",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "jsonschema-specifications",
+      "version": "2025.9.1",
+      "normalized_license": "MIT",
+      "basis": "wheel License-Expression",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "lark",
+      "version": "1.3.1",
+      "normalized_license": "MIT",
+      "basis": "wheel MIT field/classifier",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "license-expression",
+      "version": "30.4.4",
+      "normalized_license": "Apache-2.0",
+      "basis": "wheel License field + Apache license file",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "packageurl-python",
+      "version": "0.17.6",
+      "normalized_license": "MIT",
+      "basis": "wheel MIT field/classifier",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "py-serializable",
+      "version": "2.1.0",
+      "normalized_license": "Apache-2.0",
+      "basis": "wheel Apache field/classifier",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "python-dateutil",
+      "version": "2.9.0.post0",
+      "normalized_license": "BSD-3-Clause",
+      "basis": "conservative whole-distribution choice; official project states older code BSD-3-Clause and newer contributions BSD-3-Clause OR Apache-2.0",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "referencing",
+      "version": "0.37.0",
+      "normalized_license": "MIT",
+      "basis": "wheel License-Expression",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "rfc3339-validator",
+      "version": "0.1.4",
+      "normalized_license": "MIT",
+      "basis": "wheel MIT field/classifier",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "rfc3986-validator",
+      "version": "0.1.1",
+      "normalized_license": "MIT",
+      "basis": "wheel MIT field/classifier",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "rfc3987-syntax",
+      "version": "1.1.0",
+      "normalized_license": "MIT",
+      "basis": "wheel License-Expression; legacy Apache classifier treated as stale per PyPA metadata guidance",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "rpds-py",
+      "version": "2026.6.3",
+      "normalized_license": "MIT",
+      "basis": "wheel License-Expression",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "six",
+      "version": "1.17.0",
+      "normalized_license": "MIT",
+      "basis": "wheel MIT field/classifier",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "sortedcontainers",
+      "version": "2.4.0",
+      "normalized_license": "Apache-2.0",
+      "basis": "wheel Apache field/classifier",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "tzdata",
+      "version": "2026.3",
+      "normalized_license": "Apache-2.0",
+      "basis": "wheel Apache field + license files",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "uri-template",
+      "version": "1.3.0",
+      "normalized_license": "MIT",
+      "basis": "wheel MIT field/classifier",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    },
+    {
+      "name": "webcolors",
+      "version": "25.10.0",
+      "normalized_license": "BSD-3-Clause",
+      "basis": "wheel BSD-3-Clause field/classifier",
+      "cost_disposition": "NO_MANDATORY_USAGE_FEE_IDENTIFIED_IN_REVIEWED_LICENSE_EVIDENCE",
+      "candidate_use": "ALLOW_FOR_HASH_LOCKED_CI_INSTALL_TEST_ONLY",
+      "distribution_disposition": "EXTERNAL_DISTRIBUTION_REQUIRES_LICENSE_NOTICE_REVIEW"
+    }
+  ],
+  "special_cases": {
+    "fqdn": {
+      "license": "MPL-2.0",
+      "finding": "file-level copyleft",
+      "current_ci_only_use_triggers_external_distribution_obligation": false,
+      "future_external_distribution": "REVIEW_REQUIRED",
+      "evidence_urls": [
+        "https://pypi.org/project/fqdn/1.5.1/",
+        "https://github.com/ypcrts/fqdn",
+        "https://www.mozilla.org/en-US/MPL/2.0/FAQ/"
+      ]
+    },
+    "rfc3987-syntax": {
+      "license": "MIT",
+      "finding": "License-Expression is MIT while legacy Trove classifier still says Apache Software License",
+      "resolution": "Use artifact-specific License-Expression MIT; record classifier as stale metadata",
+      "evidence_urls": [
+        "https://pypi.org/project/rfc3987-syntax/1.1.0/",
+        "https://packaging.python.org/en/latest/specifications/core-metadata/"
+      ]
+    },
+    "python-dateutil": {
+      "license": "BSD-3-Clause",
+      "finding": "Conservative whole-distribution basis",
+      "resolution": "Older contributions are BSD-3-Clause only; newer contributions permit Apache-2.0 or BSD-3-Clause, so BSD-3-Clause is the conservative license applicable across the whole distribution",
+      "evidence_urls": [
+        "https://pypi.org/project/python-dateutil/2.9.0.post0/"
+      ]
+    },
+    "isoduration": {
+      "license": "ISC",
+      "finding": "Wheel License field is UNKNOWN but exact PyPI release metadata/classifier identifies ISC",
+      "evidence_urls": [
+        "https://pypi.org/project/isoduration/20.11.0/",
+        "https://github.com/bolsote/isoduration"
+      ]
+    }
+  },
+  "gate": {
+    "exact_package_count_matches_lock": true,
+    "unknown_normalized_license_count": 0,
+    "conditional_usage_fee_blocker_count": 0,
+    "strong_copyleft_package_count": 0,
+    "weak_file_level_copyleft_package_count": 1,
+    "license_gate": "PASS_FOR_CANDIDATE_INSTALL_TEST_ONLY",
+    "zero_cost_gate": "PASS_FOR_CANDIDATE_INSTALL_TEST_ONLY",
+    "permanent_tool_adoption": "DENY_PENDING_EXECUTION_AND_FIDELITY_REVIEW",
+    "external_distribution": "DENY_BY_HARD_GATE"
+  }
+}

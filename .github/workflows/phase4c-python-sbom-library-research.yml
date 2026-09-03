@@ -1,0 +1,250 @@
+name: phase4c-python-sbom-library-research
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/phase4c-python-sbom-library-research.yml"
+      - "config/phase4c-python-sbom-library-candidate.json"
+      - "config/phase4c-python-sbom-library-license-dispositions.json"
+      - "docs/source-evidence/phase-4c-python-sbom-library-candidate.md"
+      - "docs/source-evidence/phase-4c-python-wheel-inventory.json"
+      - "docs/licensing/PHASE4C_PYTHON_SBOM_LIBRARY_LICENSE_REVIEW.md"
+      - "requirements/candidates/phase4c-cyclonedx-python.lock"
+      - "tests/test_phase4c_python_sbom_library_candidate.py"
+      - "tests/test_phase4c_python_sbom_library_license_review.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: phase4c-python-sbom-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  wheel-metadata-resolution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      QROS_PYPI_INDEX: "https://pypi.org/simple"
+      QROS_ROOT_WHEEL_SHA256: "0e807521a921a5c3cb8ce1153f8a61d29eedfe76a46aac2796b7c6b573391a54"
+    steps:
+      - name: Checkout QROS
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup exact Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.14.7"
+          check-latest: false
+
+      - name: Verify research boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(python -c 'import sys; print(sys.version.split()[0])')" = "3.14.7"
+          python -m pip --version
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          policy=json.loads(Path("config/phase4c-python-sbom-library-candidate.json").read_text(encoding="utf-8"))
+          assert policy["status"] == "EXACT_WHEEL_LOCK_CANDIDATE"
+          assert policy["resolution"]["wheel_only"] is True
+          assert policy["resolution"]["sdist_allowed"] is False
+          assert policy["resolution"]["install_allowed"] is False
+          assert policy["resolution"]["package_import_allowed"] is False
+          assert policy["scope"]["converter_execution_authorized"] is False
+          print("QROS_PHASE4C_PYTHON_RESEARCH_BOUNDARY=PASS")
+          PY
+
+      - name: Download exact committed wheel lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .phase4c-python/wheels .phase4c-python/verify .phase4c-python/evidence
+          python -m pip download --index-url "$QROS_PYPI_INDEX" --only-binary=:all: --require-hashes --dest .phase4c-python/wheels -r requirements/candidates/phase4c-cyclonedx-python.lock
+          if find .phase4c-python/wheels -type f ! -name '*.whl' | grep -q .; then
+            echo "Non-wheel artifact resolved" >&2
+            find .phase4c-python/wheels -maxdepth 1 -type f -print >&2
+            exit 1
+          fi
+
+      - name: Inspect wheel metadata and verify committed lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import email
+          import hashlib
+          import json
+          import zipfile
+          from pathlib import Path
+
+          wheel_dir=Path(".phase4c-python/wheels")
+          rows=[]
+          root_seen=False
+          lock_lines=[]
+          for wheel in sorted(wheel_dir.glob("*.whl")):
+              digest=hashlib.sha256(wheel.read_bytes()).hexdigest()
+              with zipfile.ZipFile(wheel) as zf:
+                  metadata_paths=[x for x in zf.namelist() if x.endswith(".dist-info/METADATA")]
+                  wheel_paths=[x for x in zf.namelist() if x.endswith(".dist-info/WHEEL")]
+                  if len(metadata_paths)!=1 or len(wheel_paths)!=1:
+                      raise SystemExit(f"Unexpected wheel metadata layout: {wheel.name}")
+                  msg=email.message_from_bytes(zf.read(metadata_paths[0]))
+                  wheel_msg=email.message_from_bytes(zf.read(wheel_paths[0]))
+              name=msg["Name"]
+              version=msg["Version"]
+              if not name or not version:
+                  raise SystemExit(f"Missing Name/Version: {wheel.name}")
+              if name.lower().replace("_","-")=="cyclonedx-python-lib":
+                  root_seen=True
+                  if version!="11.12.0":
+                      raise SystemExit(f"Unexpected root version {version}")
+                  if digest!="0e807521a921a5c3cb8ce1153f8a61d29eedfe76a46aac2796b7c6b573391a54":
+                      raise SystemExit("Root wheel SHA-256 mismatch")
+
+              rows.append({
+                  "name":name,
+                  "version":version,
+                  "filename":wheel.name,
+                  "sha256":digest,
+                  "root_is_purelib":wheel_msg.get("Root-Is-Purelib"),
+                  "license_expression":msg.get("License-Expression"),
+                  "license_field":msg.get("License"),
+                  "license_files":msg.get_all("License-File") or [],
+                  "license_classifiers":[
+                      x for x in (msg.get_all("Classifier") or [])
+                      if x.startswith("License ::")
+                  ],
+                  "requires_dist":msg.get_all("Requires-Dist") or [],
+              })
+              lock_lines.append(f"{name}=={version} --hash=sha256:{digest}")
+
+          if not root_seen:
+              raise SystemExit("Root cyclonedx-python-lib wheel missing")
+          if len(rows)!=26:
+              raise SystemExit(f"Unexpected exact wheel count: {len(rows)}")
+
+          Path(".phase4c-python/evidence/wheel-inventory.json").write_text(
+              json.dumps(rows,indent=2,sort_keys=True)+"\n",encoding="utf-8")
+          generated_lock=Path(".phase4c-python/evidence/requirements.wheel.lock")
+          generated_lock.write_text(
+              "\n".join(sorted(lock_lines,key=str.lower))+"\n",encoding="utf-8")
+
+          committed=Path("requirements/candidates/phase4c-cyclonedx-python.lock")
+          if generated_lock.read_bytes()!=committed.read_bytes():
+              raise SystemExit("Committed wheel lock differs from downloaded exact artifacts")
+
+          print("QROS_PHASE4C_PYTHON_WHEEL_COUNT="+str(len(rows)))
+          print("QROS_PHASE4C_PYTHON_INVENTORY_SHA256="+hashlib.sha256(
+              Path(".phase4c-python/evidence/wheel-inventory.json").read_bytes()
+          ).hexdigest())
+          print("QROS_PHASE4C_PYTHON_LOCK_SHA256="+hashlib.sha256(
+              committed.read_bytes()
+          ).hexdigest())
+          PY
+
+      - name: Re-resolve exact artifact lock without installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip download --index-url "$QROS_PYPI_INDEX" --only-binary=:all: --require-hashes --dest .phase4c-python/verify -r requirements/candidates/phase4c-cyclonedx-python.lock
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          def hashes(path):
+              return sorted(hashlib.sha256(p.read_bytes()).hexdigest() for p in Path(path).glob("*.whl"))
+          a=hashes(".phase4c-python/wheels")
+          b=hashes(".phase4c-python/verify")
+          if a!=b:
+              raise SystemExit("Exact wheel hash re-resolution mismatch")
+          print("QROS_PHASE4C_PYTHON_HASH_RERESOLUTION=PASS")
+          PY
+
+      - name: Check exact PyPI release vulnerabilities and yanked state
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import urllib.parse
+          import urllib.request
+          from pathlib import Path
+
+          rows=json.loads(Path(".phase4c-python/evidence/wheel-inventory.json").read_text(encoding="utf-8"))
+          evidence=[]
+          blockers=[]
+          for row in rows:
+              name=row["name"]
+              version=row["version"]
+              url=(
+                  "https://pypi.org/pypi/"
+                  + urllib.parse.quote(name, safe="")
+                  + "/"
+                  + urllib.parse.quote(version, safe="")
+                  + "/json"
+              )
+              request=urllib.request.Request(
+                  url,
+                  headers={"User-Agent":"Jerry-QROS-Next-Phase4C-Research/1"},
+              )
+              with urllib.request.urlopen(request, timeout=20) as response:
+                  data=json.load(response)
+
+              if str(data.get("info",{}).get("version")) != str(version):
+                  blockers.append(f"{name}@{version}:release-version-mismatch")
+
+              vulnerabilities=data.get("vulnerabilities") or []
+              if vulnerabilities:
+                  blockers.append(
+                      f"{name}@{version}:known-vulnerabilities:"
+                      + json.dumps(vulnerabilities,sort_keys=True,separators=(",",":"))
+                  )
+
+              matches=[
+                  item for item in (data.get("urls") or [])
+                  if (item.get("digests") or {}).get("sha256")==row["sha256"]
+              ]
+              if len(matches)!=1:
+                  blockers.append(f"{name}@{version}:selected-wheel-not-found-by-sha256")
+                  selected=None
+              else:
+                  selected=matches[0]
+                  if selected.get("yanked"):
+                      blockers.append(
+                          f"{name}@{version}:yanked:{selected.get('yanked_reason') or 'no-reason'}"
+                      )
+                  if selected.get("packagetype")!="bdist_wheel":
+                      blockers.append(f"{name}@{version}:selected-artifact-not-wheel")
+
+              evidence.append({
+                  "name":name,
+                  "version":version,
+                  "sha256":row["sha256"],
+                  "known_vulnerabilities":vulnerabilities,
+                  "selected_file_yanked":selected.get("yanked") if selected else None,
+                  "selected_file_yanked_reason":selected.get("yanked_reason") if selected else None,
+              })
+
+          security=Path(".phase4c-python/evidence/pypi-security.json")
+          security.write_text(
+              json.dumps(evidence,indent=2,sort_keys=True)+"\n",
+              encoding="utf-8",
+          )
+          if blockers:
+              raise SystemExit("PyPI exact-release blocker(s): "+" | ".join(blockers))
+          print("QROS_PHASE4C_PYPI_EXACT_RELEASE_COUNT="+str(len(evidence)))
+          print("QROS_PHASE4C_PYPI_VULNERABILITY_GATE=PASS")
+          print("QROS_PHASE4C_PYPI_YANKED_GATE=PASS")
+          PY
+          echo "QROS_PHASE4C_PYPI_SECURITY_SHA256=$(sha256sum .phase4c-python/evidence/pypi-security.json | cut -d' ' -f1)"
+
+      - name: Confirm no install import build or conversion
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          echo "QROS_PHASE4C_PYTHON_INSTALL=NOT_PERFORMED"
+          echo "QROS_PHASE4C_PYTHON_PACKAGE_IMPORT=NOT_PERFORMED"
+          echo "QROS_PHASE4C_PYTHON_BUILD=NOT_PERFORMED"
+          echo "QROS_PHASE4C_PYTHON_CONVERSION=NOT_PERFORMED"
