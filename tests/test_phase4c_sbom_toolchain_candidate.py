@@ -83,6 +83,10 @@ class Phase4CSbomToolchainCandidateTests(unittest.TestCase):
         self.assertFalse(source_eval["using_task_allowed"])
         self.assertFalse(source_eval["restore_hook_allowed"])
         self.assertIn("Restore-time/custom MSBuild execution surface found", self.workflow)
+        self.assertIn("ET.parse(p)", self.workflow)
+        self.assertIn('{"Exec", "UsingTask"}', self.workflow)
+        self.assertIn("RestoreAdditionalProjectSources", self.workflow)
+        self.assertIn("RemoteImport", self.workflow)
 
     def test_hard_gates_remain_closed(self):
         gates = self.policy["hard_gates"]
