@@ -28,8 +28,19 @@
     "no_deps_during_install": true,
     "require_hashes": true,
     "pth_files_allowed": false,
-    "wheel_data_scripts_allowed": false,
-    "entry_points_may_be_inventoried_but_not_executed": true
+    "entry_points_may_be_inventoried_but_not_executed": true,
+    "unlisted_wheel_data_scripts_allowed": false,
+    "allowed_wheel_data_scripts": [
+      {
+        "wheel": "jsonpointer-3.1.1-py3-none-any.whl",
+        "path": "jsonpointer-3.1.1.data/scripts/jsonpointer",
+        "sha256": "0922c792b58faecab05e9010713eb5345b964848abeecd62d901a0f10ff1a0c6",
+        "upstream_repository": "stefankoegl/python-json-pointer",
+        "upstream_release_commit": "5998f951dcc5ace60f67f35afe6778c445401a07",
+        "upstream_path": "bin/jsonpointer",
+        "reviewed_as": "NON_EXECUTED_CLI_SCRIPT_COPIED_BY_WHEEL_INSTALLER"
+      }
+    ]
   },
   "import_boundary": {
     "empty_environment_required": true,
