@@ -14,7 +14,10 @@
   "dotnet": {
     "sdk": "10.0.400",
     "setup_action_revision": "a98b56852c35b8e3190ac28c8c2271da59106c68",
-    "nuget_source": "https://api.nuget.org/v3/index.json"
+    "nuget_source": "https://api.nuget.org/v3/index.json",
+    "tool_runtime": "linux-x64",
+    "ci_tool_target_only": true,
+    "does_not_add_linux_product_support": true
   },
   "restore": {
     "generate_qros_lock_evidence": true,
