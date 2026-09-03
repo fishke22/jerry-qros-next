@@ -105,5 +105,31 @@ class Phase4CSbomToolchainCandidateTests(unittest.TestCase):
         self.assertFalse(gates["live_trading_authorized"])
 
 
+    def test_dotnet_cli_binary_path_is_rejected_by_zero_cost_policy(self):
+        self.assertEqual(
+            self.policy["outcome"]["nuget_binary_toolchain"],
+            "REJECT_ZERO_COST",
+        )
+        self.assertTrue(
+            self.policy["outcome"]["json_everything_binary_fee_condition_detected"]
+        )
+        self.assertEqual(
+            set(self.policy["outcome"]["fee_condition_packages"]),
+            {"Json.More.Net", "JsonPointer.Net", "JsonSchema.Net"},
+        )
+        self.assertFalse(
+            self.policy["scope"]["build_cli_authorized"]
+        )
+        review = (
+            ROOT
+            / "docs"
+            / "licensing"
+            / "PHASE4C_CYCLONEDX_CLI_NUGET_REVIEW.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("REJECT_ZERO_COST", review)
+        self.assertIn("OSMFEULA.txt", review)
+        self.assertIn("UNKNOWN = DENY", review)
+
+
 if __name__ == "__main__":
     unittest.main()
