@@ -1,0 +1,169 @@
+name: phase4c-python-sbom-library-research
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/phase4c-python-sbom-library-research.yml"
+      - "config/phase4c-python-sbom-library-candidate.json"
+      - "docs/source-evidence/phase-4c-python-sbom-library-candidate.md"
+      - "tests/test_phase4c_python_sbom_library_candidate.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: phase4c-python-sbom-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  wheel-metadata-resolution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      QROS_PYPI_INDEX: "https://pypi.org/simple"
+      QROS_ROOT_WHEEL_SHA256: "0e807521a921a5c3cb8ce1153f8a61d29eedfe76a46aac2796b7c6b573391a54"
+    steps:
+      - name: Checkout QROS
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup exact Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.14.7"
+          check-latest: false
+
+      - name: Verify research boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(python -c 'import sys; print(sys.version.split()[0])')" = "3.14.7"
+          python -m pip --version
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          policy=json.loads(Path("config/phase4c-python-sbom-library-candidate.json").read_text(encoding="utf-8"))
+          assert policy["status"] == "WHEEL_METADATA_RESOLUTION_ONLY"
+          assert policy["resolution"]["wheel_only"] is True
+          assert policy["resolution"]["sdist_allowed"] is False
+          assert policy["resolution"]["install_allowed"] is False
+          assert policy["resolution"]["package_import_allowed"] is False
+          assert policy["scope"]["converter_execution_authorized"] is False
+          print("QROS_PHASE4C_PYTHON_RESEARCH_BOUNDARY=PASS")
+          PY
+
+      - name: Resolve wheel-only candidate graph
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .phase4c-python/wheels .phase4c-python/verify .phase4c-python/evidence
+          python -m pip download             --index-url "$QROS_PYPI_INDEX"             --only-binary=:all:             --dest .phase4c-python/wheels             "cyclonedx-python-lib[json-validation]==11.12.0"
+          if find .phase4c-python/wheels -type f ! -name '*.whl' | grep -q .; then
+            echo "Non-wheel artifact resolved" >&2
+            find .phase4c-python/wheels -type f -maxdepth 1 -print >&2
+            exit 1
+          fi
+
+      - name: Inspect wheel metadata and create exact hash lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import email
+          import hashlib
+          import json
+          import re
+          import zipfile
+          from pathlib import Path
+
+          wheel_dir=Path(".phase4c-python/wheels")
+          rows=[]
+          root_seen=False
+          lock_lines=[]
+          for wheel in sorted(wheel_dir.glob("*.whl")):
+              digest=hashlib.sha256(wheel.read_bytes()).hexdigest()
+              with zipfile.ZipFile(wheel) as zf:
+                  metadata_paths=[x for x in zf.namelist() if x.endswith(".dist-info/METADATA")]
+                  wheel_paths=[x for x in zf.namelist() if x.endswith(".dist-info/WHEEL")]
+                  if len(metadata_paths)!=1 or len(wheel_paths)!=1:
+                      raise SystemExit(f"Unexpected wheel metadata layout: {wheel.name}")
+                  msg=email.message_from_bytes(zf.read(metadata_paths[0]))
+                  wheel_msg=email.message_from_bytes(zf.read(wheel_paths[0]))
+              name=msg["Name"]
+              version=msg["Version"]
+              if not name or not version:
+                  raise SystemExit(f"Missing Name/Version: {wheel.name}")
+              if name.lower().replace("_","-")=="cyclonedx-python-lib":
+                  root_seen=True
+                  if version!="11.12.0":
+                      raise SystemExit(f"Unexpected root version {version}")
+                  if digest!="0e807521a921a5c3cb8ce1153f8a61d29eedfe76a46aac2796b7c6b573391a54":
+                      raise SystemExit("Root wheel SHA-256 mismatch")
+
+              license_expression=msg.get("License-Expression")
+              license_field=msg.get("License")
+              license_files=msg.get_all("License-File") or []
+              classifiers=[
+                  x for x in (msg.get_all("Classifier") or [])
+                  if x.startswith("License ::")
+              ]
+              rows.append({
+                  "name":name,
+                  "version":version,
+                  "filename":wheel.name,
+                  "sha256":digest,
+                  "root_is_purelib":wheel_msg.get("Root-Is-Purelib"),
+                  "license_expression":license_expression,
+                  "license_field":license_field,
+                  "license_files":license_files,
+                  "license_classifiers":classifiers,
+                  "requires_dist":msg.get_all("Requires-Dist") or [],
+              })
+              lock_lines.append(f"{name}=={version} --hash=sha256:{digest}")
+
+          if not root_seen:
+              raise SystemExit("Root cyclonedx-python-lib wheel missing")
+          if not rows:
+              raise SystemExit("No wheel evidence")
+
+          Path(".phase4c-python/evidence/wheel-inventory.json").write_text(
+              json.dumps(rows,indent=2,sort_keys=True)+"\n",encoding="utf-8")
+          Path(".phase4c-python/evidence/requirements.wheel.lock").write_text(
+              "\n".join(sorted(lock_lines,key=str.lower))+"\n",encoding="utf-8")
+
+          print("QROS_PHASE4C_PYTHON_WHEEL_COUNT="+str(len(rows)))
+          print("QROS_PHASE4C_PYTHON_INVENTORY_BEGIN")
+          print(json.dumps(rows,sort_keys=True,separators=(",",":")))
+          print("QROS_PHASE4C_PYTHON_INVENTORY_END")
+          print("QROS_PHASE4C_PYTHON_LOCK_BEGIN")
+          print(Path(".phase4c-python/evidence/requirements.wheel.lock").read_text(encoding="utf-8"),end="")
+          print("QROS_PHASE4C_PYTHON_LOCK_END")
+          PY
+          echo "QROS_PHASE4C_PYTHON_INVENTORY_SHA256=$(sha256sum .phase4c-python/evidence/wheel-inventory.json | cut -d' ' -f1)"
+          echo "QROS_PHASE4C_PYTHON_LOCK_SHA256=$(sha256sum .phase4c-python/evidence/requirements.wheel.lock | cut -d' ' -f1)"
+
+      - name: Re-resolve exact artifact lock without installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip download             --index-url "$QROS_PYPI_INDEX"             --only-binary=:all:             --require-hashes             --dest .phase4c-python/verify             -r .phase4c-python/evidence/requirements.wheel.lock
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          def hashes(path):
+              return sorted(hashlib.sha256(p.read_bytes()).hexdigest() for p in Path(path).glob("*.whl"))
+          a=hashes(".phase4c-python/wheels")
+          b=hashes(".phase4c-python/verify")
+          if a!=b:
+              raise SystemExit("Exact wheel hash re-resolution mismatch")
+          print("QROS_PHASE4C_PYTHON_HASH_RERESOLUTION=PASS")
+          PY
+
+      - name: Confirm no install import build or conversion
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          echo "QROS_PHASE4C_PYTHON_INSTALL=NOT_PERFORMED"
+          echo "QROS_PHASE4C_PYTHON_PACKAGE_IMPORT=NOT_PERFORMED"
+          echo "QROS_PHASE4C_PYTHON_BUILD=NOT_PERFORMED"
+          echo "QROS_PHASE4C_PYTHON_CONVERSION=NOT_PERFORMED"
