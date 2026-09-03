@@ -78,6 +78,13 @@ jobs:
           import zipfile
           from pathlib import Path
 
+          import hashlib
+
+          allowed_scripts={
+              "jsonpointer-3.1.1.data/scripts/jsonpointer":
+                  "0922c792b58faecab05e9010713eb5345b964848abeecd62d901a0f10ff1a0c6",
+          }
+          observed_scripts={}
           rows=[]
           blockers=[]
           for wheel in sorted(Path(".phase4c-install/wheels").glob("*.whl")):
@@ -85,6 +92,19 @@ jobs:
                   names=zf.namelist()
                   pth=[n for n in names if n.lower().endswith(".pth")]
                   scripts=[n for n in names if ".data/scripts/" in n.lower()]
+                  script_rows=[]
+                  for script in scripts:
+                      digest=hashlib.sha256(zf.read(script)).hexdigest()
+                      observed_scripts[script]=digest
+                      script_rows.append({"path":script,"sha256":digest})
+                      expected=allowed_scripts.get(script)
+                      if expected is None:
+                          blockers.append(f"{wheel.name}:unlisted-wheel-data-script:{script}")
+                      elif digest != expected:
+                          blockers.append(
+                              f"{wheel.name}:wheel-data-script-sha-mismatch:"
+                              f"{script}:{digest}!={expected}"
+                          )
                   eps=[n for n in names if n.endswith(".dist-info/entry_points.txt")]
                   entry_points=[]
                   for ep in eps:
@@ -94,14 +114,18 @@ jobs:
                       })
               if pth:
                   blockers.append(f"{wheel.name}:pth:{pth}")
-              if scripts:
-                  blockers.append(f"{wheel.name}:wheel-data-scripts:{scripts}")
               rows.append({
                   "wheel":wheel.name,
                   "pth_files":pth,
-                  "wheel_data_scripts":scripts,
+                  "wheel_data_scripts":script_rows,
                   "entry_points":entry_points,
               })
+          if set(observed_scripts) != set(allowed_scripts):
+              blockers.append(
+                  "wheel-data-script-allowlist-drift:"
+                  f"observed={sorted(observed_scripts)}:"
+                  f"allowed={sorted(allowed_scripts)}"
+              )
           Path(".phase4c-install/evidence/wheel-activation-surfaces.json").write_text(
               json.dumps(rows,indent=2,sort_keys=True)+"\n",
               encoding="utf-8",
@@ -109,7 +133,7 @@ jobs:
           if blockers:
               raise SystemExit("Wheel activation surface blocker(s): "+" | ".join(blockers))
           print("QROS_PHASE4C_PTH_GATE=PASS")
-          print("QROS_PHASE4C_WHEEL_DATA_SCRIPTS_GATE=PASS")
+          print("QROS_PHASE4C_WHEEL_DATA_SCRIPTS_EXACT_ALLOWLIST=PASS")
           print("QROS_PHASE4C_ENTRY_POINTS_INVENTORIED=PASS")
           PY
           echo "QROS_PHASE4C_ACTIVATION_SURFACES_SHA256=$(sha256sum .phase4c-install/evidence/wheel-activation-surfaces.json | cut -d' ' -f1)"
