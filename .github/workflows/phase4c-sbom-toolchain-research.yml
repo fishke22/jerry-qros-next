@@ -76,20 +76,42 @@ jobs:
 
           repo = Path(".phase4c/cyclonedx-cli")
           forbidden = []
+          restore_source_properties = {
+              "RestoreSources",
+              "RestoreAdditionalProjectSources",
+              "RestoreFallbackFolders",
+          }
           for p in repo.rglob("*"):
               if not p.is_file():
                   continue
               name = p.name.lower()
               if name == "directory.build.targets":
-                  forbidden.append(str(p))
+                  forbidden.append(f"{p}:Directory.Build.targets")
                   continue
-              if p.suffix.lower() in {".csproj", ".props", ".targets"}:
-                  text = p.read_text(encoding="utf-8-sig", errors="replace")
-                  for token in ("<Exec", "<UsingTask", 'BeforeTargets="Restore', 'AfterTargets="Restore'):
-                      if token in text:
-                          forbidden.append(f"{p}:{token}")
+              if p.suffix.lower() not in {".csproj", ".props", ".targets"}:
+                  continue
+              try:
+                  tree = ET.parse(p)
+              except ET.ParseError as exc:
+                  raise SystemExit(f"Unable to parse MSBuild XML {p}: {exc}") from exc
+              for elem in tree.getroot().iter():
+                  local = elem.tag.rsplit("}", 1)[-1]
+                  if local in {"Exec", "UsingTask"}:
+                      forbidden.append(f"{p}:{local}")
+                  if local == "Target":
+                      before = elem.attrib.get("BeforeTargets", "")
+                      after = elem.attrib.get("AfterTargets", "")
+                      if "Restore" in {x.strip() for x in (before + ";" + after).split(";")}:
+                          forbidden.append(f"{p}:RestoreTargetHook")
+                  if local == "Import":
+                      project_attr = elem.attrib.get("Project", "").strip().lower()
+                      if project_attr.startswith(("http://", "https://")):
+                          forbidden.append(f"{p}:RemoteImport")
+                  if local in restore_source_properties:
+                      forbidden.append(f"{p}:{local}")
+
           if forbidden:
-              raise SystemExit("Restore-time/custom MSBuild execution surface found: " + ", ".join(sorted(forbidden)))
+              raise SystemExit("Restore-time/custom MSBuild execution surface found: " + ", ".join(sorted(set(forbidden))))
 
           print("QROS_PHASE4C_SOURCE_BOUNDARY=PASS")
           PY
