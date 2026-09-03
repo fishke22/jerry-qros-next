@@ -28,7 +28,7 @@
     "output_spec_version": "1.7",
     "two_fresh_deserializations_required": true,
     "byte_deterministic_output_required": true,
-    "semantic_rule": "CANONICAL_JSON_DEEP_EQUAL_EXCEPT_$schema_AND_specVersion",
+    "semantic_rule": "CANONICAL_JSON_DEEP_EQUAL_AFTER_SERIALNUMBER_ABSENCE_PRESERVATION_AND_EXACT_SET_COLLECTION_ORDER_NORMALIZATION_EXCEPT_$schema_AND_specVersion",
     "component_count_must_remain": 253,
     "input_hash_must_match_prior_evidence": true,
     "raw_library_output_byte_determinism_required": false,
@@ -45,6 +45,26 @@
       "reason": "preserve input absence and avoid inventing unstable BOM identity",
       "cyclonedx_1_7_required": false,
       "canonical_output_byte_determinism_required": true
+    },
+    "order_insensitive_collections": {
+      "components": {
+        "rule": "SORT_BY_bom-ref_AFTER_RECURSIVE_CANONICALIZATION",
+        "evidence": "cyclonedx-python-lib model uses SortedSet; CycloneDX 1.7 top-level schema sets uniqueItems=true"
+      },
+      "externalReferences": {
+        "rule": "SORT_BY_CANONICAL_JSON_AFTER_RECURSIVE_CANONICALIZATION",
+        "evidence": "cyclonedx-python-lib component.external_references uses SortedSet"
+      }
+    },
+    "all_other_arrays_order_sensitive": true,
+    "order_normalization_review": {
+      "observed_run": 33755913855,
+      "observed_job": 100650259539,
+      "observed_differences": [
+        "components ordering",
+        "component.externalReferences ordering"
+      ],
+      "value_loss_observed": false
     }
   },
   "scope": {
