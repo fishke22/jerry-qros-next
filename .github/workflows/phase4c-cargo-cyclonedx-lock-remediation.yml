@@ -1,0 +1,166 @@
+name: phase4c-cargo-cyclonedx-lock-remediation
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/phase4c-cargo-cyclonedx-lock-remediation.yml"
+      - "config/phase4c-cargo-cyclonedx-lock-remediation.json"
+      - "docs/source-evidence/phase-4c-cargo-cyclonedx-lock-remediation.md"
+      - "tests/test_phase4c_cargo_cyclonedx_lock_remediation.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: phase4c-cargo-cyclonedx-remediation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lock-only-remediation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout QROS candidate
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Checkout exact cargo-cyclonedx release source
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: CycloneDX/cyclonedx-rust-cargo
+          ref: e58bd5590212f82c5b7e16dd3e2e819b0dbea5b1
+          path: .phase4c-remediation/upstream
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Setup exact Rust and verify policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install 1.98.0 --profile minimal --no-self-update
+          rustup default 1.98.0
+          test "$(rustc --version | awk '{print $2}')" = "1.98.0"
+          test "$(git -C .phase4c-remediation/upstream rev-parse HEAD)" = "e58bd5590212f82c5b7e16dd3e2e819b0dbea5b1"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path("config/phase4c-cargo-cyclonedx-lock-remediation.json").read_text(encoding="utf-8"))
+          assert p["status"] == "LOCK_ONLY_REMEDIATION_RESEARCH"
+          assert p["lock_remediation"]["source_code_change_authorized"] is False
+          assert p["lock_remediation"]["only_lock_entry_change_authorized"] is True
+          assert p["scope"]["permanent_tool_adoption_authorized"] is False
+          assert p["hard_gates"]["zero_cost_required"] is True
+          assert p["hard_gates"]["package_authorized"] is False
+          assert p["hard_gates"]["release_authorized"] is False
+          print("QROS_PHASE4C_REMEDIATION_POLICY=PASS")
+          PY
+          grep -F 'xml-rs = "0.8.16"' .phase4c-remediation/upstream/cyclonedx-bom/Cargo.toml
+          grep -A4 -F 'name = "xml-rs"' .phase4c-remediation/upstream/Cargo.lock | grep -F 'version = "0.8.19"'
+
+      - name: Update only xml-rs lock entry
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp .phase4c-remediation/upstream/Cargo.lock "$RUNNER_TEMP/cargo-cyclonedx-before.lock"
+          cargo update \
+            --manifest-path .phase4c-remediation/upstream/Cargo.toml \
+            -p xml-rs \
+            --precise 0.8.27
+          cp .phase4c-remediation/upstream/Cargo.lock "$RUNNER_TEMP/cargo-cyclonedx-after.lock"
+          BEFORE="$RUNNER_TEMP/cargo-cyclonedx-before.lock" AFTER="$RUNNER_TEMP/cargo-cyclonedx-after.lock" python - <<'PY'
+          import hashlib
+          import os
+          import tomllib
+          from pathlib import Path
+
+          before_path=Path(os.environ["BEFORE"])
+          after_path=Path(os.environ["AFTER"])
+          before=tomllib.loads(before_path.read_text(encoding="utf-8"))
+          after=tomllib.loads(after_path.read_text(encoding="utf-8"))
+
+          def pkg_key(p):
+              return (p.get("name"),p.get("version"),p.get("source"))
+
+          b_xml=[p for p in before["package"] if p["name"]=="xml-rs"]
+          a_xml=[p for p in after["package"] if p["name"]=="xml-rs"]
+          if len(b_xml)!=1 or len(a_xml)!=1:
+              raise SystemExit("Expected exactly one xml-rs package entry")
+          if b_xml[0]["version"]!="0.8.19":
+              raise SystemExit(f"Unexpected original xml-rs: {b_xml[0]}")
+          if a_xml[0]["version"]!="0.8.27":
+              raise SystemExit(f"Unexpected remediated xml-rs: {a_xml[0]}")
+
+          b_other=sorted(
+              (pkg_key(p),p)
+              for p in before["package"]
+              if p["name"]!="xml-rs"
+          )
+          a_other=sorted(
+              (pkg_key(p),p)
+              for p in after["package"]
+              if p["name"]!="xml-rs"
+          )
+          if b_other != a_other:
+              raise SystemExit("Lock remediation changed packages other than xml-rs")
+
+          print("QROS_PHASE4C_XML_RS_BEFORE=0.8.19")
+          print("QROS_PHASE4C_XML_RS_AFTER=0.8.27")
+          print("QROS_PHASE4C_XML_RS_AFTER_CHECKSUM="+str(a_xml[0].get("checksum")))
+          print("QROS_PHASE4C_LOCK_ONLY_PACKAGE_DIFF=PASS")
+          print("QROS_PHASE4C_PATCHED_LOCK_SHA256="+hashlib.sha256(after_path.read_bytes()).hexdigest())
+          PY
+
+      - name: Build patched tool from exact source and exact remediated lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/phase4c-remediated-tool"
+          cargo install \
+            --locked \
+            --path .phase4c-remediation/upstream/cargo-cyclonedx \
+            --root "$RUNNER_TEMP/phase4c-remediated-tool"
+          test "$(PATH="$RUNNER_TEMP/phase4c-remediated-tool/bin:$PATH" cargo cyclonedx --version | awk '{print $2}')" = "0.5.9"
+          echo "QROS_PHASE4C_PATCHED_TOOL_BUILD=PASS"
+
+      - name: Regenerate canonical QUT SBOM with remediated tool
+        shell: bash
+        run: |
+          set -euo pipefail
+          candidate_checkout="$(git rev-parse HEAD)"
+          git fetch --no-tags --depth=1 origin 32e74ccfde93cf02fc0f149dd84a9c4ea6b1112e
+          git checkout --force 32e74ccfde93cf02fc0f149dd84a9c4ea6b1112e
+          test "$(git rev-parse HEAD)" = "32e74ccfde93cf02fc0f149dd84a9c4ea6b1112e"
+          test "$(sha256sum apps/qut/src-tauri/Cargo.lock | cut -d' ' -f1)" = "c9abfa64e57be2dd18efa91d8ae4abf43944bdbae75af94555ff28daa7601adb"
+
+          cd apps/qut/src-tauri
+          PATH="$RUNNER_TEMP/phase4c-remediated-tool/bin:$PATH" \
+            SOURCE_DATE_EPOCH=0 \
+            cargo cyclonedx --format json --target x86_64-pc-windows-msvc --spec-version 1.5
+          count="$(find . -maxdepth 1 -type f -name '*.cdx.json' | wc -l)"
+          test "$count" = "1"
+          sbom="$(find . -maxdepth 1 -type f -name '*.cdx.json' -print | head -n 1)"
+          actual="$(sha256sum "$sbom" | cut -d' ' -f1)"
+          echo "QROS_PHASE4C_REMEDIATED_SBOM_SHA256=$actual"
+          test "$actual" = "50e315c02680106ff3004e6e194f58d4cbbd8732fab33aff08ff122972da3623"
+          SBOM="$sbom" python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.loads(Path(os.environ["SBOM"]).read_text(encoding="utf-8"))
+          assert d["bomFormat"]=="CycloneDX"
+          assert str(d["specVersion"])=="1.5"
+          assert len(d.get("components") or [])==253
+          print("QROS_PHASE4C_REMEDIATED_COMPONENT_COUNT=253")
+          print("QROS_PHASE4C_REMEDIATED_SBOM_BYTE_IDENTITY=PASS")
+          PY
+          rm -f "$sbom"
+          cd "$GITHUB_WORKSPACE"
+          git checkout --force "$candidate_checkout"
+          test "$(git rev-parse HEAD)" = "$candidate_checkout"
+          git diff --exit-code
+          echo "QROS_PHASE4C_CANDIDATE_CHECKOUT_RESTORED=PASS"
+
+      - name: Confirm research-only boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "QROS_PHASE4C_PATCHED_LOCK_ADOPTION=DENY_PENDING_REVIEW"
+          echo "QROS_PHASE4C_PERMANENT_TOOL_ADOPTION=DENY"
+          echo "QROS_PHASE4C_DEPENDENCY_REGISTRY_PROMOTION=DENY"
+          echo "QROS_PHASE4C_CANONICAL_SBOM_1_7_PROMOTION=DENY"
