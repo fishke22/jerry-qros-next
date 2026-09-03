@@ -97,3 +97,46 @@ all other arrays:
 ```
 
 This rule does not allow adding, removing, modifying or deduplicating values. Any semantic difference remaining after these two exact collection-order normalizations fails closed.
+
+
+## Reviewed PURL, dependency-edge and timestamp normalizations
+
+Workflow run `33756396707` (job `100651776224`) passed:
+- serialNumber absence preservation;
+- canonical output byte determinism;
+- strict CycloneDX 1.7 output validation.
+
+Remaining semantic differences were limited to:
+
+1. six Cargo PURLs whose versions contain `+`, e.g.
+   `pkg:cargo/toml@0.9.12+spec-1.1.0`
+   becoming
+   `pkg:cargo/toml@0.9.12%2Bspec-1.1.0`;
+2. order-only changes inside `dependencies[].dependsOn`;
+3. `metadata.timestamp` formatting from
+   `1970-01-01T00:00:00.000000000Z`
+   to
+   `1970-01-01T00:00:00+00:00`.
+
+Evidence:
+- Package URL canonical encoded form does not permit an unencoded `+`; canonicalization percent-encodes it.
+- `cyclonedx-python-lib` models dependency children as a `SortedSet`, and CycloneDX 1.5/1.7 schemas mark `dependsOn` items as unique.
+- `BomMetaData.timestamp` is a timezone-aware datetime mapped through XSD date-time.
+
+The semantic comparator therefore additionally permits only:
+
+```text
+purl field:
+    parse with exact locked packageurl-python
+    compare canonical PackageURL.to_string()
+
+dependsOn:
+    require string refs
+    compare sorted values
+
+top-level metadata.timestamp:
+    parse timezone-aware ISO/RFC3339 value
+    compare UTC instant representation
+```
+
+Canonical 1.7 output remains the library output (after the separately reviewed serialNumber absence-preservation rule). Input non-canonical PURL spelling is not copied back into the output.
