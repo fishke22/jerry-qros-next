@@ -64,3 +64,36 @@ else:
 ```
 
 This does not ignore arbitrary nondeterminism. After the above rule, two fresh conversions must still be byte-identical, strict-valid as CycloneDX 1.7, and semantic-deep-equal to the input after removing only `$schema` and `specVersion`.
+
+
+## Reviewed collection-order normalization
+
+Workflow run `33755913855` (job `100650259539`) proved that, after the reviewed serialNumber rule:
+
+- input CycloneDX 1.5 strict validation: PASS;
+- canonical conversion byte determinism: PASS;
+- output CycloneDX 1.7 strict validation: PASS;
+- semantic comparison failed on ordering differences in `components` and component `externalReferences`.
+
+Exact `cyclonedx-python-lib 11.12.0` model evidence:
+- BOM/component `components` setters use `SortedSet`;
+- component `external_references` is a `SortedSet[ExternalReference]`;
+- the bundled CycloneDX 1.7 schema declares top-level `components` as an array with `uniqueItems: true`.
+
+QROS therefore permits order normalization only for these two model-set collections:
+
+```text
+components:
+    recursively canonicalize items
+    require bom-ref on every item
+    sort by bom-ref
+
+externalReferences:
+    recursively canonicalize items
+    sort by canonical JSON representation
+
+all other arrays:
+    order remains significant
+```
+
+This rule does not allow adding, removing, modifying or deduplicating values. Any semantic difference remaining after these two exact collection-order normalizations fails closed.
