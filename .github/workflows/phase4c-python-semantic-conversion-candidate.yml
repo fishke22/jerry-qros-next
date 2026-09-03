@@ -71,7 +71,7 @@ jobs:
           test "$(rustc --version | awk '{print $2}')" = "1.98.0"
           mkdir -p "$RUNNER_TEMP/phase4c-cargo-tools"
           cargo install --locked --root "$RUNNER_TEMP/phase4c-cargo-tools" cargo-cyclonedx --version 0.5.9
-          PATH="$RUNNER_TEMP/phase4c-cargo-tools/bin:$PATH" cargo cyclonedx --version | grep -Fx "cargo-cyclonedx 0.5.9"
+          test "$(PATH="$RUNNER_TEMP/phase4c-cargo-tools/bin:$PATH" cargo cyclonedx --version | awk '{print $2}')" = "0.5.9"
           echo "QROS_PHASE4C_CARGO_CYCLONEDX_INPUT_GENERATOR_ONLY=PASS"
 
       - name: Regenerate exact QROS Cargo CycloneDX 1.5 input
