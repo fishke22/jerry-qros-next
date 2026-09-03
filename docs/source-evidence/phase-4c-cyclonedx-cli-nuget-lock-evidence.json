@@ -1,0 +1,128 @@
+{
+  "evidence_version": 1,
+  "source_run": 33739454968,
+  "source_job": 100597722306,
+  "generated_lock_sha256": "01b9d04a2137ddac295892d157e38b2f019c069f799b6db8c90b806aa345add4",
+  "note": "Normalized semantic structure transcribed from the successful CI log. This file is evidence, not claimed byte-identical to the generated packages.lock.json.",
+  "frameworks": [
+    "net10.0",
+    "net10.0/linux-x64"
+  ],
+  "packages": [
+    [
+      "CoderPatros.AntPathMatching",
+      "0.1.1",
+      "Direct",
+      "MIT"
+    ],
+    [
+      "CsvHelper",
+      "29.0.0",
+      "Direct",
+      "MS-PL OR Apache-2.0"
+    ],
+    [
+      "CycloneDX.Core",
+      "12.1.2",
+      "Transitive",
+      "Apache-2.0"
+    ],
+    [
+      "CycloneDX.Spdx",
+      "12.1.2",
+      "Transitive",
+      "Apache-2.0"
+    ],
+    [
+      "CycloneDX.Spdx.Interop",
+      "12.1.2",
+      "Direct",
+      "Apache-2.0"
+    ],
+    [
+      "CycloneDX.Utils",
+      "12.1.2",
+      "Direct",
+      "Apache-2.0"
+    ],
+    [
+      "Humanizer.Core",
+      "3.0.10",
+      "Transitive",
+      "MIT"
+    ],
+    [
+      "Json.More.Net",
+      "3.0.1",
+      "Transitive",
+      "OSMFEULA.txt"
+    ],
+    [
+      "JsonPointer.Net",
+      "7.0.1",
+      "Transitive",
+      "OSMFEULA.txt"
+    ],
+    [
+      "JsonSchema.Net",
+      "9.3.0",
+      "Transitive",
+      "OSMFEULA.txt"
+    ],
+    [
+      "protobuf-net",
+      "3.2.56",
+      "Transitive",
+      "Apache-2.0"
+    ],
+    [
+      "protobuf-net.Core",
+      "3.2.56",
+      "Transitive",
+      "Apache-2.0"
+    ],
+    [
+      "System.CommandLine",
+      "2.0.0-beta4.22272.1",
+      "Direct",
+      "MIT"
+    ],
+    [
+      "System.CommandLine.NamingConventionBinder",
+      "2.0.0-beta4.22272.1",
+      "Direct",
+      "MIT"
+    ],
+    [
+      "System.IO.Abstractions",
+      "13.2.47",
+      "Transitive",
+      "MIT"
+    ],
+    [
+      "System.IO.FileSystem.AccessControl",
+      "5.0.0",
+      "Transitive",
+      "MIT"
+    ],
+    [
+      "System.Security.Cryptography.Pkcs",
+      "10.0.10",
+      "Transitive",
+      "MIT"
+    ],
+    [
+      "System.Security.Cryptography.Xml",
+      "10.0.10",
+      "Direct",
+      "MIT"
+    ]
+  ],
+  "graph_summary": {
+    "package_count_unique": 18,
+    "direct_count": 7,
+    "transitive_count_base": 11,
+    "edge_count": 15,
+    "runtime_package_count": 2
+  }
+}
