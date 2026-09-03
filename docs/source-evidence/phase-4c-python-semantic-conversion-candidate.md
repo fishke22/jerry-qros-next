@@ -41,3 +41,26 @@ DEPENDENCY_REGISTRY_PROMOTION = DENY
 CANONICAL_SBOM_1_7_PROMOTION = DENY
 PACKAGE/RELEASE/YUANTA/LIVE = DENY
 ```
+
+
+## Reviewed serialNumber normalization
+
+Diagnostic workflow run `33755577669` (job `100649075398`) reached real conversion and proved:
+
+- strict CycloneDX 1.5 input validation: PASS;
+- two raw library outputs differed only in top-level `serialNumber`;
+- example generated values were distinct `urn:uuid:...` values;
+- exact `cyclonedx-python-lib 11.12.0` source initializes a missing BOM serial number with `uuid4()`;
+- the exact bundled CycloneDX 1.7 JSON schema requires only `bomFormat` and `specVersion`; `serialNumber` is recommended but optional.
+
+The canonical candidate therefore uses this narrow rule:
+
+```text
+if input contains serialNumber:
+    output serialNumber MUST equal input exactly
+else:
+    raw library output MUST contain a valid urn:uuid serialNumber
+    remove only that generated serialNumber from canonical output
+```
+
+This does not ignore arbitrary nondeterminism. After the above rule, two fresh conversions must still be byte-identical, strict-valid as CycloneDX 1.7, and semantic-deep-equal to the input after removing only `$schema` and `specVersion`.
