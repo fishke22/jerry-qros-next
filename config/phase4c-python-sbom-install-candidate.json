@@ -1,0 +1,68 @@
+{
+  "candidate_version": 1,
+  "verified_parent_head": "336f4b3eacd70d3ab2ac1392fe5e58463fae9c20",
+  "parent_pr": 30,
+  "issue": 27,
+  "status": "HASH_LOCKED_INSTALL_IMPORT_COMPATIBILITY_CANDIDATE",
+  "python": {
+    "version": "3.14.7",
+    "setup_action_revision": "a309ff8b426b58ec0e2a45f0f869d46889d02405",
+    "ci_tool_target_only": true,
+    "does_not_add_linux_product_support": true
+  },
+  "artifact_lock": {
+    "path": "requirements/candidates/phase4c-cyclonedx-python.lock",
+    "sha256": "bd9df0ad87b54e5bb0d03e25572ac23d02d4fd41acc35631dad4b67b61b0dee1",
+    "wheel_count": 26,
+    "wheel_only": true
+  },
+  "prerequisites": {
+    "license_gate": "PASS_FOR_CANDIDATE_INSTALL_TEST_ONLY",
+    "zero_cost_gate": "PASS_FOR_CANDIDATE_INSTALL_TEST_ONLY",
+    "pypi_vulnerability_gate": "PASS_EXACT_PYPI_RELEASE_JSON",
+    "pypi_yanked_gate": "PASS"
+  },
+  "install_boundary": {
+    "isolated_venv_required": true,
+    "no_index_during_install": true,
+    "no_deps_during_install": true,
+    "require_hashes": true,
+    "pth_files_allowed": false,
+    "wheel_data_scripts_allowed": false,
+    "entry_points_may_be_inventoried_but_not_executed": true
+  },
+  "import_boundary": {
+    "empty_environment_required": true,
+    "isolated_python_mode_required": true,
+    "repo_cwd_allowed": false,
+    "socket_operations_allowed": false,
+    "subprocess_operations_allowed": false,
+    "allowed_imports": [
+      "cyclonedx.model.bom.Bom",
+      "cyclonedx.output.json.JsonV1Dot7",
+      "cyclonedx.validation.json.JsonValidator",
+      "cyclonedx.validation.json.JsonStrictValidator"
+    ],
+    "bom_from_json_call_authorized": false,
+    "json_v1_7_generation_authorized": false,
+    "schema_validation_call_authorized": false
+  },
+  "scope": {
+    "candidate_install_authorized": true,
+    "candidate_import_authorized": true,
+    "converter_execution_authorized": false,
+    "semantic_fidelity_test_authorized": false,
+    "permanent_tool_adoption_authorized": false,
+    "dependency_registry_promotion_authorized": false,
+    "canonical_sbom_1_7_promotion_authorized": false,
+    "main_runtime_promotion_authorized": false,
+    "production_readiness_authorized": false
+  },
+  "hard_gates": {
+    "zero_cost_required": true,
+    "package_authorized": false,
+    "release_authorized": false,
+    "yuanta_integration_authorized": false,
+    "live_trading_authorized": false
+  }
+}
