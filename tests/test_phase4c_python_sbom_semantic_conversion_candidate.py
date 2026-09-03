@@ -96,6 +96,43 @@ class Phase4CPythonSemanticConversionCandidateTests(unittest.TestCase):
             self.workflow,
         )
 
+    def test_successful_semantic_outcome_is_sealed(self):
+        self.assertEqual(
+            self.policy["status"],
+            "SEMANTIC_FIDELITY_CONVERSION_PASS_CANDIDATE_EVIDENCE_ONLY",
+        )
+        outcome=self.policy["outcome"]
+        self.assertEqual(outcome["evidence_run"],33756884807)
+        self.assertEqual(outcome["evidence_job"],100653599007)
+        self.assertEqual(
+            outcome["input_sbom_sha256"],
+            "50e315c02680106ff3004e6e194f58d4cbbd8732fab33aff08ff122972da3623",
+        )
+        self.assertEqual(
+            outcome["output_sbom_sha256"],
+            "b1bee226f7df007a243b6114c13fe1e22f5e0e2083f26ae261a68357b419d668",
+        )
+        self.assertEqual(outcome["input_component_count"],253)
+        self.assertEqual(outcome["output_component_count"],253)
+        self.assertEqual(outcome["semantic_equality"],"PASS")
+        self.assertIn(
+            outcome["output_sbom_sha256"],
+            self.workflow,
+        )
+        self.assertIn(
+            "QROS_PHASE4C_SEALED_OUTPUT_SHA256",
+            self.workflow,
+        )
+        self.assertEqual(
+            self.policy["next_gate"]["name"],
+            "PERMANENT_SBOM_TOOLCHAIN_ADOPTION_REVIEW",
+        )
+        self.assertFalse(
+            self.policy["next_gate"][
+                "canonical_sbom_1_7_promotion_authorized"
+            ]
+        )
+
     def test_converter_execution_is_candidate_only(self):
         s=self.policy["scope"]
         self.assertTrue(s["bom_from_json_execution_authorized"])
