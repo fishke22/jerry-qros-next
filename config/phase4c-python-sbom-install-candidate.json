@@ -1,0 +1,110 @@
+{
+  "candidate_version": 1,
+  "verified_parent_head": "336f4b3eacd70d3ab2ac1392fe5e58463fae9c20",
+  "parent_pr": 30,
+  "issue": 27,
+  "status": "HASH_LOCKED_INSTALL_IMPORT_COMPATIBILITY_PASS",
+  "python": {
+    "version": "3.14.7",
+    "setup_action_revision": "a309ff8b426b58ec0e2a45f0f869d46889d02405",
+    "ci_tool_target_only": true,
+    "does_not_add_linux_product_support": true
+  },
+  "artifact_lock": {
+    "path": "requirements/candidates/phase4c-cyclonedx-python.lock",
+    "sha256": "bd9df0ad87b54e5bb0d03e25572ac23d02d4fd41acc35631dad4b67b61b0dee1",
+    "wheel_count": 26,
+    "wheel_only": true
+  },
+  "prerequisites": {
+    "license_gate": "PASS_FOR_CANDIDATE_INSTALL_TEST_ONLY",
+    "zero_cost_gate": "PASS_FOR_CANDIDATE_INSTALL_TEST_ONLY",
+    "pypi_vulnerability_gate": "PASS_EXACT_PYPI_RELEASE_JSON",
+    "pypi_yanked_gate": "PASS"
+  },
+  "install_boundary": {
+    "isolated_venv_required": true,
+    "no_index_during_install": true,
+    "no_deps_during_install": true,
+    "require_hashes": true,
+    "pth_files_allowed": false,
+    "entry_points_may_be_inventoried_but_not_executed": true,
+    "unlisted_wheel_data_scripts_allowed": false,
+    "allowed_wheel_data_scripts": [
+      {
+        "wheel": "jsonpointer-3.1.1-py3-none-any.whl",
+        "path": "jsonpointer-3.1.1.data/scripts/jsonpointer",
+        "sha256": "4c9bda8829e436ce6c732194421f645240695bf647a75eb210f17256215f7b22",
+        "upstream_repository": "stefankoegl/python-json-pointer",
+        "upstream_release_commit": "5998f951dcc5ace60f67f35afe6778c445401a07",
+        "upstream_path": "bin/jsonpointer",
+        "reviewed_as": "NON_EXECUTED_CLI_SCRIPT_COPIED_BY_WHEEL_INSTALLER",
+        "upstream_source_sha256": "0922c792b58faecab05e9010713eb5345b964848abeecd62d901a0f10ff1a0c6",
+        "wheel_transformation": "ONLY_SHEBANG_CHANGED_FROM_#!/usr/bin/env python3_TO_#!python",
+        "wheel_spec": "https://packaging.python.org/en/latest/specifications/binary-distribution-format/"
+      }
+    ]
+  },
+  "import_boundary": {
+    "empty_environment_required": true,
+    "isolated_python_mode_required": true,
+    "repo_cwd_allowed": false,
+    "socket_operations_allowed": false,
+    "subprocess_operations_allowed": false,
+    "allowed_imports": [
+      "cyclonedx.model.bom.Bom",
+      "cyclonedx.output.json.JsonV1Dot7",
+      "cyclonedx.validation.json.JsonValidator",
+      "cyclonedx.validation.json.JsonStrictValidator"
+    ],
+    "bom_from_json_call_authorized": false,
+    "json_v1_7_generation_authorized": false,
+    "schema_validation_call_authorized": false
+  },
+  "scope": {
+    "candidate_install_authorized": true,
+    "candidate_import_authorized": true,
+    "converter_execution_authorized": false,
+    "semantic_fidelity_test_authorized": false,
+    "permanent_tool_adoption_authorized": false,
+    "dependency_registry_promotion_authorized": false,
+    "canonical_sbom_1_7_promotion_authorized": false,
+    "main_runtime_promotion_authorized": false,
+    "production_readiness_authorized": false
+  },
+  "hard_gates": {
+    "zero_cost_required": true,
+    "package_authorized": false,
+    "release_authorized": false,
+    "yuanta_integration_authorized": false,
+    "live_trading_authorized": false
+  },
+  "outcome": {
+    "evidence_run": 33743936003,
+    "evidence_job": 100612043832,
+    "activation_surfaces_sha256": "f38359daa01e72c90c13130ff00e772e377d96c27d8374e85edda696d4ff9ef5",
+    "pth_gate": "PASS",
+    "wheel_data_scripts_exact_allowlist": "PASS",
+    "entry_points_inventory": "PASS",
+    "hash_locked_install": "PASS",
+    "installed_distribution_set": "PASS",
+    "installed_distribution_count": 26,
+    "cyclonedx_python_lib_version": "11.12.0",
+    "bom_from_json_symbol": "PASS",
+    "json_v1_7_symbol": "PASS",
+    "json_validator_symbols": "PASS",
+    "limited_import": "PASS",
+    "bom_from_json_execution": "NOT_PERFORMED",
+    "json_v1_7_generation": "NOT_PERFORMED",
+    "schema_validation_execution": "NOT_PERFORMED",
+    "semantic_fidelity_test": "NOT_PERFORMED",
+    "canonical_sbom_1_7_promotion": "DENY"
+  },
+  "next_gate": {
+    "name": "SEMANTIC_FIDELITY_CONVERSION_CANDIDATE",
+    "authorized_to_create_separate_candidate_branch": true,
+    "converter_execution_in_current_pr_authorized": false,
+    "permanent_tool_adoption_authorized": false,
+    "canonical_sbom_1_7_promotion_authorized": false
+  }
+}
