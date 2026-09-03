@@ -8,6 +8,8 @@ on:
       - "docs/security/NETWORK_ENDPOINTS.md"
       - "docs/source-evidence/phase-4b-windows11-local-validation-gate.md"
       - "docs/runbooks/phase4-windows11-local-validation.md"
+      - "docs/validation/PHASE4_WINDOWS11_LOCAL_VALIDATION_PLAN.md"
+      - "supply-chain/SHA256SUMS"
       - "tests/test_phase4_qut_candidate.py"
       - ".github/workflows/phase4-qut-candidate.yml"
   workflow_dispatch:
