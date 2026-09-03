@@ -158,6 +158,7 @@ jobs:
           cat > "$RUNNER_TEMP/phase4c-semantic-convert.py" <<'PY'
           import copy
           import hashlib
+          from datetime import datetime, timezone
           import json
           import os
           import socket
@@ -182,6 +183,7 @@ jobs:
           from cyclonedx.output.json import JsonV1Dot7
           from cyclonedx.schema import SchemaVersion
           from cyclonedx.validation.json import JsonStrictValidator
+          from packageurl import PackageURL
 
           input_path=Path(sys.argv[1])
           input_text=input_path.read_text(encoding="utf-8")
@@ -258,11 +260,28 @@ jobs:
           if len(output_obj.get("components") or []) != 253:
               raise SystemExit("Output component count changed")
 
-          def canonicalize_set_collections(value):
+          def canonicalize_semantics(value,path=()):
               if isinstance(value,dict):
                   out={}
                   for key,item in value.items():
-                      normalized=canonicalize_set_collections(item)
+                      child_path=path+(key,)
+                      if key=="purl" and isinstance(item,str):
+                          normalized=PackageURL.from_string(item).to_string()
+                      elif child_path==("metadata","timestamp") and isinstance(item,str):
+                          timestamp_text=(
+                              item[:-1]+"+00:00"
+                              if item.endswith("Z")
+                              else item
+                          )
+                          parsed=datetime.fromisoformat(timestamp_text)
+                          if parsed.tzinfo is None:
+                              raise SystemExit(
+                                  "metadata.timestamp must be timezone-aware"
+                              )
+                          normalized=parsed.astimezone(timezone.utc).isoformat()
+                      else:
+                          normalized=canonicalize_semantics(item,child_path)
+
                       if key=="components" and isinstance(normalized,list):
                           if not all(
                               isinstance(x,dict) and isinstance(x.get("bom-ref"),str)
@@ -282,11 +301,17 @@ jobs:
                                   x,sort_keys=True,separators=(",",":")
                               ),
                           )
+                      elif key=="dependsOn" and isinstance(normalized,list):
+                          if not all(isinstance(x,str) for x in normalized):
+                              raise SystemExit(
+                                  "dependsOn ordering normalization requires string refs"
+                              )
+                          normalized=sorted(normalized)
                       out[key]=normalized
                   return out
               if isinstance(value,list):
                   return [
-                      canonicalize_set_collections(x)
+                      canonicalize_semantics(x,path)
                       for x in value
                   ]
               return value
@@ -295,7 +320,7 @@ jobs:
               d=copy.deepcopy(doc)
               d.pop("$schema",None)
               d.pop("specVersion",None)
-              return canonicalize_set_collections(d)
+              return canonicalize_semantics(d)
 
           a=projection(input_obj)
           b=projection(output_obj)
@@ -331,6 +356,9 @@ jobs:
 
           Path(sys.argv[2]).write_text(out1,encoding="utf-8")
           print("QROS_PHASE4C_SET_COLLECTION_ORDER_NORMALIZATION=PASS")
+          print("QROS_PHASE4C_DEPENDSON_ORDER_NORMALIZATION=PASS")
+          print("QROS_PHASE4C_PURL_CANONICALIZATION=PASS")
+          print("QROS_PHASE4C_METADATA_TIMESTAMP_NORMALIZATION=PASS")
           print("QROS_PHASE4C_SEMANTIC_EQUALITY_EXCEPT_VERSION_FIELDS=PASS")
           print("QROS_PHASE4C_OUTPUT_COMPONENT_COUNT=253")
           print("QROS_PHASE4C_OUTPUT_SHA256="+hashlib.sha256(out1.encode()).hexdigest())
