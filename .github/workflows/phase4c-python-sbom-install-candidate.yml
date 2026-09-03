@@ -1,0 +1,225 @@
+name: phase4c-python-sbom-install-candidate
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/phase4c-python-sbom-install-candidate.yml"
+      - "config/phase4c-python-sbom-install-candidate.json"
+      - "docs/source-evidence/phase-4c-python-install-import-candidate.md"
+      - "requirements/candidates/phase4c-cyclonedx-python.lock"
+      - "tests/test_phase4c_python_sbom_install_candidate.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: phase4c-python-install-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  install-import-compatibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      QROS_PYPI_INDEX: "https://pypi.org/simple"
+      QROS_LOCK: "requirements/candidates/phase4c-cyclonedx-python.lock"
+      QROS_LOCK_SHA256: "bd9df0ad87b54e5bb0d03e25572ac23d02d4fd41acc35631dad4b67b61b0dee1"
+    steps:
+      - name: Checkout QROS
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup exact Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.14.7"
+          check-latest: false
+
+      - name: Verify candidate prerequisites and lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(python -c 'import sys; print(sys.version.split()[0])')" = "3.14.7"
+          test "$(sha256sum "$QROS_LOCK" | cut -d' ' -f1)" = "$QROS_LOCK_SHA256"
+          test "$(grep -cve '^[[:space:]]*$' "$QROS_LOCK")" = "26"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path("config/phase4c-python-sbom-install-candidate.json").read_text(encoding="utf-8"))
+          p=json.loads(Path("config/phase4c-python-sbom-library-candidate.json").read_text(encoding="utf-8"))
+          l=json.loads(Path("config/phase4c-python-sbom-library-license-dispositions.json").read_text(encoding="utf-8"))
+          assert c["status"] == "HASH_LOCKED_INSTALL_IMPORT_COMPATIBILITY_CANDIDATE"
+          assert p["outcome"]["license_gate"] == "PASS_FOR_CANDIDATE_INSTALL_TEST_ONLY"
+          assert p["outcome"]["zero_cost_gate"] == "PASS_FOR_CANDIDATE_INSTALL_TEST_ONLY"
+          assert p["outcome"]["vulnerability_gate"] == "PASS_EXACT_PYPI_RELEASE_JSON"
+          assert l["gate"]["unknown_normalized_license_count"] == 0
+          assert l["gate"]["conditional_usage_fee_blocker_count"] == 0
+          assert c["scope"]["converter_execution_authorized"] is False
+          print("QROS_PHASE4C_INSTALL_PREREQUISITES=PASS")
+          PY
+
+      - name: Download exact wheel set
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .phase4c-install/wheels .phase4c-install/evidence
+          python -m pip download --index-url "$QROS_PYPI_INDEX" --only-binary=:all: --require-hashes --dest .phase4c-install/wheels -r "$QROS_LOCK"
+          test "$(find .phase4c-install/wheels -maxdepth 1 -type f -name '*.whl' | wc -l)" = "26"
+          if find .phase4c-install/wheels -maxdepth 1 -type f ! -name '*.whl' | grep -q .; then
+            echo "Non-wheel artifact downloaded" >&2
+            exit 1
+          fi
+
+      - name: Reject wheel activation surfaces before install
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import zipfile
+          from pathlib import Path
+
+          rows=[]
+          blockers=[]
+          for wheel in sorted(Path(".phase4c-install/wheels").glob("*.whl")):
+              with zipfile.ZipFile(wheel) as zf:
+                  names=zf.namelist()
+                  pth=[n for n in names if n.lower().endswith(".pth")]
+                  scripts=[n for n in names if ".data/scripts/" in n.lower()]
+                  eps=[n for n in names if n.endswith(".dist-info/entry_points.txt")]
+                  entry_points=[]
+                  for ep in eps:
+                      entry_points.append({
+                          "path":ep,
+                          "content":zf.read(ep).decode("utf-8", errors="replace"),
+                      })
+              if pth:
+                  blockers.append(f"{wheel.name}:pth:{pth}")
+              if scripts:
+                  blockers.append(f"{wheel.name}:wheel-data-scripts:{scripts}")
+              rows.append({
+                  "wheel":wheel.name,
+                  "pth_files":pth,
+                  "wheel_data_scripts":scripts,
+                  "entry_points":entry_points,
+              })
+          Path(".phase4c-install/evidence/wheel-activation-surfaces.json").write_text(
+              json.dumps(rows,indent=2,sort_keys=True)+"\n",
+              encoding="utf-8",
+          )
+          if blockers:
+              raise SystemExit("Wheel activation surface blocker(s): "+" | ".join(blockers))
+          print("QROS_PHASE4C_PTH_GATE=PASS")
+          print("QROS_PHASE4C_WHEEL_DATA_SCRIPTS_GATE=PASS")
+          print("QROS_PHASE4C_ENTRY_POINTS_INVENTORIED=PASS")
+          PY
+          echo "QROS_PHASE4C_ACTIVATION_SURFACES_SHA256=$(sha256sum .phase4c-install/evidence/wheel-activation-surfaces.json | cut -d' ' -f1)"
+
+      - name: Install exact wheels into isolated venv
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m venv .phase4c-install/venv
+          vpy="$GITHUB_WORKSPACE/.phase4c-install/venv/bin/python"
+          "$vpy" -m pip install --no-index --find-links "$GITHUB_WORKSPACE/.phase4c-install/wheels" --no-deps --require-hashes -r "$GITHUB_WORKSPACE/$QROS_LOCK"
+          "$vpy" -m pip check
+          echo "QROS_PHASE4C_HASH_LOCKED_INSTALL=PASS"
+
+      - name: Verify exact installed distribution set
+        shell: bash
+        run: |
+          set -euo pipefail
+          vpy="$GITHUB_WORKSPACE/.phase4c-install/venv/bin/python"
+          "$vpy" -I - <<'PY'
+          import importlib.metadata as md
+          import re
+          from pathlib import Path
+
+          def norm(name):
+              return re.sub(r"[-_.]+", "-", name).lower()
+
+          expected={}
+          for line in Path("requirements/candidates/phase4c-cyclonedx-python.lock").read_text(encoding="utf-8").splitlines():
+              if not line.strip():
+                  continue
+              spec=line.split(" --hash=",1)[0]
+              name,version=spec.split("==",1)
+              expected[norm(name)]=version
+
+          installed={}
+          for dist in md.distributions():
+              name=dist.metadata.get("Name")
+              if not name:
+                  continue
+              key=norm(name)
+              if key in {"pip"}:
+                  continue
+              installed[key]=dist.version
+
+          if installed != expected:
+              raise SystemExit(f"Installed distribution set mismatch: installed={installed}, expected={expected}")
+          print("QROS_PHASE4C_INSTALLED_DISTRIBUTION_SET=PASS")
+          print("QROS_PHASE4C_INSTALLED_DISTRIBUTION_COUNT="+str(len(installed)))
+          PY
+
+      - name: Import required APIs with ambient capabilities denied
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/phase4c-import-home" "$RUNNER_TEMP/phase4c-import-cwd"
+          vpy="$GITHUB_WORKSPACE/.phase4c-install/venv/bin/python"
+          cat > "$RUNNER_TEMP/phase4c-import-smoke.py" <<'PY'
+          import importlib.metadata as md
+          import os
+          import socket
+          import subprocess
+
+          def denied(*args, **kwargs):
+              raise RuntimeError("QROS Phase 4C ambient capability denied")
+
+          socket.socket=denied
+          socket.create_connection=denied
+          subprocess.Popen=denied
+          subprocess.run=denied
+          subprocess.call=denied
+          subprocess.check_call=denied
+          subprocess.check_output=denied
+          os.system=denied
+          if hasattr(os, "spawnv"):
+              os.spawnv=denied
+          if hasattr(os, "spawnve"):
+              os.spawnve=denied
+
+          assert md.version("cyclonedx-python-lib") == "11.12.0"
+
+          from cyclonedx.model.bom import Bom
+          from cyclonedx.output.json import JsonV1Dot7
+          from cyclonedx.validation.json import JsonStrictValidator, JsonValidator
+
+          assert callable(getattr(Bom, "from_json", None))
+          assert isinstance(JsonV1Dot7, type)
+          assert isinstance(JsonValidator, type)
+          assert isinstance(JsonStrictValidator, type)
+
+          print("QROS_PHASE4C_CYCLONEDX_VERSION=11.12.0")
+          print("QROS_PHASE4C_BOM_FROM_JSON_SYMBOL=PASS")
+          print("QROS_PHASE4C_JSON_V1_7_SYMBOL=PASS")
+          print("QROS_PHASE4C_JSON_VALIDATOR_SYMBOLS=PASS")
+          print("QROS_PHASE4C_LIMITED_IMPORT=PASS")
+          PY
+          cd "$RUNNER_TEMP/phase4c-import-cwd"
+          env -i \
+            HOME="$RUNNER_TEMP/phase4c-import-home" \
+            LANG="C.UTF-8" \
+            PYTHONDONTWRITEBYTECODE="1" \
+            "$vpy" -I "$RUNNER_TEMP/phase4c-import-smoke.py"
+
+      - name: Confirm no converter execution or repository mutation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          echo "QROS_PHASE4C_BOM_FROM_JSON_EXECUTION=NOT_PERFORMED"
+          echo "QROS_PHASE4C_JSON_V1_7_GENERATION=NOT_PERFORMED"
+          echo "QROS_PHASE4C_SCHEMA_VALIDATION_EXECUTION=NOT_PERFORMED"
+          echo "QROS_PHASE4C_SEMANTIC_FIDELITY_TEST=NOT_PERFORMED"
+          echo "QROS_PHASE4C_CANONICAL_SBOM_1_7_PROMOTION=DENY"
