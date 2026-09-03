@@ -1,0 +1,51 @@
+{
+  "candidate_version": 1,
+  "status": "RESTORE_INVENTORY_ONLY",
+  "base_research_pr": 28,
+  "issue": 27,
+  "cyclonedx_cli": {
+    "version": "0.33.1",
+    "source_revision": "b3cfa4b0edc356dad07e0b6e7ab6da0a94af0246",
+    "license": "Apache-2.0",
+    "target_framework": "net10.0",
+    "build_authorized": false,
+    "execution_authorized": false
+  },
+  "dotnet": {
+    "sdk": "10.0.400",
+    "setup_action_revision": "a98b56852c35b8e3190ac28c8c2271da59106c68",
+    "nuget_source": "https://api.nuget.org/v3/index.json"
+  },
+  "restore": {
+    "generate_qros_lock_evidence": true,
+    "locked_restore_required": true,
+    "nuget_audit": true,
+    "nuget_audit_mode": "all",
+    "nuget_audit_level": "low",
+    "license_metadata_required": true
+  },
+  "source_evaluation": {
+    "directory_build_targets_allowed": false,
+    "exec_task_allowed": false,
+    "using_task_allowed": false,
+    "restore_hook_allowed": false
+  },
+  "scope": {
+    "restore_and_inventory_authorized": true,
+    "build_cli_authorized": false,
+    "execute_cli_authorized": false,
+    "sbom_conversion_authorized": false,
+    "permanent_tool_adoption_authorized": false,
+    "canonical_sbom_1_7_promotion_authorized": false,
+    "dependency_adoption_authorized": false,
+    "main_runtime_promotion_authorized": false,
+    "production_readiness_authorized": false
+  },
+  "hard_gates": {
+    "zero_cost_required": true,
+    "package_authorized": false,
+    "release_authorized": false,
+    "yuanta_integration_authorized": false,
+    "live_trading_authorized": false
+  }
+}
