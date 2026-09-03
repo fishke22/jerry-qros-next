@@ -20,13 +20,15 @@ Hard gates remain:
 - `UNKNOWN != ALLOW`
 - `UNKNOWN = DENY`
 
-## Current hosted evidence already closed
+## Hosted evidence baseline
 
-Exact Phase 4 candidate head `695220b746d217e716a9b964650e7694f041d773` has successful:
+Historical reviewed source head `cc387b0a4566a7e6a842f0c4f46179cd7897fb77` had successful:
 - `qros-gate`
 - `phase4-qut-candidate`
 - `phase4-qut-cargo-sbom`
 - `lean-integration`
+
+This is a historical evidence anchor, not a standing exact-head claim. Any subsequent commit to PR #26 must rerun the required workflows, and the acceptance review must record the then-current PR head explicitly.
 
 Hosted Windows evidence is not a substitute for physical Windows 11 validation because GitHub hosted validation ran on Windows Server 2025.
 
