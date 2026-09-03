@@ -60,6 +60,18 @@
     "package_install": "NOT_PERFORMED",
     "package_import": "NOT_PERFORMED",
     "conversion": "NOT_PERFORMED",
-    "vulnerability_gate": "PENDING_EXACT_PYPI_RELEASE_JSON"
+    "vulnerability_gate": "PASS_EXACT_PYPI_RELEASE_JSON",
+    "yanked_gate": "PASS",
+    "license_gate": "PASS_FOR_CANDIDATE_INSTALL_TEST_ONLY",
+    "zero_cost_gate": "PASS_FOR_CANDIDATE_INSTALL_TEST_ONLY",
+    "license_dispositions": "config/phase4c-python-sbom-library-license-dispositions.json",
+    "license_review": "docs/licensing/PHASE4C_PYTHON_SBOM_LIBRARY_LICENSE_REVIEW.md"
+  },
+  "next_gate": {
+    "name": "HASH_LOCKED_INSTALL_IMPORT_COMPATIBILITY_CANDIDATE",
+    "authorized_to_create_separate_candidate_branch": true,
+    "install_in_current_research_pr_authorized": false,
+    "converter_execution_authorized": false,
+    "canonical_sbom_1_7_promotion_authorized": false
   }
 }
