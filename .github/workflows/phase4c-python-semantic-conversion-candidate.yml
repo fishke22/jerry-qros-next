@@ -28,15 +28,6 @@ jobs:
       - name: Checkout current candidate
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Checkout exact QUT source snapshot
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          repository: fishke22/jerry-qros-next
-          ref: 32e74ccfde93cf02fc0f149dd84a9c4ea6b1112e
-          path: .phase4c-semantic/qut-snapshot
-          fetch-depth: 1
-          persist-credentials: false
-
       - name: Setup exact Python
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
@@ -49,7 +40,6 @@ jobs:
           set -euo pipefail
           test "$(python -c 'import sys; print(sys.version.split()[0])')" = "3.14.7"
           test "$(sha256sum "$QROS_LOCK" | cut -d' ' -f1)" = "$QROS_LOCK_SHA256"
-          test "$(sha256sum .phase4c-semantic/qut-snapshot/apps/qut/src-tauri/Cargo.lock | cut -d' ' -f1)" = "c9abfa64e57be2dd18efa91d8ae4abf43944bdbae75af94555ff28daa7601adb"
           python - <<'PY'
           import json
           from pathlib import Path
@@ -74,11 +64,19 @@ jobs:
           test "$(PATH="$RUNNER_TEMP/phase4c-cargo-tools/bin:$PATH" cargo cyclonedx --version | awk '{print $2}')" = "0.5.9"
           echo "QROS_PHASE4C_CARGO_CYCLONEDX_INPUT_GENERATOR_ONLY=PASS"
 
-      - name: Regenerate exact QROS Cargo CycloneDX 1.5 input
+      - name: Regenerate exact QROS Cargo CycloneDX 1.5 input at canonical workspace path
         shell: bash
-        working-directory: .phase4c-semantic/qut-snapshot/apps/qut/src-tauri
         run: |
           set -euo pipefail
+          candidate_checkout="$(git rev-parse HEAD)"
+          echo "QROS_PHASE4C_CANDIDATE_CHECKOUT=$candidate_checkout"
+
+          git fetch --no-tags --depth=1 origin 32e74ccfde93cf02fc0f149dd84a9c4ea6b1112e
+          git checkout --force 32e74ccfde93cf02fc0f149dd84a9c4ea6b1112e
+          test "$(git rev-parse HEAD)" = "32e74ccfde93cf02fc0f149dd84a9c4ea6b1112e"
+          test "$(sha256sum apps/qut/src-tauri/Cargo.lock | cut -d' ' -f1)" = "c9abfa64e57be2dd18efa91d8ae4abf43944bdbae75af94555ff28daa7601adb"
+
+          cd apps/qut/src-tauri
           before="$(sha256sum Cargo.lock | cut -d' ' -f1)"
           PATH="$RUNNER_TEMP/phase4c-cargo-tools/bin:$PATH" SOURCE_DATE_EPOCH=0 cargo cyclonedx --format json --target x86_64-pc-windows-msvc --spec-version 1.5
           after="$(sha256sum Cargo.lock | cut -d' ' -f1)"
@@ -88,7 +86,7 @@ jobs:
           sbom="$(find . -maxdepth 1 -type f -name '*.cdx.json' -print | head -n 1)"
           actual_sha="$(sha256sum "$sbom" | cut -d' ' -f1)"
           echo "QROS_PHASE4C_INPUT_WORKDIR=$PWD"
-          echo "QROS_PHASE4C_INPUT_SOURCE_HEAD=$(git -C "$GITHUB_WORKSPACE/.phase4c-semantic/qut-snapshot" rev-parse HEAD)"
+          echo "QROS_PHASE4C_INPUT_SOURCE_HEAD=$(git rev-parse HEAD)"
           echo "QROS_PHASE4C_INPUT_ACTUAL_SHA256=$actual_sha"
           cp "$sbom" "$RUNNER_TEMP/qros-qut-cargo-1.5.json"
           INPUT="$RUNNER_TEMP/qros-qut-cargo-1.5.json" python - <<'PY'
@@ -112,6 +110,13 @@ jobs:
           test "$actual_sha" = "$QROS_INPUT_SHA256"
           echo "QROS_PHASE4C_INPUT_SHA256=$actual_sha"
           echo "QROS_PHASE4C_INPUT_COMPONENT_COUNT=253"
+
+          rm -f "$sbom"
+          cd "$GITHUB_WORKSPACE"
+          git checkout --force "$candidate_checkout"
+          test "$(git rev-parse HEAD)" = "$candidate_checkout"
+          test "$(sha256sum "$QROS_LOCK" | cut -d' ' -f1)" = "$QROS_LOCK_SHA256"
+          echo "QROS_PHASE4C_CANDIDATE_CHECKOUT_RESTORED=PASS"
 
       - name: Prepare exact Python converter environment
         shell: bash
