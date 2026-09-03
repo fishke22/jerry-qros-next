@@ -330,7 +330,8 @@ jobs:
               )
 
           Path(sys.argv[2]).write_text(out1,encoding="utf-8")
-          print("QROS_PHASE4C_SET_COLLECTION_ORDER_NORMALIZATION=PASS")\n          print("QROS_PHASE4C_SEMANTIC_EQUALITY_EXCEPT_VERSION_FIELDS=PASS")
+          print("QROS_PHASE4C_SET_COLLECTION_ORDER_NORMALIZATION=PASS")
+          print("QROS_PHASE4C_SEMANTIC_EQUALITY_EXCEPT_VERSION_FIELDS=PASS")
           print("QROS_PHASE4C_OUTPUT_COMPONENT_COUNT=253")
           print("QROS_PHASE4C_OUTPUT_SHA256="+hashlib.sha256(out1.encode()).hexdigest())
           print("QROS_PHASE4C_OUTPUT_TOP_LEVEL_KEYS="+json.dumps(sorted(output_obj),separators=(",",":")))
