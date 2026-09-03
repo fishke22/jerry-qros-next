@@ -82,6 +82,46 @@ class Phase4CPythonInstallCandidateTests(unittest.TestCase):
             self.workflow,
         )
 
+
+    def test_observed_install_import_outcome_is_recorded(self):
+        self.assertEqual(
+            self.policy["status"],
+            "HASH_LOCKED_INSTALL_IMPORT_COMPATIBILITY_PASS",
+        )
+        outcome=self.policy["outcome"]
+        self.assertEqual(outcome["evidence_run"], 33743936003)
+        self.assertEqual(outcome["evidence_job"], 100612043832)
+        self.assertEqual(outcome["pth_gate"], "PASS")
+        self.assertEqual(
+            outcome["wheel_data_scripts_exact_allowlist"],
+            "PASS",
+        )
+        self.assertEqual(outcome["hash_locked_install"], "PASS")
+        self.assertEqual(
+            outcome["installed_distribution_set"],
+            "PASS",
+        )
+        self.assertEqual(outcome["installed_distribution_count"], 26)
+        self.assertEqual(outcome["limited_import"], "PASS")
+        self.assertEqual(
+            outcome["bom_from_json_execution"],
+            "NOT_PERFORMED",
+        )
+        self.assertEqual(
+            outcome["semantic_fidelity_test"],
+            "NOT_PERFORMED",
+        )
+        self.assertEqual(
+            self.policy["next_gate"]["name"],
+            "SEMANTIC_FIDELITY_CONVERSION_CANDIDATE",
+        )
+        self.assertFalse(
+            self.policy["next_gate"][
+                "converter_execution_in_current_pr_authorized"
+            ]
+        )
+
+
     def test_hard_gates_and_promotion_remain_closed(self):
         s=self.policy["scope"]
         self.assertTrue(s["candidate_install_authorized"])
