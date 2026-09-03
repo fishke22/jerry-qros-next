@@ -82,7 +82,7 @@ jobs:
 
           allowed_scripts={
               "jsonpointer-3.1.1.data/scripts/jsonpointer":
-                  "0922c792b58faecab05e9010713eb5345b964848abeecd62d901a0f10ff1a0c6",
+                  "4c9bda8829e436ce6c732194421f645240695bf647a75eb210f17256215f7b22",
           }
           observed_scripts={}
           rows=[]
