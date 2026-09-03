@@ -4,10 +4,13 @@ on:
     paths:
       - ".github/workflows/phase4c-python-sbom-library-research.yml"
       - "config/phase4c-python-sbom-library-candidate.json"
+      - "config/phase4c-python-sbom-library-license-dispositions.json"
       - "docs/source-evidence/phase-4c-python-sbom-library-candidate.md"
       - "docs/source-evidence/phase-4c-python-wheel-inventory.json"
+      - "docs/licensing/PHASE4C_PYTHON_SBOM_LIBRARY_LICENSE_REVIEW.md"
       - "requirements/candidates/phase4c-cyclonedx-python.lock"
       - "tests/test_phase4c_python_sbom_library_candidate.py"
+      - "tests/test_phase4c_python_sbom_library_license_review.py"
   workflow_dispatch:
 permissions:
   contents: read
