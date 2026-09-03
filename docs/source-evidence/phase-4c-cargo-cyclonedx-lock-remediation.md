@@ -79,3 +79,37 @@ DEPENDENCY_REGISTRY_PROMOTION = DENY
 CANONICAL_SBOM_1_7_PROMOTION = DENY
 PACKAGE/RELEASE/YUANTA/LIVE = DENY
 ```
+
+
+## Observed remediation evidence
+
+Workflow run: `33758580916`  
+Job: `100658945209`  
+qros-gate: `33758580762` — SUCCESS
+
+```text
+XML_RS_BEFORE = 0.8.19
+XML_RS_AFTER = 0.8.27
+XML_RS_0_8_27_CHECKSUM =
+  6fd8403733700263c6eb89f192880191f1b83e332f7a20371ddcf421c4a337c7
+
+LOCK_ONLY_PACKAGE_DIFF = PASS
+PATCHED_LOCK_SHA256 =
+  f24c56121784fe36ee9f14868b7f6386f1dd3fe640a3d2ee3e5aed4fea986e7a
+
+PATCHED_TOOL_LOCKED_BUILD = PASS
+
+REMEDIATED_QUT_SBOM_SHA256 =
+  50e315c02680106ff3004e6e194f58d4cbbd8732fab33aff08ff122972da3623
+
+REMEDIATED_COMPONENT_COUNT = 253
+REMEDIATED_SBOM_BYTE_IDENTITY = PASS
+```
+
+The resolver result is now preserved as:
+
+`supply-chain/tool-locks/cargo-cyclonedx-0.5.9-qros.lock`
+
+Future candidate CI must use this committed lock directly. It must not silently re-resolve the tool graph.
+
+The next gate is the security/license review of the exact patched tool graph. Permanent adoption is still denied.
