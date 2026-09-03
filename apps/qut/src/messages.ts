@@ -1,0 +1,23 @@
+export const zhTW = {
+  appTitle: "Jerry QROS Next",
+  phase: "Phase 4｜桌面殼層候選",
+  localOnly: "本機模式",
+  navigation: "功能導覽",
+  systemStatus: "本機系統狀態",
+  hardGates: "安全硬閘",
+  bridgeChecking: "檢查本機 Rust 邊界…",
+  bridgeConnected: "Tauri 本機邊界已連線",
+  bridgeDenied: "本機邊界不可用｜Fail Closed",
+  scopeNotice: "目前僅提供導覽與狀態表面，不提前實作 Phase 5 功能。",
+  noNetwork: "Production shell 不需要外部網路。",
+  nav: {
+    research: "Research",
+    data: "Data",
+    backtest: "Backtest",
+    dataQa: "Data QA",
+    strategyLab: "Strategy Lab",
+    news: "News",
+    portfolioSimulation: "Portfolio Simulation",
+    paperMock: "Paper / Mock",
+  },
+} as const;

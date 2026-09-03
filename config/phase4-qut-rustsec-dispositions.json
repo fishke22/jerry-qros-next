@@ -1,0 +1,71 @@
+{
+  "policy_version": 1,
+  "phase": "Phase 4 implementation candidate",
+  "target": "x86_64-pc-windows-msvc",
+  "status": "CANDIDATE_ONLY_NOT_ADOPTION_AUTHORIZATION",
+  "rules": {
+    "windows_vulnerability_allowed": false,
+    "windows_unsound_warning_allowed": false,
+    "unknown_warning_allowed": false,
+    "unlisted_unmaintained_warning_allowed": false,
+    "non_windows_findings_may_be_target_excluded": true
+  },
+  "temporary_unmaintained_dispositions": [
+    {
+      "advisory": "RUSTSEC-2025-0075",
+      "crate": "unic-char-range",
+      "version": "0.9.0",
+      "classification": "unmaintained",
+      "patched_version": null
+    },
+    {
+      "advisory": "RUSTSEC-2025-0080",
+      "crate": "unic-common",
+      "version": "0.9.0",
+      "classification": "unmaintained",
+      "patched_version": null
+    },
+    {
+      "advisory": "RUSTSEC-2025-0081",
+      "crate": "unic-char-property",
+      "version": "0.9.0",
+      "classification": "unmaintained",
+      "patched_version": null
+    },
+    {
+      "advisory": "RUSTSEC-2025-0100",
+      "crate": "unic-ucd-ident",
+      "version": "0.9.0",
+      "classification": "unmaintained",
+      "patched_version": null
+    },
+    {
+      "advisory": "RUSTSEC-2025-0098",
+      "crate": "unic-ucd-version",
+      "version": "0.9.0",
+      "classification": "unmaintained",
+      "patched_version": null
+    }
+  ],
+  "upstream_dependency_evidence": {
+    "root": "tauri/tauri-build -> tauri-utils 2.9.3",
+    "tauri_utils_dependency": "urlpattern 0.3",
+    "urlpattern_version": "0.3.0",
+    "urlpattern_dependency": "unic-ucd-ident 0.9.0",
+    "source_notes": "Current tauri-utils 2.9.3 declares urlpattern 0.3; urlpattern 0.3.0 resolves through the listed rust-unic crates. RustSec classifies these advisories as INFO/unmaintained with no patched versions."
+  },
+  "acceptance_scope": {
+    "candidate_ci_may_pass_with_exact_list_only": true,
+    "dependency_registry_promotion_authorized": false,
+    "main_runtime_promotion_authorized": false,
+    "production_readiness_authorized": false,
+    "must_revalidate_each_audit_run": true,
+    "must_remove_disposition_when_upstream_chain_changes": true
+  },
+  "hard_gates": {
+    "package_authorized": false,
+    "release_authorized": false,
+    "yuanta_integration_authorized": false,
+    "live_trading_authorized": false
+  }
+}

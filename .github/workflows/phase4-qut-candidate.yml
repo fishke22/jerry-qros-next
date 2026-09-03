@@ -1,0 +1,273 @@
+name: phase4-qut-candidate
+on:
+  pull_request:
+    paths:
+      - "apps/qut/**"
+      - "config/phase4-qut-rustsec-dispositions.json"
+      - "scripts/phase4/windows11-local-validation.ps1"
+      - "docs/security/NETWORK_ENDPOINTS.md"
+      - "docs/source-evidence/phase-4b-windows11-local-validation-gate.md"
+      - "docs/runbooks/phase4-windows11-local-validation.md"
+      - "docs/validation/PHASE4_WINDOWS11_LOCAL_VALIDATION_PLAN.md"
+      - "supply-chain/SHA256SUMS"
+      - "tests/test_phase4_qut_candidate.py"
+      - ".github/workflows/phase4-qut-candidate.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: phase4-qut-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  locked-web-and-supply-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Setup exact Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24.20.0"
+          check-latest: false
+      - name: Verify exact frontend lock and TypeScript 7 build
+        shell: bash
+        working-directory: apps/qut
+        run: |
+          test "$(node --version)" = "v24.20.0"
+          test "$(npm --version)" = "11.19.0"
+          test "$(sha256sum package-lock.json | cut -d' ' -f1)" = "e8c023a29dbbbc9fbaff86769998e05635ab140594eb53caff5bd082624ee4b8"
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build
+          npm audit --audit-level=high
+          git diff --exit-code -- package-lock.json
+      - name: Install exact Rust
+        shell: bash
+        run: |
+          rustup toolchain install 1.98.0 --profile minimal --no-self-update
+          rustup default 1.98.0
+          test "$(rustc --version | awk '{print $2}')" = "1.98.0"
+          test "$(sha256sum apps/qut/src-tauri/Cargo.lock | cut -d' ' -f1)" = "c9abfa64e57be2dd18efa91d8ae4abf43944bdbae75af94555ff28daa7601adb"
+      - name: Validate locked Windows-target Rust graph
+        shell: bash
+        run: |
+          cargo metadata --locked --filter-platform x86_64-pc-windows-msvc --format-version=1 --manifest-path apps/qut/src-tauri/Cargo.toml > phase4-cargo-metadata.json
+          python - <<'PY'
+          import json, tomllib
+          from pathlib import Path
+          lock=tomllib.loads(Path("apps/qut/src-tauri/Cargo.lock").read_text(encoding="utf-8"))
+          pkgs={(p["name"],p["version"]) for p in lock["package"]}
+          denied={("arrayref","0.3.10"),("append-only-vec","0.1.9"),("internment","0.8.7")}
+          denied_names={"proc-macro1","proc-macro-en","aovine","arone","aronenao","tinymember"}
+          hits=sorted(f"{n}@{v}" for n,v in pkgs if (n,v) in denied or n in denied_names)
+          if hits:
+              raise SystemExit("Denied malicious/compromised crate(s): "+", ".join(hits))
+          meta=json.loads(Path("phase4-cargo-metadata.json").read_text(encoding="utf-8"))
+          missing=sorted(f'{p["name"]}@{p["version"]}' for p in meta["packages"] if p.get("source") and not p.get("license"))
+          if missing:
+              raise SystemExit("Cargo license metadata missing: "+", ".join(missing))
+          summary={}
+          for p in meta["packages"]:
+              if p.get("source"):
+                  summary[p["license"]]=summary.get(p["license"],0)+1
+          print("QROS_CARGO_LICENSE_SUMMARY="+json.dumps(summary,sort_keys=True,separators=(",",":")))
+          print("QROS_CARGO_WINDOWS_PACKAGE_COUNT="+str(sum(summary.values())))
+          print("Phase 4 malicious-crate and license-presence gate: PASS")
+          PY
+      - name: Validate npm license metadata and generate npm SBOM evidence
+        shell: bash
+        working-directory: apps/qut
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          lock=json.loads(Path("package-lock.json").read_text(encoding="utf-8"))
+          summary={}
+          missing=[]
+          for path,p in lock["packages"].items():
+              if not path:
+                  continue
+              lic=p.get("license")
+              if not lic:
+                  missing.append(path)
+              else:
+                  summary[lic]=summary.get(lic,0)+1
+          if missing:
+              raise SystemExit("npm license metadata missing: "+", ".join(sorted(missing)))
+          print("QROS_NPM_LICENSE_SUMMARY="+json.dumps(summary,sort_keys=True,separators=(",",":")))
+          print("QROS_NPM_LOCK_PACKAGE_COUNT="+str(sum(summary.values())))
+          PY
+          npm sbom --package-lock-only --sbom-format cyclonedx > phase4-npm-sbom.cdx.json
+          echo "QROS_NPM_SBOM_SHA256=$(sha256sum phase4-npm-sbom.cdx.json | cut -d' ' -f1)"
+      - name: Install exact RustSec audit and enforce Windows dispositions
+        shell: bash
+        run: |
+          cargo install --locked cargo-audit --version 0.22.2
+          set +e
+          cargo audit --json --target-arch x86_64 --target-os windows --file apps/qut/src-tauri/Cargo.lock > phase4-rustsec-audit.json
+          audit_rc=$?
+          set -e
+          AUDIT_RC="$audit_rc" python - <<'PY'
+          import json, os
+          from pathlib import Path
+
+          meta=json.loads(Path("phase4-cargo-metadata.json").read_text(encoding="utf-8"))
+          windows={(p["name"],p["version"]) for p in meta["packages"] if p.get("source")}
+          report=json.loads(Path("phase4-rustsec-audit.json").read_text(encoding="utf-8"))
+          policy=json.loads(Path("config/phase4-qut-rustsec-dispositions.json").read_text(encoding="utf-8"))
+          if not isinstance(report,dict) or "vulnerabilities" not in report or "warnings" not in report:
+              raise SystemExit("RustSec JSON schema missing expected vulnerabilities/warnings fields")
+          if policy.get("target") != "x86_64-pc-windows-msvc":
+              raise SystemExit("RustSec disposition target mismatch")
+
+          allowed={
+              (x["crate"],x["version"],x["advisory"],x["classification"])
+              for x in policy["temporary_unmaintained_dispositions"]
+          }
+          findings=[]
+          def walk(node,path=()):
+              if isinstance(node,dict):
+                  adv=node.get("advisory")
+                  pkg=node.get("package")
+                  if isinstance(adv,dict) and isinstance(pkg,dict) and pkg.get("name") and pkg.get("version"):
+                      findings.append((path,pkg,adv))
+                  for key,value in node.items():
+                      walk(value,path+(str(key),))
+              elif isinstance(node,list):
+                  for idx,value in enumerate(node):
+                      walk(value,path+(str(idx),))
+          walk(report)
+
+          excluded=[]
+          observed_allowed=set()
+          blockers=[]
+          for path,pkg,adv in findings:
+              item=(str(pkg["name"]),str(pkg["version"]))
+              advisory=str(adv.get("id") or adv.get("url") or "UNKNOWN_ADVISORY")
+              path_text="/".join(path)
+              record=f"{item[0]}@{item[1]}:{advisory}:{path_text}"
+              if item not in windows:
+                  excluded.append(record)
+                  continue
+              if path and path[0] == "vulnerabilities":
+                  blockers.append("WINDOWS_VULNERABILITY:"+record)
+                  continue
+              warning_class=path[1] if len(path) > 1 and path[0] == "warnings" else "unknown"
+              key=(item[0],item[1],advisory,warning_class)
+              if warning_class == "unmaintained" and key in allowed:
+                  observed_allowed.add(key)
+                  print("QROS_RUSTSEC_EXACT_DISPOSITION="+record)
+              else:
+                  blockers.append("WINDOWS_UNDISPOSITIONED_WARNING:"+record)
+
+          stale=allowed-observed_allowed
+          audit_rc=int(os.environ["AUDIT_RC"])
+          print("QROS_RUSTSEC_AUDIT_RC="+str(audit_rc))
+          print("QROS_RUSTSEC_TOTAL_FINDINGS="+str(len(findings)))
+          print("QROS_RUSTSEC_NONWINDOWS_EXCLUDED="+str(len(excluded)))
+          print("QROS_RUSTSEC_EXACT_DISPOSITION_COUNT="+str(len(observed_allowed)))
+          for record in sorted(excluded):
+              print("QROS_RUSTSEC_TARGET_EXCLUDED="+record)
+          if blockers:
+              raise SystemExit("RustSec Windows blocker(s): "+", ".join(sorted(blockers)))
+          if stale:
+              raise SystemExit("Stale RustSec disposition(s) must be removed/reviewed: "+", ".join(sorted(f"{n}@{v}:{a}:{c}" for n,v,a,c in stale)))
+          if audit_rc not in (0,1):
+              raise SystemExit(f"Unexpected cargo audit exit code {audit_rc}")
+          if audit_rc != 0 and not findings:
+              raise SystemExit("cargo audit returned non-zero with no classifiable findings")
+          print("Phase 4 Windows-resolved RustSec disposition gate: PASS")
+          PY
+
+  windows-source-build:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Parse local Windows validation harness without executing it
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $parseErrors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path "scripts/phase4/windows11-local-validation.ps1"),
+            [ref]$tokens,
+            [ref]$parseErrors
+          ) | Out-Null
+          if ($parseErrors.Count -ne 0) {
+            $parseErrors | ForEach-Object { Write-Error $_.Message }
+            throw "PowerShell parse errors detected in local Windows validation harness"
+          }
+          Write-Host "Phase 4 local Windows validation harness parse-only gate: PASS"
+      - name: Setup exact Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24.20.0"
+          check-latest: false
+      - name: Build locked frontend assets
+        shell: pwsh
+        working-directory: apps/qut
+        run: |
+          if ((node --version) -ne "v24.20.0") { throw "Unexpected Node version" }
+          if ((npm --version) -ne "11.19.0") { throw "Unexpected npm version" }
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build
+      - name: Install exact Rust and validate lock
+        shell: pwsh
+        run: |
+          rustup toolchain install 1.98.0 --profile minimal --no-self-update
+          rustup default 1.98.0
+          if ((rustc --version).Split(" ")[1] -ne "1.98.0") { throw "Unexpected Rust version" }
+          cargo metadata --locked --filter-platform x86_64-pc-windows-msvc --format-version=1 --manifest-path apps/qut/src-tauri/Cargo.toml | Out-Null
+      - name: Build development executable only
+        shell: pwsh
+        run: |
+          cargo build --locked --manifest-path apps/qut/src-tauri/Cargo.toml
+          $exe = "apps/qut/src-tauri/target/debug/qros-qut.exe"
+          if (-not (Test-Path $exe)) { throw "Development executable missing" }
+          $hash = (Get-FileHash $exe -Algorithm SHA256).Hash.ToLowerInvariant()
+          Write-Host "QROS_QUT_DEV_EXE_SHA256=$hash"
+      - name: Record hosted Windows build environment and WebView2
+        shell: pwsh
+        run: |
+          rustc -Vv
+          cargo -V
+          Write-Host "RUNNER_OS=$env:RUNNER_OS"
+          Write-Host "RUNNER_ARCH=$env:RUNNER_ARCH"
+          Write-Host "ImageOS=$env:ImageOS"
+          Write-Host "ImageVersion=$env:ImageVersion"
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          if (Test-Path $vswhere) {
+            & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -format json
+          } else {
+            throw "vswhere.exe missing"
+          }
+          $clientId = "{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}"
+          $registryPaths = @(
+            "HKLM:\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\$clientId",
+            "HKCU:\Software\Microsoft\EdgeUpdate\Clients\$clientId"
+          )
+          $webViewVersions = @()
+          foreach ($path in $registryPaths) {
+            if (Test-Path $path) {
+              $pv = (Get-ItemProperty -Path $path -Name pv -ErrorAction Stop).pv
+              if ($pv -and $pv -ne "0.0.0.0") {
+                $webViewVersions += [PSCustomObject]@{ Path = $path; Version = $pv }
+              }
+            }
+          }
+          if ($webViewVersions.Count -eq 0) { throw "WebView2 Evergreen Runtime registry inventory missing" }
+          foreach ($entry in $webViewVersions) {
+            Write-Host "QROS_WEBVIEW2_RUNTIME_VERSION=$($entry.Version) SOURCE=$($entry.Path)"
+          }
+      - name: Confirm no installer or release artifact was produced
+        shell: pwsh
+        run: |
+          $forbidden = @("*.msi", "*-setup.exe", ("*.m" + "six"))
+          foreach ($pattern in $forbidden) {
+            $hits = Get-ChildItem -Path apps/qut -Recurse -Filter $pattern -ErrorAction SilentlyContinue
+            if ($hits) { throw "Forbidden packaging artifact produced: $($hits.FullName)" }
+          }
+          Write-Host "Phase 4 source-build boundary: PASS"

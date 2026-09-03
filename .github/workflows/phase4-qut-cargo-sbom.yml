@@ -1,0 +1,79 @@
+name: phase4-qut-cargo-sbom
+on:
+  pull_request:
+    paths:
+      - "apps/qut/src-tauri/**"
+      - ".github/workflows/phase4-qut-cargo-sbom.yml"
+      - "supply-chain/SHA256SUMS"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: phase4-qut-cargo-sbom-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cargo-cyclonedx:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Install exact Rust
+        shell: bash
+        run: |
+          rustup toolchain install 1.98.0 --profile minimal --no-self-update
+          rustup default 1.98.0
+          test "$(rustc --version | awk '{print $2}')" = "1.98.0"
+          test "$(sha256sum apps/qut/src-tauri/Cargo.lock | cut -d' ' -f1)" = "c9abfa64e57be2dd18efa91d8ae4abf43944bdbae75af94555ff28daa7601adb"
+      - name: Install exact cargo-cyclonedx
+        shell: bash
+        run: |
+          cargo install --locked cargo-cyclonedx --version 0.5.9
+          test "$(cargo cyclonedx --version | awk '{print $2}')" = "0.5.9"
+      - name: Generate reproducible Windows-target Cargo SBOM
+        shell: bash
+        working-directory: apps/qut/src-tauri
+        run: |
+          before_lock="$(sha256sum Cargo.lock | cut -d' ' -f1)"
+          SOURCE_DATE_EPOCH=0 cargo cyclonedx --format json --target x86_64-pc-windows-msvc --spec-version 1.5
+          after_lock="$(sha256sum Cargo.lock | cut -d' ' -f1)"
+          test "$before_lock" = "$after_lock"
+          mapfile -t sboms < <(find . -maxdepth 1 -type f -name '*.cdx.json' -print | sort)
+          if [ "${#sboms[@]}" -ne 1 ]; then
+            printf 'Expected exactly one Cargo CycloneDX JSON, got %s: %s\n' "${#sboms[@]}" "${sboms[*]}" >&2
+            exit 1
+          fi
+          sbom="${sboms[0]}"
+          echo "QROS_CARGO_SBOM_FILE=$sbom"
+          echo "QROS_CARGO_SBOM_SHA256=$(sha256sum "$sbom" | cut -d' ' -f1)"
+          SBOM="$sbom" python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path(os.environ["SBOM"])
+          doc=json.loads(p.read_text(encoding="utf-8"))
+          if doc.get("bomFormat") != "CycloneDX":
+              raise SystemExit("Unexpected Cargo SBOM bomFormat")
+          if str(doc.get("specVersion")) != "1.5":
+              raise SystemExit("Unexpected Cargo SBOM specVersion")
+          components=doc.get("components")
+          if not isinstance(components,list) or not components:
+              raise SystemExit("Cargo SBOM has no components")
+          missing=[]
+          mpl=[]
+          for c in components:
+              name=c.get("name","UNKNOWN")
+              version=c.get("version","UNKNOWN")
+              licenses=c.get("licenses") or []
+              if not licenses:
+                  missing.append(f"{name}@{version}")
+              text=json.dumps(licenses,sort_keys=True)
+              if "MPL-2.0" in text:
+                  mpl.append(f"{name}@{version}")
+          if missing:
+              raise SystemExit("Cargo SBOM component license evidence missing: "+", ".join(sorted(missing)))
+          print("QROS_CARGO_SBOM_COMPONENT_COUNT="+str(len(components)))
+          print("QROS_CARGO_SBOM_MPL2_COMPONENTS="+json.dumps(sorted(mpl),separators=(",",":")))
+          print("Phase 4 Cargo CycloneDX evidence gate: PASS")
+          PY
+          git diff --exit-code -- Cargo.lock Cargo.toml
