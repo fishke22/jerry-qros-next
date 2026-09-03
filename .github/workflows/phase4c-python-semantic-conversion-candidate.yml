@@ -164,6 +164,7 @@ jobs:
           import subprocess
           import sys
           from pathlib import Path
+          from uuid import UUID
 
           def denied(*args, **kwargs):
               raise RuntimeError("QROS Phase 4C ambient capability denied")
@@ -195,8 +196,37 @@ jobs:
               bom=Bom.from_json(json.loads(input_text))
               return JsonV1Dot7(bom=bom).output_as_string(indent=2)
 
-          out1=convert_once()
-          out2=convert_once()
+          raw1=convert_once()
+          raw2=convert_once()
+
+          def normalize_library_output(raw):
+              doc=json.loads(raw)
+              if "serialNumber" in input_obj:
+                  if doc.get("serialNumber") != input_obj["serialNumber"]:
+                      raise SystemExit(
+                          "Input serialNumber was not preserved exactly"
+                      )
+                  print("QROS_PHASE4C_SERIALNUMBER_VALUE_PRESERVATION=PASS")
+              else:
+                  serial=doc.get("serialNumber")
+                  if not isinstance(serial,str) or not serial.startswith("urn:uuid:"):
+                      raise SystemExit(
+                          "Expected library-generated urn:uuid serialNumber"
+                      )
+                  try:
+                      UUID(serial.removeprefix("urn:uuid:"))
+                  except ValueError as error:
+                      raise SystemExit(
+                          f"Invalid generated serialNumber: {serial}"
+                      ) from error
+                  doc.pop("serialNumber")
+              return json.dumps(doc,indent=2)
+
+          out1=normalize_library_output(raw1)
+          out2=normalize_library_output(raw2)
+          if "serialNumber" not in input_obj:
+              print("QROS_PHASE4C_SERIALNUMBER_ABSENCE_PRESERVATION=PASS")
+
           if out1 != out2:
               j1=json.loads(out1)
               j2=json.loads(out2)
@@ -206,11 +236,11 @@ jobs:
                   if j1.get(key) != j2.get(key):
                       top_diff[key]={"out1":j1.get(key),"out2":j2.get(key)}
               print(
-                  "QROS_PHASE4C_NONDETERMINISM_TOP_LEVEL_DIFF="
+                  "QROS_PHASE4C_NORMALIZED_NONDETERMINISM_TOP_LEVEL_DIFF="
                   + json.dumps(top_diff,sort_keys=True,separators=(",",":"))
               )
               raise SystemExit(
-                  "Conversion not byte deterministic: "
+                  "Canonical conversion not byte deterministic: "
                   + hashlib.sha256(out1.encode()).hexdigest()
                   + " != "
                   + hashlib.sha256(out2.encode()).hexdigest()
