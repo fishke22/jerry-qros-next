@@ -180,6 +180,10 @@ class Phase4QutCandidateTests(unittest.TestCase):
         self.assertIn("[System.Management.Automation.Language.Parser]::ParseFile", workflow)
         self.assertIn("docs/validation/PHASE4_WINDOWS11_LOCAL_VALIDATION_PLAN.md", workflow)
         self.assertIn("supply-chain/SHA256SUMS", workflow)
+        cargo_sbom_workflow = (
+            ROOT / ".github" / "workflows" / "phase4-qut-cargo-sbom.yml"
+        ).read_text(encoding="utf-8")
+        self.assertIn("supply-chain/SHA256SUMS", cargo_sbom_workflow)
 
 
     def test_windows11_local_validation_harness_is_read_only_and_fail_closed(self):
