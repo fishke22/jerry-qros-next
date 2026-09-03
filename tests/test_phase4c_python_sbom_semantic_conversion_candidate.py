@@ -42,7 +42,7 @@ class Phase4CPythonSemanticConversionCandidateTests(unittest.TestCase):
         self.assertTrue(f["byte_deterministic_output_required"])
         self.assertEqual(
             f["semantic_rule"],
-            "CANONICAL_JSON_DEEP_EQUAL_AFTER_SERIALNUMBER_ABSENCE_PRESERVATION_AND_EXACT_SET_COLLECTION_ORDER_NORMALIZATION_EXCEPT_$schema_AND_specVersion",
+            "CANONICAL_DEEP_EQUAL_AFTER_EXACT_REVIEWED_SERIALNUMBER_SET_ORDER_PURL_AND_METADATA_TIMESTAMP_NORMALIZATIONS_EXCEPT_$schema_AND_specVersion",
         )
         self.assertIn('d.pop("$schema",None)',self.workflow)
         self.assertIn('d.pop("specVersion",None)',self.workflow)
@@ -56,7 +56,7 @@ class Phase4CPythonSemanticConversionCandidateTests(unittest.TestCase):
         order=f["order_insensitive_collections"]
         self.assertEqual(
             set(order),
-            {"components","externalReferences"},
+            {"components","externalReferences","dependsOn"},
         )
         self.assertTrue(f["all_other_arrays_order_sensitive"])
         self.assertIn(
@@ -69,6 +69,30 @@ class Phase4CPythonSemanticConversionCandidateTests(unittest.TestCase):
         )
         self.assertIn(
             "QROS_PHASE4C_SET_COLLECTION_ORDER_NORMALIZATION=PASS",
+            self.workflow,
+        )
+        self.assertIn(
+            'elif key=="dependsOn"',
+            self.workflow,
+        )
+        self.assertIn(
+            "PackageURL.from_string(item).to_string()",
+            self.workflow,
+        )
+        self.assertIn(
+            'child_path==("metadata","timestamp")',
+            self.workflow,
+        )
+        self.assertIn(
+            "QROS_PHASE4C_DEPENDSON_ORDER_NORMALIZATION=PASS",
+            self.workflow,
+        )
+        self.assertIn(
+            "QROS_PHASE4C_PURL_CANONICALIZATION=PASS",
+            self.workflow,
+        )
+        self.assertIn(
+            "QROS_PHASE4C_METADATA_TIMESTAMP_NORMALIZATION=PASS",
             self.workflow,
         )
 
