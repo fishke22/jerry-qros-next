@@ -40,6 +40,9 @@ class Phase4CSbomToolchainCandidateTests(unittest.TestCase):
             "b3cfa4b0edc356dad07e0b6e7ab6da0a94af0246",
         )
         self.assertEqual(self.policy["dotnet"]["sdk"], "10.0.400")
+        self.assertEqual(self.policy["dotnet"]["tool_runtime"], "linux-x64")
+        self.assertTrue(self.policy["dotnet"]["ci_tool_target_only"])
+        self.assertTrue(self.policy["dotnet"]["does_not_add_linux_product_support"])
         self.assertEqual(
             self.policy["dotnet"]["setup_action_revision"],
             "a98b56852c35b8e3190ac28c8c2271da59106c68",
@@ -59,6 +62,9 @@ class Phase4CSbomToolchainCandidateTests(unittest.TestCase):
         self.assertIn("-p:NuGetAuditMode=all", self.workflow)
         self.assertIn("-p:NuGetAuditLevel=low", self.workflow)
         self.assertIn("https://api.nuget.org/v3/index.json", self.workflow)
+        self.assertIn("QROS_TOOL_RUNTIME: linux-x64", self.workflow)
+        self.assertIn('--runtime "$QROS_TOOL_RUNTIME"', self.workflow)
+        self.assertIn('-p:RuntimeIdentifiers="$QROS_TOOL_RUNTIME"', self.workflow)
 
     def test_no_build_execute_or_conversion_command(self):
         for forbidden in (
