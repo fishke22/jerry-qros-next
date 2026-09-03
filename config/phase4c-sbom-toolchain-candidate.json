@@ -1,6 +1,6 @@
 {
   "candidate_version": 1,
-  "status": "RESTORE_INVENTORY_ONLY",
+  "status": "REJECTED_ZERO_COST_AFTER_RESTORE_INVENTORY",
   "base_research_pr": 28,
   "issue": 27,
   "cyclonedx_cli": {
@@ -50,5 +50,20 @@
     "release_authorized": false,
     "yuanta_integration_authorized": false,
     "live_trading_authorized": false
+  },
+  "outcome": {
+    "evidence_run": 33739454968,
+    "evidence_job": 100597722306,
+    "generated_lock_sha256": "01b9d04a2137ddac295892d157e38b2f019c069f799b6db8c90b806aa345add4",
+    "unique_package_count": 18,
+    "vulnerability_gate": "PASS",
+    "license_metadata_presence_gate": "PASS",
+    "json_everything_binary_fee_condition_detected": true,
+    "fee_condition_packages": [
+      "Json.More.Net",
+      "JsonPointer.Net",
+      "JsonSchema.Net"
+    ],
+    "nuget_binary_toolchain": "REJECT_ZERO_COST"
   }
 }
