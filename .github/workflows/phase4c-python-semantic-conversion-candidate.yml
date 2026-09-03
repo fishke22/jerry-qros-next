@@ -1,0 +1,388 @@
+name: phase4c-python-semantic-conversion-candidate
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/phase4c-python-semantic-conversion-candidate.yml"
+      - "config/phase4c-python-sbom-semantic-conversion-candidate.json"
+      - "docs/source-evidence/phase-4c-python-semantic-conversion-candidate.md"
+      - "requirements/candidates/phase4c-cyclonedx-python.lock"
+      - "tests/test_phase4c_python_sbom_semantic_conversion_candidate.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: phase4c-python-semantic-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  semantic-fidelity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      QROS_LOCK: "requirements/candidates/phase4c-cyclonedx-python.lock"
+      QROS_LOCK_SHA256: "bd9df0ad87b54e5bb0d03e25572ac23d02d4fd41acc35631dad4b67b61b0dee1"
+      QROS_INPUT_SHA256: "50e315c02680106ff3004e6e194f58d4cbbd8732fab33aff08ff122972da3623"
+      QROS_OUTPUT_SHA256: "b1bee226f7df007a243b6114c13fe1e22f5e0e2083f26ae261a68357b419d668"
+    steps:
+      - name: Checkout current candidate
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup exact Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.14.7"
+          check-latest: false
+
+      - name: Verify candidate policy and locks
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(python -c 'import sys; print(sys.version.split()[0])')" = "3.14.7"
+          test "$(sha256sum "$QROS_LOCK" | cut -d' ' -f1)" = "$QROS_LOCK_SHA256"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          c=json.loads(Path("config/phase4c-python-sbom-semantic-conversion-candidate.json").read_text(encoding="utf-8"))
+          p=json.loads(Path("config/phase4c-python-sbom-install-candidate.json").read_text(encoding="utf-8"))
+          assert c["status"] == "SEMANTIC_FIDELITY_CONVERSION_PASS_CANDIDATE_EVIDENCE_ONLY"
+          assert p["status"] == "HASH_LOCKED_INSTALL_IMPORT_COMPATIBILITY_PASS"
+          assert c["scope"]["semantic_fidelity_test_authorized"] is True
+          assert c["scope"]["canonical_sbom_1_7_promotion_authorized"] is False
+          print("QROS_PHASE4C_SEMANTIC_PREREQUISITES=PASS")
+          PY
+
+      - name: Install exact Rust and candidate-evidence input generator
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install 1.98.0 --profile minimal --no-self-update
+          rustup default 1.98.0
+          test "$(rustc --version | awk '{print $2}')" = "1.98.0"
+          mkdir -p "$RUNNER_TEMP/phase4c-cargo-tools"
+          cargo install --locked --root "$RUNNER_TEMP/phase4c-cargo-tools" cargo-cyclonedx --version 0.5.9
+          test "$(PATH="$RUNNER_TEMP/phase4c-cargo-tools/bin:$PATH" cargo cyclonedx --version | awk '{print $2}')" = "0.5.9"
+          echo "QROS_PHASE4C_CARGO_CYCLONEDX_INPUT_GENERATOR_ONLY=PASS"
+
+      - name: Regenerate exact QROS Cargo CycloneDX 1.5 input at canonical workspace path
+        shell: bash
+        run: |
+          set -euo pipefail
+          candidate_checkout="$(git rev-parse HEAD)"
+          echo "QROS_PHASE4C_CANDIDATE_CHECKOUT=$candidate_checkout"
+
+          git fetch --no-tags --depth=1 origin 32e74ccfde93cf02fc0f149dd84a9c4ea6b1112e
+          git checkout --force 32e74ccfde93cf02fc0f149dd84a9c4ea6b1112e
+          test "$(git rev-parse HEAD)" = "32e74ccfde93cf02fc0f149dd84a9c4ea6b1112e"
+          test "$(sha256sum apps/qut/src-tauri/Cargo.lock | cut -d' ' -f1)" = "c9abfa64e57be2dd18efa91d8ae4abf43944bdbae75af94555ff28daa7601adb"
+
+          cd apps/qut/src-tauri
+          before="$(sha256sum Cargo.lock | cut -d' ' -f1)"
+          PATH="$RUNNER_TEMP/phase4c-cargo-tools/bin:$PATH" SOURCE_DATE_EPOCH=0 cargo cyclonedx --format json --target x86_64-pc-windows-msvc --spec-version 1.5
+          after="$(sha256sum Cargo.lock | cut -d' ' -f1)"
+          test "$before" = "$after"
+          count="$(find . -maxdepth 1 -type f -name '*.cdx.json' | wc -l)"
+          test "$count" = "1"
+          sbom="$(find . -maxdepth 1 -type f -name '*.cdx.json' -print | head -n 1)"
+          actual_sha="$(sha256sum "$sbom" | cut -d' ' -f1)"
+          echo "QROS_PHASE4C_INPUT_WORKDIR=$PWD"
+          echo "QROS_PHASE4C_INPUT_SOURCE_HEAD=$(git rev-parse HEAD)"
+          echo "QROS_PHASE4C_INPUT_ACTUAL_SHA256=$actual_sha"
+          cp "$sbom" "$RUNNER_TEMP/qros-qut-cargo-1.5.json"
+          INPUT="$RUNNER_TEMP/qros-qut-cargo-1.5.json" python - <<'PY'
+          import json, os
+          from pathlib import Path
+          d=json.loads(Path(os.environ["INPUT"]).read_text(encoding="utf-8"))
+          print("QROS_PHASE4C_INPUT_COMPONENT_COUNT_ACTUAL="+str(len(d.get("components") or [])))
+          print("QROS_PHASE4C_INPUT_TOP_LEVEL_KEYS="+json.dumps(sorted(d),separators=(",",":")))
+          metadata=d.get("metadata") or {}
+          root=metadata.get("component") or {}
+          print("QROS_PHASE4C_INPUT_ROOT_COMPONENT="+json.dumps({
+              "name":root.get("name"),
+              "version":root.get("version"),
+              "purl":root.get("purl"),
+              "bom-ref":root.get("bom-ref"),
+          },sort_keys=True,separators=(",",":")))
+          assert d["bomFormat"]=="CycloneDX"
+          assert str(d["specVersion"])=="1.5"
+          assert len(d.get("components") or [])==253
+          PY
+          test "$actual_sha" = "$QROS_INPUT_SHA256"
+          echo "QROS_PHASE4C_INPUT_SHA256=$actual_sha"
+          echo "QROS_PHASE4C_INPUT_COMPONENT_COUNT=253"
+
+          rm -f "$sbom"
+          cd "$GITHUB_WORKSPACE"
+          git checkout --force "$candidate_checkout"
+          test "$(git rev-parse HEAD)" = "$candidate_checkout"
+          test "$(sha256sum "$QROS_LOCK" | cut -d' ' -f1)" = "$QROS_LOCK_SHA256"
+          echo "QROS_PHASE4C_CANDIDATE_CHECKOUT_RESTORED=PASS"
+
+      - name: Prepare exact Python converter environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .phase4c-semantic/wheels
+          python -m pip download --index-url https://pypi.org/simple --only-binary=:all: --require-hashes --dest .phase4c-semantic/wheels -r "$QROS_LOCK"
+          python - <<'PY'
+          import hashlib, zipfile
+          from pathlib import Path
+          allowed={"jsonpointer-3.1.1.data/scripts/jsonpointer":"4c9bda8829e436ce6c732194421f645240695bf647a75eb210f17256215f7b22"}
+          seen={}
+          for wheel in Path(".phase4c-semantic/wheels").glob("*.whl"):
+              with zipfile.ZipFile(wheel) as zf:
+                  for n in zf.namelist():
+                      if n.lower().endswith(".pth"):
+                          raise SystemExit(f"Unexpected .pth: {wheel.name}:{n}")
+                      if ".data/scripts/" in n.lower():
+                          digest=hashlib.sha256(zf.read(n)).hexdigest()
+                          seen[n]=digest
+                          if allowed.get(n)!=digest:
+                              raise SystemExit(f"Unexpected wheel script: {wheel.name}:{n}:{digest}")
+          if seen != allowed:
+              raise SystemExit(f"Wheel script allowlist drift: {seen}")
+          print("QROS_PHASE4C_CONVERTER_WHEEL_SURFACES=PASS")
+          PY
+          python -m venv .phase4c-semantic/venv
+          vpy="$GITHUB_WORKSPACE/.phase4c-semantic/venv/bin/python"
+          "$vpy" -m pip install --no-index --find-links "$GITHUB_WORKSPACE/.phase4c-semantic/wheels" --no-deps --require-hashes -r "$GITHUB_WORKSPACE/$QROS_LOCK"
+          "$vpy" -m pip check
+          echo "QROS_PHASE4C_CONVERTER_INSTALL=PASS"
+
+      - name: Convert twice validate and enforce semantic equality
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/phase4c-semantic-home" "$RUNNER_TEMP/phase4c-semantic-cwd"
+          vpy="$GITHUB_WORKSPACE/.phase4c-semantic/venv/bin/python"
+          cat > "$RUNNER_TEMP/phase4c-semantic-convert.py" <<'PY'
+          import copy
+          import hashlib
+          from datetime import datetime, timezone
+          import json
+          import os
+          import socket
+          import subprocess
+          import sys
+          from pathlib import Path
+          from uuid import UUID
+
+          def denied(*args, **kwargs):
+              raise RuntimeError("QROS Phase 4C ambient capability denied")
+
+          socket.socket=denied
+          socket.create_connection=denied
+          subprocess.Popen=denied
+          subprocess.run=denied
+          subprocess.call=denied
+          subprocess.check_call=denied
+          subprocess.check_output=denied
+          os.system=denied
+
+          from cyclonedx.model.bom import Bom
+          from cyclonedx.output.json import JsonV1Dot7
+          from cyclonedx.schema import SchemaVersion
+          from cyclonedx.validation.json import JsonStrictValidator
+          from packageurl import PackageURL
+
+          input_path=Path(sys.argv[1])
+          input_text=input_path.read_text(encoding="utf-8")
+          input_obj=json.loads(input_text)
+
+          err=JsonStrictValidator(SchemaVersion.V1_5).validate_str(input_text)
+          if err is not None:
+              raise SystemExit(f"Input 1.5 strict validation failed: {err}")
+          print("QROS_PHASE4C_INPUT_STRICT_VALIDATION=PASS")
+
+          def convert_once():
+              bom=Bom.from_json(json.loads(input_text))
+              return JsonV1Dot7(bom=bom).output_as_string(indent=2)
+
+          raw1=convert_once()
+          raw2=convert_once()
+
+          def normalize_library_output(raw):
+              doc=json.loads(raw)
+              if "serialNumber" in input_obj:
+                  if doc.get("serialNumber") != input_obj["serialNumber"]:
+                      raise SystemExit(
+                          "Input serialNumber was not preserved exactly"
+                      )
+                  print("QROS_PHASE4C_SERIALNUMBER_VALUE_PRESERVATION=PASS")
+              else:
+                  serial=doc.get("serialNumber")
+                  if not isinstance(serial,str) or not serial.startswith("urn:uuid:"):
+                      raise SystemExit(
+                          "Expected library-generated urn:uuid serialNumber"
+                      )
+                  try:
+                      UUID(serial.removeprefix("urn:uuid:"))
+                  except ValueError as error:
+                      raise SystemExit(
+                          f"Invalid generated serialNumber: {serial}"
+                      ) from error
+                  doc.pop("serialNumber")
+              return json.dumps(doc,indent=2)
+
+          out1=normalize_library_output(raw1)
+          out2=normalize_library_output(raw2)
+          if "serialNumber" not in input_obj:
+              print("QROS_PHASE4C_SERIALNUMBER_ABSENCE_PRESERVATION=PASS")
+
+          if out1 != out2:
+              j1=json.loads(out1)
+              j2=json.loads(out2)
+              keys=sorted(set(j1)|set(j2))
+              top_diff={}
+              for key in keys:
+                  if j1.get(key) != j2.get(key):
+                      top_diff[key]={"out1":j1.get(key),"out2":j2.get(key)}
+              print(
+                  "QROS_PHASE4C_NORMALIZED_NONDETERMINISM_TOP_LEVEL_DIFF="
+                  + json.dumps(top_diff,sort_keys=True,separators=(",",":"))
+              )
+              raise SystemExit(
+                  "Canonical conversion not byte deterministic: "
+                  + hashlib.sha256(out1.encode()).hexdigest()
+                  + " != "
+                  + hashlib.sha256(out2.encode()).hexdigest()
+              )
+          print("QROS_PHASE4C_CONVERSION_BYTE_DETERMINISM=PASS")
+
+          err=JsonStrictValidator(SchemaVersion.V1_7).validate_str(out1)
+          if err is not None:
+              raise SystemExit(f"Output 1.7 strict validation failed: {err}")
+          print("QROS_PHASE4C_OUTPUT_STRICT_VALIDATION=PASS")
+
+          output_obj=json.loads(out1)
+          assert output_obj["bomFormat"]=="CycloneDX"
+          assert str(output_obj["specVersion"])=="1.7"
+          if len(output_obj.get("components") or []) != 253:
+              raise SystemExit("Output component count changed")
+
+          def canonicalize_semantics(value,path=()):
+              if isinstance(value,dict):
+                  out={}
+                  for key,item in value.items():
+                      child_path=path+(key,)
+                      if key=="purl" and isinstance(item,str):
+                          normalized=PackageURL.from_string(item).to_string()
+                      elif child_path==("metadata","timestamp") and isinstance(item,str):
+                          timestamp_text=(
+                              item[:-1]+"+00:00"
+                              if item.endswith("Z")
+                              else item
+                          )
+                          parsed=datetime.fromisoformat(timestamp_text)
+                          if parsed.tzinfo is None:
+                              raise SystemExit(
+                                  "metadata.timestamp must be timezone-aware"
+                              )
+                          normalized=parsed.astimezone(timezone.utc).isoformat()
+                      else:
+                          normalized=canonicalize_semantics(item,child_path)
+
+                      if key=="components" and isinstance(normalized,list):
+                          if not all(
+                              isinstance(x,dict) and isinstance(x.get("bom-ref"),str)
+                              for x in normalized
+                          ):
+                              raise SystemExit(
+                                  "components ordering normalization requires bom-ref on every item"
+                              )
+                          normalized=sorted(
+                              normalized,
+                              key=lambda x:x["bom-ref"],
+                          )
+                      elif key=="externalReferences" and isinstance(normalized,list):
+                          normalized=sorted(
+                              normalized,
+                              key=lambda x:json.dumps(
+                                  x,sort_keys=True,separators=(",",":")
+                              ),
+                          )
+                      elif key=="dependsOn" and isinstance(normalized,list):
+                          if not all(isinstance(x,str) for x in normalized):
+                              raise SystemExit(
+                                  "dependsOn ordering normalization requires string refs"
+                              )
+                          normalized=sorted(normalized)
+                      out[key]=normalized
+                  return out
+              if isinstance(value,list):
+                  return [
+                      canonicalize_semantics(x,path)
+                      for x in value
+                  ]
+              return value
+
+          def projection(doc):
+              d=copy.deepcopy(doc)
+              d.pop("$schema",None)
+              d.pop("specVersion",None)
+              return canonicalize_semantics(d)
+
+          a=projection(input_obj)
+          b=projection(output_obj)
+          if a != b:
+              def diff(x,y,path="$",limit=40):
+                  out=[]
+                  if type(x) is not type(y):
+                      return [f"{path}:type:{type(x).__name__}!={type(y).__name__}"]
+                  if isinstance(x,dict):
+                      for k in sorted(set(x)|set(y)):
+                          if len(out)>=limit:
+                              break
+                          if k not in x:
+                              out.append(f"{path}.{k}:missing-input")
+                          elif k not in y:
+                              out.append(f"{path}.{k}:missing-output")
+                          else:
+                              out.extend(diff(x[k],y[k],f"{path}.{k}",limit-len(out)))
+                  elif isinstance(x,list):
+                      if len(x)!=len(y):
+                          out.append(f"{path}:len:{len(x)}!={len(y)}")
+                      for i,(vx,vy) in enumerate(zip(x,y)):
+                          if len(out)>=limit:
+                              break
+                          out.extend(diff(vx,vy,f"{path}[{i}]",limit-len(out)))
+                  elif x!=y:
+                      out.append(f"{path}:{x!r}!={y!r}")
+                  return out
+              raise SystemExit(
+                  "Semantic equality failed beyond $schema/specVersion: "
+                  + " | ".join(diff(a,b))
+              )
+
+          Path(sys.argv[2]).write_text(out1,encoding="utf-8")
+          print("QROS_PHASE4C_SET_COLLECTION_ORDER_NORMALIZATION=PASS")
+          print("QROS_PHASE4C_DEPENDSON_ORDER_NORMALIZATION=PASS")
+          print("QROS_PHASE4C_PURL_CANONICALIZATION=PASS")
+          print("QROS_PHASE4C_METADATA_TIMESTAMP_NORMALIZATION=PASS")
+          print("QROS_PHASE4C_SEMANTIC_EQUALITY_EXCEPT_VERSION_FIELDS=PASS")
+          print("QROS_PHASE4C_OUTPUT_COMPONENT_COUNT=253")
+          print("QROS_PHASE4C_OUTPUT_SHA256="+hashlib.sha256(out1.encode()).hexdigest())
+          print("QROS_PHASE4C_OUTPUT_TOP_LEVEL_KEYS="+json.dumps(sorted(output_obj),separators=(",",":")))
+          PY
+          cd "$RUNNER_TEMP/phase4c-semantic-cwd"
+          env -i \
+            HOME="$RUNNER_TEMP/phase4c-semantic-home" \
+            LANG="C.UTF-8" \
+            PYTHONDONTWRITEBYTECODE="1" \
+            "$vpy" -I "$RUNNER_TEMP/phase4c-semantic-convert.py" \
+            "$RUNNER_TEMP/qros-qut-cargo-1.5.json" \
+            "$RUNNER_TEMP/qros-qut-cargo-1.7.json"
+          actual_output_sha="$(sha256sum "$RUNNER_TEMP/qros-qut-cargo-1.7.json" | cut -d' ' -f1)"
+          test "$actual_output_sha" = "$QROS_OUTPUT_SHA256"
+          echo "QROS_PHASE4C_SEALED_OUTPUT_SHA256=$actual_output_sha"
+
+      - name: Confirm candidate only boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          echo "QROS_PHASE4C_SEMANTIC_FIDELITY_GATE=EVIDENCE_ONLY"
+          echo "QROS_PHASE4C_PERMANENT_TOOL_ADOPTION=DENY"
+          echo "QROS_PHASE4C_CARGO_CYCLONEDX_PERMANENT_ADOPTION=DENY"
+          echo "QROS_PHASE4C_CANONICAL_SBOM_1_7_PROMOTION=DENY"
