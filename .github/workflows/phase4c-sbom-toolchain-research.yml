@@ -85,16 +85,18 @@ jobs:
               if not p.is_file():
                   continue
               name = p.name.lower()
-              if name == "directory.build.targets":
-                  forbidden.append(f"{p}:Directory.Build.targets")
-                  continue
               if p.suffix.lower() not in {".csproj", ".props", ".targets"}:
                   continue
               try:
                   tree = ET.parse(p)
               except ET.ParseError as exc:
                   raise SystemExit(f"Unable to parse MSBuild XML {p}: {exc}") from exc
-              for elem in tree.getroot().iter():
+              xml_root = tree.getroot()
+              if name == "directory.build.targets":
+                  if xml_root.attrib or list(xml_root):
+                      forbidden.append(f"{p}:NonEmptyDirectory.Build.targets")
+                  continue
+              for elem in xml_root.iter():
                   local = elem.tag.rsplit("}", 1)[-1]
                   if local in {"Exec", "UsingTask"}:
                       forbidden.append(f"{p}:{local}")
