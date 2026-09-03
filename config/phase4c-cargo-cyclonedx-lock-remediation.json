@@ -1,0 +1,81 @@
+{
+  "research_version": 1,
+  "verified_at": "2026-09-03",
+  "status": "PATCHED_LOCK_PRESERVED_SECURITY_REVIEW_PENDING",
+  "parent_pr": 32,
+  "parent_head": "f66825f4a6a9b5c0be4afda68e12a098bf506acb",
+  "issue": 27,
+  "upstream": {
+    "repository": "CycloneDX/cyclonedx-rust-cargo",
+    "component": "cargo-cyclonedx",
+    "version": "0.5.9",
+    "release_commit": "e58bd5590212f82c5b7e16dd3e2e819b0dbea5b1",
+    "release_tag": "cargo-cyclonedx-0.5.9",
+    "latest_release_verified": true,
+    "native_1_7_support_released": false,
+    "native_1_7_open_pr": 872
+  },
+  "lock_remediation": {
+    "package": "xml-rs",
+    "from_version": "0.8.19",
+    "to_version": "0.8.27",
+    "from_yanked": true,
+    "source_code_change_authorized": false,
+    "only_lock_entry_change_authorized": true,
+    "all_other_locked_packages_must_match": true,
+    "patched_lock_adoption_authorized": false,
+    "patched_lock_path": "supply-chain/tool-locks/cargo-cyclonedx-0.5.9-qros.lock",
+    "patched_lock_sha256": "f24c56121784fe36ee9f14868b7f6386f1dd3fe640a3d2ee3e5aed4fea986e7a",
+    "remediated_checksum": "6fd8403733700263c6eb89f192880191f1b83e332f7a20371ddcf421c4a337c7"
+  },
+  "license": {
+    "upstream_declared": "Apache-2.0",
+    "upstream_legal_issue": 864,
+    "embedded_inbound_notice": "MIT",
+    "qros_conservative_effective_disposition": "Apache-2.0 AND MIT",
+    "mit_notice_preservation_required": true,
+    "external_distribution_authorized": false
+  },
+  "fidelity": {
+    "qut_source_head": "32e74ccfde93cf02fc0f149dd84a9c4ea6b1112e",
+    "qut_cargo_lock_sha256": "c9abfa64e57be2dd18efa91d8ae4abf43944bdbae75af94555ff28daa7601adb",
+    "expected_cyclonedx_1_5_sha256": "50e315c02680106ff3004e6e194f58d4cbbd8732fab33aff08ff122972da3623",
+    "expected_component_count": 253,
+    "byte_identical_output_required": true
+  },
+  "scope": {
+    "lock_remediation_research_authorized": true,
+    "patched_tool_build_test_authorized": true,
+    "patched_tool_sbom_generation_test_authorized": true,
+    "permanent_tool_adoption_authorized": false,
+    "dependency_registry_promotion_authorized": false,
+    "canonical_sbom_1_7_promotion_authorized": false,
+    "main_runtime_promotion_authorized": false,
+    "production_readiness_authorized": false
+  },
+  "hard_gates": {
+    "zero_cost_required": true,
+    "package_authorized": false,
+    "release_authorized": false,
+    "yuanta_integration_authorized": false,
+    "live_trading_authorized": false
+  },
+  "outcome": {
+    "evidence_run": 33758580916,
+    "evidence_job": 100658945209,
+    "qros_gate_run": 33758580762,
+    "lock_only_package_diff": "PASS",
+    "patched_tool_locked_build": "PASS",
+    "remediated_sbom_byte_identity": "PASS",
+    "remediated_sbom_sha256": "50e315c02680106ff3004e6e194f58d4cbbd8732fab33aff08ff122972da3623",
+    "remediated_component_count": 253,
+    "patched_lock_adoption": "PENDING_TOOL_SECURITY_REVIEW"
+  },
+  "next_gate": {
+    "name": "PATCHED_TOOL_SECURITY_LICENSE_REVIEW",
+    "cargo_audit_version": "0.22.2",
+    "permanent_tool_adoption_authorized": false,
+    "dependency_registry_promotion_authorized": false,
+    "canonical_sbom_1_7_promotion_authorized": false
+  }
+}
