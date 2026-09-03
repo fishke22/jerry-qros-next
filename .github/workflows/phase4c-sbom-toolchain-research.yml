@@ -1,0 +1,276 @@
+name: phase4c-sbom-toolchain-research
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/phase4c-sbom-toolchain-research.yml"
+      - "config/phase4c-sbom-toolchain-candidate.json"
+      - "tests/test_phase4c_sbom_toolchain_candidate.py"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: phase4c-sbom-toolchain-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  nuget-lock-and-license-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+      DOTNET_NOLOGO: "1"
+      NUGET_XMLDOC_MODE: skip
+      NUGET_PACKAGES: ${{ github.workspace }}/.phase4c/nuget-packages
+      CYCLONEDX_CLI_SHA: b3cfa4b0edc356dad07e0b6e7ab6da0a94af0246
+      CYCLONEDX_CLI_VERSION: 0.33.1
+      DOTNET_SDK_VERSION: 10.0.400
+    steps:
+      - name: Checkout QROS
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Checkout exact CycloneDX CLI source
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: CycloneDX/cyclonedx-cli
+          ref: b3cfa4b0edc356dad07e0b6e7ab6da0a94af0246
+          path: .phase4c/cyclonedx-cli
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Setup exact .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: "10.0.400"
+
+      - name: Verify source and project boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(dotnet --version)" = "$DOTNET_SDK_VERSION"
+          test "$(git -C .phase4c/cyclonedx-cli rev-parse HEAD)" = "$CYCLONEDX_CLI_SHA"
+          python - <<'PY'
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          project = Path(".phase4c/cyclonedx-cli/src/cyclonedx/cyclonedx.csproj")
+          root = ET.fromstring(project.read_text(encoding="utf-8-sig"))
+          target = root.findtext(".//TargetFramework")
+          if target != "net10.0":
+              raise SystemExit(f"Unexpected TargetFramework: {target!r}")
+
+          expected = {
+              "CoderPatros.AntPathMatching": "0.1.1",
+              "CsvHelper": "29.0.0",
+              "CycloneDX.Utils": "12.1.2",
+              "CycloneDX.Spdx.Interop": "12.1.2",
+              "System.CommandLine": "2.0.0-beta4.22272.1",
+              "System.CommandLine.NamingConventionBinder": "2.0.0-beta4.22272.1",
+              "System.Security.Cryptography.Xml": "10.0.10",
+          }
+          actual = {
+              x.attrib["Include"]: x.attrib["Version"]
+              for x in root.findall(".//PackageReference")
+          }
+          if actual != expected:
+              raise SystemExit(f"Unexpected top-level PackageReference set: {actual}")
+
+          repo = Path(".phase4c/cyclonedx-cli")
+          forbidden = []
+          for p in repo.rglob("*"):
+              if not p.is_file():
+                  continue
+              name = p.name.lower()
+              if name == "directory.build.targets":
+                  forbidden.append(str(p))
+                  continue
+              if p.suffix.lower() in {".csproj", ".props", ".targets"}:
+                  text = p.read_text(encoding="utf-8-sig", errors="replace")
+                  for token in ("<Exec", "<UsingTask", 'BeforeTargets="Restore', 'AfterTargets="Restore'):
+                      if token in text:
+                          forbidden.append(f"{p}:{token}")
+          if forbidden:
+              raise SystemExit("Restore-time/custom MSBuild execution surface found: " + ", ".join(sorted(forbidden)))
+
+          print("QROS_PHASE4C_SOURCE_BOUNDARY=PASS")
+          PY
+
+      - name: Create isolated NuGet configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .phase4c/evidence
+          cat > .phase4c/evidence/nuget.config <<'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <configuration>
+            <packageSources>
+              <clear />
+              <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
+            </packageSources>
+            <auditSources>
+              <clear />
+              <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
+            </auditSources>
+          </configuration>
+          EOF
+
+      - name: Resolve candidate NuGet lock graph
+        shell: bash
+        run: |
+          set -euo pipefail
+          project=".phase4c/cyclonedx-cli/src/cyclonedx/cyclonedx.csproj"
+          lock="$GITHUB_WORKSPACE/.phase4c/evidence/packages.lock.json"
+          dotnet restore "$project"             --configfile "$GITHUB_WORKSPACE/.phase4c/evidence/nuget.config"             --packages "$NUGET_PACKAGES"             --use-lock-file             --force-evaluate             --lock-file-path "$lock"             -p:NuGetAudit=true             -p:NuGetAuditMode=all             -p:NuGetAuditLevel=low
+          test -s "$lock"
+          echo "QROS_PHASE4C_LOCK_SHA256=$(sha256sum "$lock" | cut -d' ' -f1)"
+
+      - name: Prove locked restore
+        shell: bash
+        run: |
+          set -euo pipefail
+          project=".phase4c/cyclonedx-cli/src/cyclonedx/cyclonedx.csproj"
+          lock="$GITHUB_WORKSPACE/.phase4c/evidence/packages.lock.json"
+          dotnet restore "$project"             --configfile "$GITHUB_WORKSPACE/.phase4c/evidence/nuget.config"             --packages "$NUGET_PACKAGES"             --locked-mode             --lock-file-path "$lock"             -p:NuGetAudit=true             -p:NuGetAuditMode=all             -p:NuGetAuditLevel=low
+          echo "QROS_PHASE4C_LOCKED_RESTORE=PASS"
+
+      - name: Generate machine-readable package and vulnerability reports
+        shell: bash
+        run: |
+          set -euo pipefail
+          project=".phase4c/cyclonedx-cli/src/cyclonedx/cyclonedx.csproj"
+          dotnet package list             --project "$project"             --include-transitive             --format json             --output-version 1             --no-restore             > .phase4c/evidence/package-list.json
+          dotnet package list             --project "$project"             --include-transitive             --vulnerable             --format json             --output-version 1             --no-restore             > .phase4c/evidence/vulnerable.json
+
+      - name: Validate vulnerability, license and graph evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          ev = Path(".phase4c/evidence")
+          lock_path = ev / "packages.lock.json"
+          lock = json.loads(lock_path.read_text(encoding="utf-8"))
+          deps = lock.get("dependencies", {})
+          if set(deps) != {"net10.0"}:
+              raise SystemExit(f"Unexpected lock frameworks: {sorted(deps)}")
+          graph = deps["net10.0"]
+
+          direct_expected = {
+              "CoderPatros.AntPathMatching": "0.1.1",
+              "CsvHelper": "29.0.0",
+              "CycloneDX.Utils": "12.1.2",
+              "CycloneDX.Spdx.Interop": "12.1.2",
+              "System.CommandLine": "2.0.0-beta4.22272.1",
+              "System.CommandLine.NamingConventionBinder": "2.0.0-beta4.22272.1",
+              "System.Security.Cryptography.Xml": "10.0.10",
+          }
+          direct_actual = {
+              name: entry.get("resolved")
+              for name, entry in graph.items()
+              if entry.get("type") == "Direct"
+          }
+          if direct_actual != direct_expected:
+              raise SystemExit(f"Direct lock set mismatch: {direct_actual}")
+
+          vulnerable = json.loads((ev / "vulnerable.json").read_text(encoding="utf-8"))
+          vulnerability_nodes = []
+          def walk(node, path=()):
+              if isinstance(node, dict):
+                  vulns = node.get("vulnerabilities")
+                  if isinstance(vulns, list) and vulns:
+                      vulnerability_nodes.append((path, node))
+                  for k, v in node.items():
+                      walk(v, path + (str(k),))
+              elif isinstance(node, list):
+                  for i, v in enumerate(node):
+                      walk(v, path + (str(i),))
+          walk(vulnerable)
+          if vulnerability_nodes:
+              raise SystemExit(
+                  "Known NuGet vulnerability evidence present: "
+                  + json.dumps(vulnerability_nodes, default=str, sort_keys=True)
+              )
+
+          packages_root = Path(os.environ["NUGET_PACKAGES"])
+          inventory = []
+          missing_license = []
+          for name, entry in sorted(graph.items(), key=lambda x: x[0].lower()):
+              version = str(entry["resolved"])
+              pkg_dir = packages_root / name.lower() / version.lower()
+              nuspecs = list(pkg_dir.glob("*.nuspec"))
+              if len(nuspecs) != 1:
+                  raise SystemExit(f"Expected one nuspec for {name}@{version}, got {nuspecs}")
+              root = ET.fromstring(nuspecs[0].read_text(encoding="utf-8-sig"))
+              def find_local(local):
+                  for elem in root.iter():
+                      if elem.tag.rsplit("}", 1)[-1] == local:
+                          return elem
+                  return None
+              lic = find_local("license")
+              lic_url = find_local("licenseUrl")
+              repo = find_local("repository")
+              license_value = None
+              license_type = None
+              if lic is not None and (lic.text or "").strip():
+                  license_type = lic.attrib.get("type", "unknown")
+                  license_value = (lic.text or "").strip()
+              elif lic_url is not None and (lic_url.text or "").strip():
+                  license_type = "url"
+                  license_value = (lic_url.text or "").strip()
+              if not license_value:
+                  missing_license.append(f"{name}@{version}")
+              inventory.append({
+                  "name": name,
+                  "version": version,
+                  "type": entry.get("type"),
+                  "contentHash": entry.get("contentHash"),
+                  "license_type": license_type,
+                  "license": license_value,
+                  "repository_url": repo.attrib.get("url") if repo is not None else None,
+                  "dependencies": entry.get("dependencies", {}),
+              })
+
+          if missing_license:
+              raise SystemExit("NuGet package license metadata missing: " + ", ".join(missing_license))
+
+          inv_path = ev / "license-inventory.json"
+          inv_path.write_text(
+              json.dumps(inventory, indent=2, sort_keys=True) + "\n",
+              encoding="utf-8",
+          )
+
+          edges = []
+          for name, entry in graph.items():
+              for dep_name, dep_range in (entry.get("dependencies") or {}).items():
+                  edges.append((name, dep_name, dep_range))
+          graph_summary = {
+              "package_count": len(graph),
+              "direct_count": sum(1 for x in graph.values() if x.get("type") == "Direct"),
+              "transitive_count": sum(1 for x in graph.values() if x.get("type") == "Transitive"),
+              "edge_count": len(edges),
+          }
+          print("QROS_PHASE4C_GRAPH_SUMMARY=" + json.dumps(graph_summary, sort_keys=True, separators=(",", ":")))
+          print("QROS_PHASE4C_LICENSE_INVENTORY_SHA256=" + hashlib.sha256(inv_path.read_bytes()).hexdigest())
+          print("QROS_PHASE4C_VULNERABILITY_GATE=PASS")
+          print("QROS_PHASE4C_LICENSE_METADATA_GATE=PASS")
+          print("QROS_PHASE4C_LOCK_BEGIN")
+          print(json.dumps(lock, sort_keys=True, separators=(",", ":")))
+          print("QROS_PHASE4C_LOCK_END")
+          print("QROS_PHASE4C_LICENSE_INVENTORY_BEGIN")
+          print(json.dumps(inventory, sort_keys=True, separators=(",", ":")))
+          print("QROS_PHASE4C_LICENSE_INVENTORY_END")
+          PY
+
+      - name: Confirm research-only boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          test ! -e .phase4c/evidence/cyclonedx-cli
+          echo "QROS_PHASE4C_RESTORE_INVENTORY_ONLY=PASS"
+          echo "QROS_PHASE4C_CLI_BUILD_EXECUTION=NOT_PERFORMED"
+          echo "QROS_PHASE4C_CONVERSION=NOT_PERFORMED"
